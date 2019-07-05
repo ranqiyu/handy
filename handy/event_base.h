@@ -84,6 +84,7 @@ struct Channel : private noncopyable {
     //挂接事件处理器
     void onRead(const Task &readcb) { readcb_ = readcb; }
     void onWrite(const Task &writecb) { writecb_ = writecb; }
+    // 右值
     void onRead(Task &&readcb) { readcb_ = std::move(readcb); }
     void onWrite(Task &&writecb) { writecb_ = std::move(writecb); }
 

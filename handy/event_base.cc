@@ -142,6 +142,8 @@ void EventsImp::loop() {
 }
 
 void EventsImp::init() {
+    // pipe函数创建匿名管道，将为输入的两个文件描述符赋值，并通过特殊的方式连接在一起，
+    //写到file_descriptor[1]的数据都能从file_descriptor[0]读出来
     int r = pipe(wakeupFds_);
     fatalif(r, "pipe failed %d %s", errno, strerror(errno));
     r = util::addFdFlag(wakeupFds_[0], FD_CLOEXEC);
@@ -149,12 +151,17 @@ void EventsImp::init() {
     r = util::addFdFlag(wakeupFds_[1], FD_CLOEXEC);
     fatalif(r, "addFdFlag failed %d %s", errno, strerror(errno));
     trace("wakeup pipe created %d %d", wakeupFds_[0], wakeupFds_[1]);
+
+    // 监听匿名管道[0]读事件kReadEvent。原始指针似乎没有delete?
     Channel *ch = new Channel(base_, wakeupFds_[0], kReadEvent);
     ch->onRead([=] {
-        char buf[1024];
+        char buf[1024] = {0};
         int r = ch->fd() >= 0 ? ::read(ch->fd(), buf, sizeof buf) : 0;
         if (r > 0) {
+            info("read[%d] %s", r, buf);
+            // 这个管道的目的是用来通知做任务的，现在不需要里面有什么数据
             Task task;
+            // 如果有任务就一直执行
             while (tasks_.pop_wait(&task, 0)) {
                 task();
             }
@@ -294,7 +301,7 @@ void MultiBase::loop() {
 
 Channel::Channel(EventBase *base, int fd, int events) : base_(base), fd_(fd), events_(events) {
     fatalif(net::setNonBlock(fd_) < 0, "channel set non block failed");
-    static atomic<int64_t> id(0);
+    static atomic<int64_t> id(0); // 静态的
     id_ = ++id;
     poller_ = base_->imp_->poller_;
     poller_->addChannel(this);
