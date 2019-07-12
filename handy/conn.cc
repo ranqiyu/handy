@@ -169,9 +169,13 @@ void TcpConn::handleWrite(const TcpConnPtr &con) {
     } else if (state_ == State::Connected) {
         ssize_t sended = isend(output_.begin(), output_.size());
         output_.consume(sended);
+
+        // 回调给客户端
         if (output_.empty() && writablecb_) {
             writablecb_(con);
         }
+        // 当没有缓存的数据后，就取消监听可写事件
+        // 如果客户端有数据要写，则这里不会为空
         if (output_.empty() && channel_->writeEnabled()) {  // writablecb_ may write something
             channel_->enableWrite(false);
         }
@@ -182,16 +186,16 @@ void TcpConn::handleWrite(const TcpConnPtr &con) {
 
 ssize_t TcpConn::isend(const char *buf, size_t len) {
     size_t sended = 0;
-    while (len > sended) {
+    while (len > sended) { // 当 等于 时就退出循化，说明写完了
         ssize_t wd = writeImp(channel_->fd(), buf + sended, len - sended);
         trace("channel %lld fd %d write %ld bytes", (long long) channel_->id(), channel_->fd(), wd);
         if (wd > 0) {
             sended += wd;
             continue;
-        } else if (wd == -1 && errno == EINTR) {
+        } else if (wd == -1 && errno == EINTR) { // 系统调用被中断
             continue;
-        } else if (wd == -1 && (errno == EAGAIN || errno == EWOULDBLOCK)) {
-            if (!channel_->writeEnabled()) {
+        } else if (wd == -1 && (errno == EAGAIN || errno == EWOULDBLOCK)) { // 已经写满了不能再写
+            if (!channel_->writeEnabled()) { // 如果但前没有注册可写事件，则注册
                 channel_->enableWrite(true);
             }
             break;
@@ -205,14 +209,15 @@ ssize_t TcpConn::isend(const char *buf, size_t len) {
 
 void TcpConn::send(Buffer &buf) {
     if (channel_) {
+        // 如果当前已经监听了可写事件，则说明之前已经有其他县城触发了写
         if (channel_->writeEnabled()) {  // just full
-            output_.absorb(buf);
+            output_.absorb(buf); //合并
         }
-        if (buf.size()) {
+        if (buf.size()) { // 如果合并字符串了，这里就会为false，就不会进来
             ssize_t sended = isend(buf.begin(), buf.size());
-            buf.consume(sended);
+            buf.consume(sended); // 将消费了的字符串丢掉
         }
-        if (buf.size()) {
+        if (buf.size()) { // 如果本次没有消费完，则保留到 output
             output_.absorb(buf);
             if (!channel_->writeEnabled()) {
                 channel_->enableWrite(true);
@@ -253,6 +258,9 @@ void TcpConn::onMsg(CodecBase *codec, const MsgCallBack &cb) {
                 trace("a msg decoded. origin len %d msg len %ld", r, msg.size());
                 cb(con, msg);
                 con->getInput().consume(r);
+            } else {
+                std::string s = msg;
+                warn("[%s] decode len 0", s.c_str());
             }
         }
     });
@@ -352,9 +360,9 @@ void HSHA::onMsg(CodecBase *codec, const RetMsgCallBack &cb) {
     server_->onConnMsg(codec, [this, cb](const TcpConnPtr &con, Slice msg) {
         std::string input = msg;
         threadPool_.addTask([=] {
-            std::string output = cb(con, input);
+            std::string output = cb(con, input); // 处理完消息后的 response
             server_->getBase()->safeCall([=] {
-                if (output.size())
+                if (output.size()) // 将 写入消息 加入县城任务队列
                     con->sendMsg(output);
             });
         });

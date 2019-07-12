@@ -49,7 +49,7 @@ class Slice {
     bool starts_with(const Slice &x) const { return (size() >= x.size() && memcmp(pb_, x.pb_, x.size()) == 0); }
 
     bool end_with(const Slice &x) const { return (size() >= x.size() && memcmp(pe_ - x.size(), x.pb_, x.size()) == 0); }
-    operator std::string() const { return std::string(pb_, pe_); }
+    operator std::string() const { return std::string(pb_, pe_); } // 这样可以直接赋值给一个 std::string。运算符重栽，类型转换
     std::vector<Slice> split(char ch) const;
 
    private:

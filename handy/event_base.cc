@@ -159,7 +159,7 @@ void EventsImp::init() {
         int r = ch->fd() >= 0 ? ::read(ch->fd(), buf, sizeof buf) : 0;
         if (r > 0) {
             info("read[%d] %s", r, buf);
-            // 这个管道的目的是用来通知做任务的，现在不需要里面有什么数据
+            // 这个管道的目的是用来通知做任务的，现在不需要里面有什么数据。但是，ch->fd() 大于 0, 这个是哪里fuzhi的？
             Task task;
             // 如果有任务就一直执行
             while (tasks_.pop_wait(&task, 0)) {
@@ -293,7 +293,7 @@ void MultiBase::loop() {
         thread t([this, i] { bases_[i].loop(); });
         ths[i].swap(t);
     }
-    bases_.back().loop();
+    bases_.back().loop(); // 当前县城也执行一个loop，使少用一个县城
     for (int i = 0; i < sz - 1; i++) {
         ths[i].join();
     }

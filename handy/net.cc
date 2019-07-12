@@ -108,6 +108,7 @@ void Buffer::copyFrom(const Buffer &b) {
     }
 }
 
+// 吞并。之后buf为空
 Buffer &Buffer::absorb(Buffer &buf) {
     if (&buf != this) {
         if (size() == 0) {

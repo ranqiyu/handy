@@ -20,6 +20,8 @@ int main(int argc, const char *argv[]) {
         usleep(ms * 1000);
         return util::format("%s used %d ms", input.c_str(), ms);
     });
+    // 在本地创建的客户端用于测试
+    /*
     for (int i = 0; i < 5; i++) {
         TcpConnPtr con = TcpConn::createConnection(&base, "localhost", 2099);
         con->onMsg(new LineCodec, [](const TcpConnPtr &con, Slice msg) {
@@ -32,10 +34,11 @@ int main(int argc, const char *argv[]) {
             }
         });
     }
+    // 1秒后退出
     base.runAfter(1000, [&, hsha] {
         base.exit();
         hsha->exit();
-    });
+    });*/
     base.loop();
     info("program exited");
 }
