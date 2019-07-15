@@ -116,6 +116,7 @@ void TcpConn::cleanup(const TcpConnPtr &con) {
 }
 
 void TcpConn::handleRead(const TcpConnPtr &con) {
+    // 这一步先将 写事件 监听 给禁用了，当需要时再启用
     if (state_ == State::Handshaking && handleHandshake(con)) {
         return;
     }
@@ -152,8 +153,15 @@ int TcpConn::handleHandshake(const TcpConnPtr &con) {
     struct pollfd pfd;
     pfd.fd = channel_->fd();
     pfd.events = POLLOUT | POLLERR;
-    int r = poll(&pfd, 1, 0);
-    if (r == 1 && pfd.revents == POLLOUT) {
+    /*
+     poll函数使用pollfd类型的结构来监控一组文件句柄，
+     ufds是要监控的文件句柄集合，
+     nfds是监控的文件句柄数量，
+     timeout是等待的毫秒数，这段时间内无论I/O是否准备好，poll都会返回。
+     timeout为负数表示无线等待，timeout为0表示调用后立即返回。执行结果：为0表示超时前没有任何事件发生；-1表示失败；成功则返回结构体中revents不为0的文件描述符个数。
+     */
+    int r = poll(&pfd, 1, 0); // 使用hai在epoll之前的poll
+    if (r == 1 && pfd.revents == POLLOUT) { // 可写
         channel_->enableReadWrite(true, false);
         state_ = State::Connected;
         if (state_ == State::Connected) {
@@ -168,7 +176,7 @@ int TcpConn::handleHandshake(const TcpConnPtr &con) {
         cleanup(con);
         return -1;
     }
-    return 0;
+    return 0; // 非0才为真，这里是假
 }
 
 void TcpConn::handleWrite(const TcpConnPtr &con) {

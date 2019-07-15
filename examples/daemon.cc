@@ -1,4 +1,4 @@
-#include <handy/handy.h>
+﻿#include <handy/handy.h>
 
 using namespace std;
 using namespace handy;
@@ -11,7 +11,9 @@ int main(int argc, const char *argv[]) {
     string program = argv[0];
     string pidfile = program + ".pid";
     string conffile = program + ".conf";
+    //自身退出
     Daemon::daemonProcess(argv[1], pidfile.c_str());
+    // 子进程在执行了
     Conf conf;
     int r = conf.parse(conffile.c_str());
     fatalif(r, "config file parse failed %s", conffile.c_str());
