@@ -351,6 +351,9 @@ void Channel::close() {
         ::close(fd_);
         fd_ = -1;
         handleRead();
+    } else {
+        // 可能是没有值的，如没有连接上
+        trace("%ld channel not fd", (long)id_);
     }
 }
 
@@ -383,6 +386,7 @@ void TcpConn::addIdleCB(int idle, const TcpCallBack &cb) {
     }
 }
 
+// 哪些地方会触发重连呢？
 void TcpConn::reconnect() {
     auto con = shared_from_this();
     getBase()->imp_->reconnectConns_.insert(con);

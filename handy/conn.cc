@@ -69,6 +69,7 @@ void TcpConn::connect(EventBase *base, const string &host, unsigned short port, 
         // 设置连接超时
         TcpConnPtr con = shared_from_this();
         timeoutId_ = base->runAfter(timeout, [con] {
+            // 关键是这里，如果超时之后，这里还没有就断开。连上了就不用管了
             if (con->getState() == Handshaking) {
                 con->channel_->close();
             }

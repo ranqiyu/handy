@@ -19,11 +19,16 @@ int main(int argc, const char *argv[]) {
             });
     });
 
+    info("==================create client connection ...");
+
     // 连接
-    TcpConnPtr con1 = TcpConn::createConnection(&base, "localhost", 2099);
-    con1->setReconnectInterval(300);
-    //    TcpConnPtr con2 = TcpConn::createConnection(&base, "localhost", 1, 100);
-    //    con2->setReconnectInterval(200);
-    base.runAfter(600, [&]() { base.exit(); });
+    //TcpConnPtr con1 = TcpConn::createConnection(&base, "localhost", 2099);
+    //con1->setReconnectInterval(300);
+    TcpConnPtr con2 = TcpConn::createConnection(&base, "localhost", 1, 1000);
+    con2->setReconnectInterval(2000);
+
+    base.runAfter(6000, [&]() { base.exit(); });
     base.loop();
+
+    info("program exit\r\n");
 }
