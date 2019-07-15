@@ -120,7 +120,13 @@ struct TcpServer : private noncopyable {
     ~TcpServer() { delete listen_channel_; }
     Ip4Addr getAddr() { return addr_; }
     EventBase *getBase() { return base_; }
-    void onConnCreate(const std::function<TcpConnPtr()> &cb) { createcb_ = cb; }
+    
+    // 这个回调函数有点意思，是由外部 return 一个 TcpConnPtr 对象
+    void onConnCreate(const std::function<TcpConnPtr()> &cb) 
+    {
+         createcb_ = cb; 
+    }
+
     void onConnState(const TcpCallBack &cb) { statecb_ = cb; }
     void onConnRead(const TcpCallBack &cb) {
         readcb_ = cb;

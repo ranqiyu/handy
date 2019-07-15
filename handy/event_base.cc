@@ -79,7 +79,8 @@ struct EventsImp {
         handleTimeouts();
     }
     void wakeup() {
-        int r = write(wakeupFds_[1], "", 1);
+        // 向用于唤醒的管道写数据
+        int r = write(wakeupFds_[1], "", 1); // 写入空数据
         fatalif(r <= 0, "write error wd %d %d %s", r, errno, strerror(errno));
     }
 

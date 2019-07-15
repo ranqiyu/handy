@@ -1,3 +1,8 @@
+# GLOBAL 用的符号文件不上传
+GPATH
+GRTAGS
+GTAGS
+
 handy.*
 *.cbp
 *.o
