@@ -18,6 +18,7 @@ int main(int argc, const char *argv[]) {
                argv[0]);
         return 1;
     }
+
     int c = 1;
     string host = argv[c++];
     int begin_port = atoi(argv[c++]);
@@ -25,7 +26,8 @@ int main(int argc, const char *argv[]) {
     int conn_count = atoi(argv[c++]);
     float create_seconds = atof(argv[c++]);
     int processes = atoi(argv[c++]);
-    conn_count = conn_count / processes;
+    conn_count = conn_count / processes; // 总的连接数分摊得每一个进程上
+
     int heartbeat_interval = atoi(argv[c++]);
     int bsz = atoi(argv[c++]);
     int man_port = atoi(argv[c++]);
@@ -38,7 +40,10 @@ int main(int argc, const char *argv[]) {
             break;
         }
     }
+    
+    // 捕获信号SIGPIPE，防止进程异常退出
     Signal::signal(SIGPIPE, [] {});
+
     EventBase base;
     if (pid == 0) {  // child process
         char *buf = new char[bsz];
@@ -51,16 +56,24 @@ int main(int argc, const char *argv[]) {
         int recved = 0;
 
         vector<TcpConnPtr> allConns;
-        info("creating %d connections", conn_count);
+        info("process %d creating %d connections", getpid(), conn_count);
+
+        // 一共用多少秒来创建这些连接
         for (int k = 0; k < create_seconds * 10; k++) {
+            // 但定时器是按 100 毫秒
             base.runAfter(100 * k, [&] {
+
+                // 当前进程的全部连接数 分摊到 这么多秒来创建，则每一次应该创建下面的 c 个tcp客户端
+                // 因为最外层的循环 x10了，所以这里要 除掉 10
                 int c = conn_count / create_seconds / 10;
                 for (int i = 0; i < c; i++) {
+                    // 这里有一个轮回，端口会被重复使用
                     unsigned short port = begin_port + (i % (end_port - begin_port));
                     auto con = TcpConn::createConnection(&base, host, port, 20 * 1000);
                     allConns.push_back(con);
                     con->setReconnectInterval(20 * 1000);
                     con->onMsg(new LengthCodec, [&](const TcpConnPtr &con, const Slice &msg) {
+                        // 如果有心跳了，这里不echo，只收
                         if (heartbeat_interval == 0) {  // echo the msg if no interval
                             con->sendMsg(msg);
                             send++;
@@ -73,7 +86,7 @@ int main(int argc, const char *argv[]) {
                             connected++;
                             //                            send ++;
                             //                            con->sendMsg(msg);
-                        } else if (st == TcpConn::Failed || st == TcpConn::Closed) {  //连接出错
+                        } else if (st == TcpConn::Failed || st == TcpConn::Closed) {  //Failed表示连接出错
                             if (st == TcpConn::Closed) {
                                 connected--;
                             }
@@ -84,10 +97,13 @@ int main(int argc, const char *argv[]) {
             });
         }
         if (heartbeat_interval) {
+            // 如果设置了心跳间隔，则发送心跳
             base.runAfter(heartbeat_interval * 1000,
                           [&] {
                               for (int i = 0; i < heartbeat_interval * 10; i++) {
+                                  // 发送一次心跳
                                   base.runAfter(i * 100, [&, i] {
+                                      // 心跳也是一批一批发
                                       size_t block = allConns.size() / heartbeat_interval / 10;
                                       for (size_t j = i * block; j < (i + 1) * block && j < allConns.size(); j++) {
                                           if (allConns[j]->getState() == TcpConn::Connected) {
@@ -100,6 +116,7 @@ int main(int argc, const char *argv[]) {
                           },
                           heartbeat_interval * 1000);
         }
+
         TcpConnPtr report = TcpConn::createConnection(&base, "127.0.0.1", man_port, 3000);
         report->onMsg(new LineCodec, [&](const TcpConnPtr &con, Slice msg) {
             if (msg == "exit") {
@@ -113,7 +130,10 @@ int main(int argc, const char *argv[]) {
             }
         });
         base.runAfter(2000,
-                      [&]() { report->sendMsg(util::format("%d connected: %ld retry: %ld send: %ld recved: %ld", getpid(), connected, retry, send, recved)); },
+                      [&]() {
+                          // 每隔2秒上报一次负载信息。当前进程有多少连接，连接失败重试了多少，发送多少，接收了多少次
+                           report->sendMsg(util::format("%d connected: %ld retry: %ld send: %ld recved: %ld", getpid(), connected, retry, send, recved)); 
+                           },
                       100);
         base.loop();
     } else {  // master process
@@ -140,7 +160,10 @@ int main(int argc, const char *argv[]) {
                           printf("\n");
                       },
                       3000);
+
+        // 主进程处理信号 SIGCHLD，
         Signal::signal(SIGCHLD, [] {
+            // 等待子进程退出
             int status = 0;
             wait(&status);
             error("wait result: status: %d is signaled: %d signal: %d", status, WIFSIGNALED(status), WTERMSIG(status));

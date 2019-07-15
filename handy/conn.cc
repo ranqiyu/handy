@@ -33,6 +33,8 @@ void TcpConn::connect(EventBase *base, const string &host, unsigned short port, 
     connectedTime_ = util::timeMilli();
     localIp_ = localip;
     Ip4Addr addr(host, port);
+
+    // 可靠连接的套接字 SOCK_STREAM
     int fd = socket(AF_INET, SOCK_STREAM, 0);
     fatalif(fd < 0, "socket failed %d %s", errno, strerror(errno));
     net::setNonBlock(fd);
@@ -46,7 +48,9 @@ void TcpConn::connect(EventBase *base, const string &host, unsigned short port, 
     }
     if (r == 0) {
         r = ::connect(fd, (sockaddr *) &addr.getAddr(), sizeof(sockaddr_in));
-        if (r != 0 && errno != EINPROGRESS) {
+        
+        // 非阻塞情况下connect产生EINPROGRESS错误
+        if (r != 0 && errno != EINPROGRESS) { // 但是这里不是这个错误，所以是error
             error("connect to %s error %d %s", addr.toString().c_str(), errno, strerror(errno));
         }
     }
@@ -62,6 +66,7 @@ void TcpConn::connect(EventBase *base, const string &host, unsigned short port, 
     state_ = State::Handshaking;
     attach(base, fd, Ip4Addr(local), addr);
     if (timeout) {
+        // 设置连接超时
         TcpConnPtr con = shared_from_this();
         timeoutId_ = base->runAfter(timeout, [con] {
             if (con->getState() == Handshaking) {
@@ -82,7 +87,7 @@ void TcpConn::close() {
 }
 
 void TcpConn::cleanup(const TcpConnPtr &con) {
-    if (readcb_ && input_.size()) {
+    if (readcb_ && input_.size()) { // 如果读取的数据还有，则先回调出去。有必要吗？
         readcb_(con);
     }
     if (state_ == State::Handshaking) {
@@ -96,7 +101,7 @@ void TcpConn::cleanup(const TcpConnPtr &con) {
         statecb_(con);
     }
     if (reconnectInterval_ >= 0 && !getBase()->exited()) {  // reconnect
-        reconnect();
+        reconnect(); // 函数的实现在哪里？跳进去看一下
         return;
     }
     for (auto &idle : idleIds_) {
@@ -130,7 +135,9 @@ void TcpConn::handleRead(const TcpConnPtr &con) {
                 readcb_(con);
             }
             break;
-        } else if (channel_->fd() == -1 || rd == 0 || rd == -1) {
+        } 
+        // 当读到为0时，表示关闭
+        else if (channel_->fd() == -1 || rd == 0 || rd == -1) {
             cleanup(con);
             break;
         } else {  // rd > 0
@@ -199,7 +206,7 @@ ssize_t TcpConn::isend(const char *buf, size_t len) {
                 channel_->enableWrite(true);
             }
             break;
-        } else {
+        } else { // 这里还有一些未处理掉的，如 SIGPIPE。表示往对端已经关闭的socket上写数据时就会触发
             error("write error: channel %lld fd %d wd %ld %d %s", (long long) channel_->id(), channel_->fd(), wd, errno, strerror(errno));
             break;
         }

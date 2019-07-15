@@ -70,6 +70,7 @@ void UdpServer::sendTo(const char *buf, size_t len, Ip4Addr addr) {
 
 UdpConnPtr UdpConn::createConnection(EventBase *base, const string &host, unsigned short port) {
     Ip4Addr addr(host, port);
+    // 这里是UDP，所以套接字类型是 SOCK_DGRAM
     int fd = socket(AF_INET, SOCK_DGRAM, 0);
     fatalif(fd < 0, "socket failed %d %s", errno, strerror(errno));
     net::setNonBlock(fd);
