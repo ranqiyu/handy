@@ -31,6 +31,7 @@ int main() {
     exitif(r, "bind failed %d %s", errno, strerror(errno));
     ProtoMsgDispatcher dispatch;
     echo.onConnRead([&](TcpConnPtr con) {
+        // 判断是否是一个完整的消息
         if (ProtoMsgCodec::msgComplete(con->getInput())) {
             Message *msg = ProtoMsgCodec::decode(con->getInput());
             if (msg) {
