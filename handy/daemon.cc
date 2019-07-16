@@ -1,4 +1,4 @@
-#include "daemon.h"
+﻿#include "daemon.h"
 #include <errno.h>
 #include <fcntl.h>
 #include <signal.h>
@@ -70,12 +70,14 @@ int Daemon::getPidFromFile(const char *pidfile) {
 int Daemon::daemonStart(const char *pidfile) {
     int pid = getPidFromFile(pidfile);
     if (pid > 0) {
-        if (kill(pid, 0) == 0 || errno == EPERM) {
+        if (kill(pid, 0) == 0 || errno == EPERM) { // EPERM，权限不购
             fprintf(stderr, "daemon exists, use restart\n");
             return -1;
         }
     }
-    if (getppid() == 1) {
+    // 当前进程本就是在后台启动的
+    if (getppid() == 1) { // 父进程PID为1，第一个init进程
+    // 守护进程的父进程是init进程，它是一个孤儿进程，没有控制终端，所以任何输出，无论是向标准输出设备stdout还是标准出错设备stderr的输出都被丢到了 /dev/null
         fprintf(stderr, "already daemon, can't start\n");
         return -1;
     }
@@ -93,6 +95,8 @@ int Daemon::daemonStart(const char *pidfile) {
     if (r != 0) {
         return r;
     }
+
+    // 0、１、2与标准输入、标准输出、标准错误输出相关联，重定向他们到 null
     int fd = open("/dev/null", 0);
     if (fd >= 0) {
         close(0);
@@ -100,6 +104,7 @@ int Daemon::daemonStart(const char *pidfile) {
         dup2(fd, 1);
         close(fd);
         string pfile = pidfile;
+        // 子进程结束时候自动删除pid文件
         static ExitCaller del([=] { unlink(pfile.c_str()); });
         return 0;
     }
