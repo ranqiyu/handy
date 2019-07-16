@@ -43,8 +43,8 @@ struct EventsImp {
     int nextTimeout_;
     SafeQueue<Task> tasks_;
 
-    std::map<TimerId, TimerRepeatable> timerReps_;
-    std::map<TimerId, Task> timers_;
+    std::map<TimerId, TimerRepeatable> timerReps_; // 循环定时器
+    std::map<TimerId, Task> timers_; // KV，使用map自动排序。但也不是县城安全的
     std::atomic<int64_t> timerSeq_;
     // 记录每个idle时间（单位秒）下所有的连接。链表中的所有连接，最新的插入到链表末尾。连接若有活动，会把连接从链表中移到链表尾部，做法参考memcache
     std::map<int, std::list<IdleNode>> idleConns_;
@@ -178,6 +178,8 @@ void EventsImp::init() {
 void EventsImp::handleTimeouts() {
     int64_t now = util::timeMilli();
     TimerId tid{now, 1L << 62};
+    
+    // 回调方法，并移出。遍历，会导致延迟。若使用多县城呢
     while (timers_.size() && timers_.begin()->first < tid) {
         Task task = move(timers_.begin()->second);
         timers_.erase(timers_.begin());
@@ -235,7 +237,7 @@ void EventsImp::refreshNearest(const TimerId *tid) {
         nextTimeout_ = 1 << 30;
     } else {
         const TimerId &t = timers_.begin()->first;
-        nextTimeout_ = t.first - util::timeMilli();
+        nextTimeout_ = t.first - util::timeMilli(); // 计算得到下一次唤醒时间
         nextTimeout_ = nextTimeout_ < 0 ? 0 : nextTimeout_;
     }
 }
@@ -292,7 +294,7 @@ void MultiBase::loop() {
     vector<thread> ths(sz - 1);
     for (int i = 0; i < sz - 1; i++) {
         thread t([this, i] { bases_[i].loop(); });
-        ths[i].swap(t);
+        ths[i].swap(t); // 这样效率更高，相比 ths[i] = t; 
     }
     bases_.back().loop(); // 当前县城也执行一个loop，使少用一个县城
     for (int i = 0; i < sz - 1; i++) {

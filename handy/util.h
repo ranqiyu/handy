@@ -19,7 +19,9 @@ struct noncopyable {
 
 struct util {
     static std::string format(const char *fmt, ...);
+    // 微妙级别
     static int64_t timeMicro();
+    // 毫秒
     static int64_t timeMilli() { return timeMicro() / 1000; }
     static int64_t steadyMicro();
     static int64_t steadyMilli() { return steadyMicro() / 1000; }
