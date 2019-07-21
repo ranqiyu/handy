@@ -117,6 +117,14 @@ void TcpConn::cleanup(const TcpConnPtr &con) {
 
 void TcpConn::handleRead(const TcpConnPtr &con) {
     // 这一步先将 写事件 监听 给禁用了，当需要时再启用
+    if (!con)
+    {
+        error("不应该为空 %s", str().c_str());
+
+        /* code */
+    }
+    assert(con); // 必须为真
+
     if (state_ == State::Handshaking && handleHandshake(con)) {
         return;
     }

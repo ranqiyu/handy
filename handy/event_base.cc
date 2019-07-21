@@ -352,6 +352,7 @@ void Channel::close() {
         poller_->removeChannel(this);
         ::close(fd_);
         fd_ = -1;
+        // 这里要回调出去。到 con->handleRead(con);
         handleRead();
     } else {
         // 可能是没有值的，如没有连接上

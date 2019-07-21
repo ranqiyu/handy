@@ -99,7 +99,7 @@ void Logger::maybeRotate() {
 static thread_local uint64_t tid;
 void Logger::logv(int level, const char *file, int line, const char *func, const char *fmt...) {
     if (tid == 0) {
-        tid = port::gettid();
+        tid = port::gettid(); // 获取县城ID。牛B了。打印县城ID
     }
     if (level > level_) {
         return;
@@ -126,12 +126,15 @@ void Logger::logv(int level, const char *file, int line, const char *func, const
     }
     *++p = '\n';
     *++p = '\0';
-    int fd = fd_ == -1 ? 1 : fd_;
+    int fd = fd_ == -1 ? 1 : fd_; // 如果没有文件描述符，则使用标准输出1，STDOUT
     int err = ::write(fd, buffer, p - buffer);
     if (err != p - buffer) {
         fprintf(stderr, "write log file %s failed. written %d errmsg: %s\n", filename_.c_str(), err, strerror(errno));
     }
-    if (level <= LERROR) {
+    if (level <= LERROR) { // 错误和至命的错误还写入syslog系统日志
+    /**
+     * syslog 所在的linux主机 可以配置 syslog 服务器，使将消息转发到服务器中
+     */
         syslog(LOG_ERR, "%s", buffer + 27);
     }
     if (level == LFATAL) {

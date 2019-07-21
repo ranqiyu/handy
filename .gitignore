@@ -2,6 +2,8 @@
 GPATH
 GRTAGS
 GTAGS
+core.*
+*.log
 
 handy.*
 *.cbp
