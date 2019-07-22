@@ -58,16 +58,28 @@ int main(int argc, const char *argv[]) {
     
     int c = 1;
 
-    string host = "182.61.30.122";
-    int begin_port = 10000;
+    string host = "182.61.30.122"; // 服务器IP
+    int begin_port = 10000; 
     int end_port = 10005;
-    int conn_count = 100;
-    int create_seconds = 500;
-    int processes = 1;
-    conn_count = conn_count / processes;
-    int heartbeat_interval = 60;
-    int bsz = 64;
+    
+    int conn_count = 100;  // 总的连接数
+    int processes = 1; // 连接一共用多少个进程创建
+    int create_rate_mils = 50; // 创建连接的速率
+    int concur_num_per_tms = 1000; // 每次的并发IO数 
+
+    int heartbeat_interval = 60; // 心跳间隔时间，毫秒
+    int bsz = 64; // 心跳包大小
+
     int man_port = 10301;
+
+    assert(conn_count >= processes);
+    int every_process_conn_count = conn_count / processes; // 每个进程创建的连接个数
+    int create_timer_cnt = every_process_conn_count / concur_num_per_tms; // 一共用这么多次的定时器
+    if (create_timer_cnt <= 0)
+    {
+        create_timer_cnt = 1;
+    }
+    
 
     if (argc < 9) {
         printf("usage %s <host> <begin port> <end port> <conn count> <create seconds> <subprocesses> <hearbeat interval> <send size> <management port>\n",
@@ -76,17 +88,17 @@ int main(int argc, const char *argv[]) {
         //return 1;
     }
     else {
-        host = argv[c++];
-        begin_port = atoi(argv[c++]);
-        end_port = atoi(argv[c++]);
-        conn_count = atoi(argv[c++]);
-        create_seconds = atof(argv[c++]);
-        processes = atoi(argv[c++]);
-        conn_count = conn_count / processes; // 总的连接数分摊得每一个进程上
+        // host = argv[c++];
+        // begin_port = atoi(argv[c++]);
+        // end_port = atoi(argv[c++]);
+        // conn_count = atoi(argv[c++]);
+        // create_seconds = atof(argv[c++]);
+        // processes = atoi(argv[c++]);
+        // conn_count = conn_count / processes; // 总的连接数分摊得每一个进程上
 
-        heartbeat_interval = atoi(argv[c++]);
-        bsz = atoi(argv[c++]);
-        man_port = atoi(argv[c++]);
+        // heartbeat_interval = atoi(argv[c++]);
+        // bsz = atoi(argv[c++]);
+        // man_port = atoi(argv[c++]);
     }
 
 
@@ -114,27 +126,25 @@ int main(int argc, const char *argv[]) {
         int recved = 0;
 
         vector<TcpConnPtr> allConns;
-        info("process %d creating %d connections。循环一共是 %d", getpid(), conn_count, create_seconds * 10);
-        // 一共用多少秒来创建这些连接
-        for (int k = 0; k < create_seconds * 10; k++) {
+       
+        info("process %d will create %d connect, with %d timer", getpid(), every_process_conn_count, create_timer_cnt);
+        
+        int total_cnt = 0;
+
+        for (int k = 0; k < create_timer_cnt; k++) {
             info("进入循环 %d", k);
             
-            // 但定时器是按 100 毫秒
-            // 这个相当于一次性创建了很多的定时器
-            base.runAfter(100 * k, [&] {
+            // 一次性创建了很多的定时器
+            base.runAfter(create_rate_mils * k, [&] {
 
-                // 当前进程的全部连接数 分摊到 这么多秒来创建，则每一次应该创建下面的 c 个tcp客户端
-                // 因为最外层的循环 x10了，所以这里要 除掉 10
-                int c = conn_count / create_seconds / 10;
-                if( c<= 0) { c = 1;}
+                info("%d 定时器 %d 已经到达，共将创建 %d 个连接", getpid(), k, concur_num_per_tms);
 
-                info("%d 定时器 %d 已经到达，共将创建 %d 个连接", getpid(), k, c);
-
-                for (int i = 0; i < c; i++) {
+                for (int i = 0; i < concur_num_per_tms; i++) {
                     // 这里有一个轮回，端口会被重复使用
                     unsigned short port = begin_port + (i % (end_port - begin_port));
                     auto con = TcpConn::createConnection(&base, host, port, 20 * 1000);
-                    info("%d 创建连接 %s", getpid(), con->str().c_str());
+
+                    info("%d 将创建第 %d 个连接 %s", getpid(), i, con->str().c_str());
 
                     allConns.push_back(con);
                     con->setReconnectInterval(20 * 1000);
@@ -163,12 +173,20 @@ int main(int argc, const char *argv[]) {
                             retry++;
                         }
                     });
+
+                    if ((++total_cnt) >= every_process_conn_count)
+                    {
+                        info("进程 %d  已完成创建连接总量 %d ", getpid(), every_process_conn_count);
+                        break;
+                    }
+                    
                 }
             });
         }
+        /*
         if (heartbeat_interval) {
             // 如果设置了心跳间隔，则发送心跳
-            base.runAfter(heartbeat_interval * 1000,
+            base.runAfter(heartbeat_interval,
                           [&] {
                               for (int i = 0; i < heartbeat_interval * 10; i++) {
                                   // 发送一次心跳。也是创建了很多定时器
@@ -187,8 +205,8 @@ int main(int argc, const char *argv[]) {
                                   });
                               }
                           },
-                          heartbeat_interval * 1000);
-        }
+                          heartbeat_interval);
+        }*/
 
         TcpConnPtr report = TcpConn::createConnection(&base, "127.0.0.1", man_port, 3000);
         report->onMsg(new LineCodec, [&](const TcpConnPtr &con, Slice msg) {
