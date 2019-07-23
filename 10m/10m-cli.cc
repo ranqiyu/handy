@@ -60,14 +60,14 @@ int main(int argc, const char *argv[]) {
 
     string host = "182.61.30.122"; // 服务器IP
     int begin_port = 10000; 
-    int end_port = 10005;
+    int end_port = 10300;
     
     int conn_count = 100;  // 总的连接数
     int processes = 1; // 连接一共用多少个进程创建
     int create_rate_mils = 50; // 创建连接的速率
     int concur_num_per_tms = 1000; // 每次的并发IO数 
 
-    int heartbeat_interval = 60; // 心跳间隔时间，毫秒
+    int heartbeat_interval = 60 * 1000; // 心跳间隔时间，毫秒
     int bsz = 64; // 心跳包大小
 
     int man_port = 10301;
@@ -183,20 +183,28 @@ int main(int argc, const char *argv[]) {
                 }
             });
         }
-        /*
+        
         if (heartbeat_interval) {
             // 如果设置了心跳间隔，则发送心跳
+            info("%d 将要启动心跳定时期", getpid());
+
             base.runAfter(heartbeat_interval,
                           [&] {
-                              for (int i = 0; i < heartbeat_interval * 10; i++) {
-                                  // 发送一次心跳。也是创建了很多定时器
-                                  base.runAfter(i * 100, [&, i] {
+                            // 这么多连接要分多少次定时期来发
+                            int timer_cnt = allConns.size() / concur_num_per_tms; // 一共用这么多次的定时器
+                            timer_cnt = std::max(timer_cnt, 1);
+                            info("%d 共有 %d 个连接，要分 %d 次定时器来发送心跳，每次发 %d 个连接", getpid(), allConns.size(), timer_cnt, concur_num_per_tms);
+
+                              for (int i = 0; i < timer_cnt; i++) {
+
+                                  base.runAfter(i * create_rate_mils, [&, i] {
+
                                       // 心跳也是一批一批发
-                                      size_t block = allConns.size() / heartbeat_interval / 10;
-                                      for (size_t j = i * block; j < (i + 1) * block && j < allConns.size(); j++) {
+                                      for (size_t j = i*concur_num_per_tms; (j < allConns.size()) && (i < concur_num_per_tms); j++) {
+
                                           if (allConns[j]->getState() == TcpConn::Connected) {
                                               
-                                              info("%d 将向 %s 发送心跳包", getpid(), allConns[i]->str().c_str());
+                                              info("%d 将向[%d] %s 发送心跳包", getpid(), j, allConns[j]->str().c_str());
 
                                               allConns[j]->sendMsg(msg);
                                               send++;
@@ -206,7 +214,7 @@ int main(int argc, const char *argv[]) {
                               }
                           },
                           heartbeat_interval);
-        }*/
+        }
 
         TcpConnPtr report = TcpConn::createConnection(&base, "127.0.0.1", man_port, 3000);
         report->onMsg(new LineCodec, [&](const TcpConnPtr &con, Slice msg) {
@@ -229,7 +237,7 @@ int main(int argc, const char *argv[]) {
                           info("上报负载： %s", s.c_str());
                            report->sendMsg(s); 
                            },
-                      100);
+                      2000);
         base.loop();
         info("%d 子进程即将退出", getpid());
     } else {  // master process

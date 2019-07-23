@@ -141,7 +141,9 @@ void TcpConn::handleRead(const TcpConnPtr &con) {
             for (auto &idle : idleIds_) {
                 handyUpdateIdle(getBase(), idle);
             }
-            if (readcb_ && input_.size()) {
+            if (readcb_ && input_.size()) { // 这里是有读到值才会回调出来的
+                info("已经读到数据长度 %d", input_.size());
+                
                 readcb_(con);
             }
             break;
@@ -284,7 +286,7 @@ void TcpConn::onMsg(CodecBase *codec, const MsgCallBack &cb) {
                 con->getInput().consume(r);
             } else {
                 std::string s = msg;
-                warn("[%s] decode len 0", s.c_str());
+                warn("[%s] 解码出来的数据长度为 len 0，但是已读数据长度为 %d", s.c_str(), con->getInput().size());
             }
         }
     });
