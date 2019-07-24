@@ -142,7 +142,7 @@ void TcpConn::handleRead(const TcpConnPtr &con) {
                 handyUpdateIdle(getBase(), idle);
             }
             if (readcb_ && input_.size()) { // 这里是有读到值才会回调出来的
-                info("已经读到数据长度 %d", input_.size());
+                info("已经读到数据长度 %d, %s", input_.size(), input_.data());
                 
                 readcb_(con);
             }
@@ -274,20 +274,23 @@ void TcpConn::onMsg(CodecBase *codec, const MsgCallBack &cb) {
     codec_.reset(codec);
     onRead([cb](const TcpConnPtr &con) {
         int r = 1;
-        while (r) {
+        while (r) {  // 当下次解析出来的为 0 时/false，就退出循环了
             Slice msg;
             r = con->codec_->tryDecode(con->getInput(), msg);
             if (r < 0) {
                 con->channel_->close();
                 break;
             } else if (r > 0) {
-                trace("a msg decoded. origin len %d msg len %ld", r, msg.size());
+                info("消息解码成功. 原始长度 %d，消息长度 %ld", r, msg.size());
                 cb(con, msg);
                 con->getInput().consume(r);
-            } else {
+            } 
+            // 无意义的打印，当完全解析后肯定就为0了
+            /*
+            else {
                 std::string s = msg;
-                warn("[%s] 解码出来的数据长度为 len 0，但是已读数据长度为 %d", s.c_str(), con->getInput().size());
-            }
+                warn("[%s] 解码出来的数据长度为 len 0，但是待解码数据长度为 %d", s.c_str(), con->getInput().size());
+            }*/
         }
     });
 }

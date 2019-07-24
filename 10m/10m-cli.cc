@@ -103,12 +103,18 @@ int main(int argc, const char *argv[]) {
 
 
     int pid = 1;
-    for (int i = 0; i < processes; i++) {
-        pid = fork();
-        if (pid == 0) {  // a child process, break
-            sleep(1);
-            break;
+    if (processes > 1)
+    {
+        for (int i = 0; i < processes; i++) {
+            pid = fork();
+            if (pid == 0) {  // a child process, break
+                sleep(1);
+                break;
+            }
         }
+    }
+    else { // 只有一个进程就不用fork了
+        pid = 0;
     }
     
     // 捕获信号SIGPIPE，防止进程异常退出
@@ -234,8 +240,16 @@ int main(int argc, const char *argv[]) {
         base.runAfter(2000,
                       [&]() {
                           std::string s = util::format("%d connected: %ld retry: %ld send: %ld recved: %ld", getpid(), connected, retry, send, recved);
-                          info("上报负载： %s", s.c_str());
-                           report->sendMsg(s); 
+                          //info("上报负载： %s", s.c_str());
+                          info("进程 %d 负载情况，connected: %ld ，retry: %ld ，send: %ld ，recved: %ld", getpid(), connected, retry, send, recved);
+                          if (report->getState() == TcpConn::Connected)
+                          {
+                                report->sendMsg(s); 
+                          }
+                          else {
+                              info("上报的socket没有连接成功，不会上报");
+                          }
+                          
                            },
                       2000);
         base.loop();
