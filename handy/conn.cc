@@ -17,9 +17,15 @@ void TcpConn::attach(EventBase *base, int fd, Ip4Addr local, Ip4Addr peer) {
     state_ = State::Handshaking;
     local_ = local;
     peer_ = peer;
+    if (channel_)
+    {   
+        trace("[%p] 原来已经有一个 channel 了，是[%p]", this, channel_);
+    }
+    
     delete channel_;
     channel_ = new Channel(base, fd, kWriteEvent | kReadEvent);
-    trace("tcp constructed %s - %s fd: %d", local_.toString().c_str(), peer_.toString().c_str(), fd);
+    trace("[%p] tcp constructed %s - %s fd: %d。附加的 channel 是[%p]", this, local_.toString().c_str(), peer_.toString().c_str(), fd, channel_);
+
     TcpConnPtr con = shared_from_this();
     con->channel_->onRead([=] { con->handleRead(con); });
     con->channel_->onWrite([=] { con->handleWrite(con); });
@@ -117,12 +123,12 @@ void TcpConn::cleanup(const TcpConnPtr &con) {
 
 void TcpConn::handleRead(const TcpConnPtr &con) {
     // 这一步先将 写事件 监听 给禁用了，当需要时再启用
+
     if (!con)
     {
         error("不应该为空 %s", str().c_str());
-
-        /* code */
     }
+
     assert(con); // 必须为真
 
     if (state_ == State::Handshaking && handleHandshake(con)) {
@@ -131,9 +137,20 @@ void TcpConn::handleRead(const TcpConnPtr &con) {
     while (state_ == State::Connected) {
         input_.makeRoom();
         int rd = 0;
+        // 打印第一个就崩溃了。说明不应该是 Connected 状态。看看在哪里赋值的
+        trace("[%p] 准备读数据", this);
+        assert(channel_); // 必须有值才行
+
+        // 尴尬。这里崩溃了。channel_ 为空，被删除了。导致崩溃
+        if (!channel_)
+        {
+            error("[%p] channel can not be null", this);
+        }
+        
         if (channel_->fd() >= 0) {
+            trace("[%p] debug: fd %d, %p, %p", this, channel_->fd(), input_.end(), input_.space());
             rd = readImp(channel_->fd(), input_.end(), input_.space());
-            trace("channel %lld fd %d readed %d bytes", (long long) channel_->id(), channel_->fd(), rd);
+            trace("[%p] channel %lld fd %d readed %d bytes", this, (long long) channel_->id(), channel_->fd(), rd);
         }
         if (rd == -1 && errno == EINTR) {
             continue;

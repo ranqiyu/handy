@@ -12,6 +12,7 @@
         }                                                                               \
     } while (0)
 #else
+// 宏 __FUNCTION__ 和 __func__。后者是C++11
 #define hlog(level, ...)                                                                \
     do {                                                                                \
         if (level <= Logger::getLogger().getLogLevel()) {                               \

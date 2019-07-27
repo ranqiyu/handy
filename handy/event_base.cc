@@ -302,7 +302,11 @@ void MultiBase::loop() {
     }
 }
 
+// ==========================================、
+// 将 conn.h 定义的方法放一部分这里了
+
 Channel::Channel(EventBase *base, int fd, int events) : base_(base), fd_(fd), events_(events) {
+    trace("[%p] channel constructor", this);
     fatalif(net::setNonBlock(fd_) < 0, "channel set non block failed");
     static atomic<int64_t> id(0); // 静态的
     id_ = ++id;
@@ -311,6 +315,7 @@ Channel::Channel(EventBase *base, int fd, int events) : base_(base), fd_(fd), ev
 }
 
 Channel::~Channel() {
+    trace("[%p] channel desctructor", this);
     close();
 }
 
@@ -376,10 +381,13 @@ void handyUpdateIdle(EventBase *base, const IdleId &idle) {
 }
 
 TcpConn::TcpConn()
-    : base_(NULL), channel_(NULL), state_(State::Invalid), destPort_(-1), connectTimeout_(0), reconnectInterval_(-1), connectedTime_(util::timeMilli()) {}
+    : base_(NULL), channel_(NULL), state_(State::Invalid), destPort_(-1), connectTimeout_(0), reconnectInterval_(-1), connectedTime_(util::timeMilli()) 
+    {
+        trace("[%p] tcp construct", this);
+    }
 
 TcpConn::~TcpConn() {
-    trace("tcp destroyed %s - %s", local_.toString().c_str(), peer_.toString().c_str());
+    trace("[%p] tcp destroyed %s - %s", this, local_.toString().c_str(), peer_.toString().c_str());
     delete channel_;
 }
 
@@ -390,16 +398,22 @@ void TcpConn::addIdleCB(int idle, const TcpCallBack &cb) {
 }
 
 // 哪些地方会触发重连呢？
+// 尴噶，TcpConn::reconnect 的声明在 conn.h。而实现在这个 event_base.cc文件
 void TcpConn::reconnect() {
     auto con = shared_from_this();
     getBase()->imp_->reconnectConns_.insert(con);
     long long interval = reconnectInterval_ - (util::timeMilli() - connectedTime_);
     interval = interval > 0 ? interval : 0;
-    info("reconnect interval: %d will reconnect after %lld ms", reconnectInterval_, interval);
+    info("[%p] tcp reconnect interval: %d will reconnect after %lld ms", this, reconnectInterval_, interval);
     getBase()->runAfter(interval, [this, con]() {
         getBase()->imp_->reconnectConns_.erase(con);
         connect(getBase(), destHost_, (unsigned short) destPort_, connectTimeout_, localIp_);
     });
+    if (channel_)
+    {
+        info("[%p] 将要删除 channel，它是[%p]", this, channel_);
+    }
+    
     delete channel_;
     channel_ = NULL;
 }

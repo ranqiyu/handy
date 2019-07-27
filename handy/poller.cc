@@ -73,6 +73,8 @@ void PollerEpoll::updateChannel(Channel *ch) {
 void PollerEpoll::removeChannel(Channel *ch) {
     trace("deleting channel %lld fd %d epoll %d", (long long) ch->id(), ch->fd(), fd_);
     liveChannels_.erase(ch);
+
+    // 这里将上一次活动的 置为null。但是如果 activeEvs_ 为空或没有找到就不会
     for (int i = lastActive_; i >= 0; i--) {
         if (ch == activeEvs_[i].data.ptr) {
             activeEvs_[i].data.ptr = NULL;
@@ -83,6 +85,7 @@ void PollerEpoll::removeChannel(Channel *ch) {
 
 void PollerEpoll::loop_once(int waitMs) {
     int64_t ticks = util::timeMilli();
+    // epoll_wait之后，有事件的会放在 activeEvs_ 里面
     lastActive_ = epoll_wait(fd_, activeEvs_, kMaxEvents, waitMs);
     int64_t used = util::timeMilli() - ticks;
     trace("epoll wait %d return %d errno %d used %lld millsecond", waitMs, lastActive_, errno, (long long) used);
@@ -91,7 +94,7 @@ void PollerEpoll::loop_once(int waitMs) {
         int i = lastActive_;
         Channel *ch = (Channel *) activeEvs_[i].data.ptr;
         int events = activeEvs_[i].events;
-        if (ch) {
+        if (ch) { // 因为 activeEvs_[i].data.ptr 可能被置为null。所以要判断一下
             if (events & kWriteEvent) {
                 trace("channel %lld fd %d handle write", (long long) ch->id(), ch->fd());
                 ch->handleWrite();

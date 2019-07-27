@@ -48,7 +48,11 @@ int main(int argc, const char *argv[]) {
     string logfile = program + ".log";
 
     setlogfile(logfile);
+    setloglevel("TRACE");
+
+    trace("process run  at %s", argv[0]);
     info("process run  at %s", argv[0]);
+    //printf("%d%s, %s\r\n", __LINE__,__FUNCTION__, __func__);
 
     if (false) // mytest
     {
@@ -62,9 +66,9 @@ int main(int argc, const char *argv[]) {
     int begin_port = 10000; 
     int end_port = 10300;
     
-    int conn_count = 100;  // 总的连接数
+    int conn_count = 10000;  // 总的连接数
     int processes = 1; // 连接一共用多少个进程创建
-    int create_rate_mils = 50; // 创建连接的速率
+    int create_rate_mils = 5000; // 创建连接的速率。每隔多少一次IO。单位毫秒
     int concur_num_per_tms = 1000; // 每次的并发IO数 
 
     int heartbeat_interval = 60 * 1000; // 心跳间隔时间，毫秒
