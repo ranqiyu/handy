@@ -315,8 +315,9 @@ Channel::Channel(EventBase *base, int fd, int events) : base_(base), fd_(fd), ev
 }
 
 Channel::~Channel() {
-    trace("[%p] channel desctructor", this);
+    trace("[%p] channel desctructor11", this);
     close();
+    trace("[%p] channel 析构完成");
 }
 
 void Channel::enableRead(bool enable) {

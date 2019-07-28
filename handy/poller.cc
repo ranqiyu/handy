@@ -81,6 +81,8 @@ void PollerEpoll::removeChannel(Channel *ch) {
             break;
         }
     }
+    // 这里是否因该从epoll里删除，还是自动的？
+    //EPOLL_CTL_DEL
 }
 
 void PollerEpoll::loop_once(int waitMs) {
@@ -99,8 +101,10 @@ void PollerEpoll::loop_once(int waitMs) {
                 trace("channel %lld fd %d handle write", (long long) ch->id(), ch->fd());
                 ch->handleWrite();
             }
+            //当close正在 epoll_wait 的一个fd时，应该是会触发事件 POLLERR
+            // 混在一起处理。？
             if (events & (kReadEvent | POLLERR)) {
-                trace("channel %lld fd %d handle read", (long long) ch->id(), ch->fd());
+                trace("channel[%p] %lld fd %d handle read", ch, (long long) ch->id(), ch->fd());
                 ch->handleRead();
             }
             if (!(events & (kReadEvent | kWriteEvent | POLLERR))){

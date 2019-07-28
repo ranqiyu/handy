@@ -123,7 +123,7 @@ void TcpConn::cleanup(const TcpConnPtr &con) {
 
 void TcpConn::handleRead(const TcpConnPtr &con) {
     // 这一步先将 写事件 监听 给禁用了，当需要时再启用
-
+    trace("[%p] here,handle read。当前网络状态是 %d", this, state_);
     if (!con)
     {
         error("不应该为空 %s", str().c_str());
@@ -138,7 +138,7 @@ void TcpConn::handleRead(const TcpConnPtr &con) {
         input_.makeRoom();
         int rd = 0;
         // 打印第一个就崩溃了。说明不应该是 Connected 状态。看看在哪里赋值的
-        trace("[%p] 准备读数据", this);
+        trace("[%p] 准备读数据，他的 channel 是 [%p]", this, channel_);
         assert(channel_); // 必须有值才行
 
         // 尴尬。这里崩溃了。channel_ 为空，被删除了。导致崩溃
@@ -167,6 +167,8 @@ void TcpConn::handleRead(const TcpConnPtr &con) {
         } 
         // 当读到为0时，表示关闭
         else if (channel_->fd() == -1 || rd == 0 || rd == -1) {
+            // 这里已经判断了为 -1 的情况
+            trace("[%p] channel 的 fd 已经被设置为 %d 了。将清理", this, channel_->fd());
             cleanup(con);
             break;
         } else {  // rd > 0
