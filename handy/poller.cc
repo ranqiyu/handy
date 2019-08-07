@@ -98,6 +98,7 @@ void PollerEpoll::loop_once(int waitMs) {
         int events = activeEvs_[i].events;
         if (ch) { // 因为 activeEvs_[i].data.ptr 可能被置为null。所以要判断一下
             if (events & kWriteEvent) {
+                // 这里当客户端connect失败之后也会返回为可写
                 trace("channel %lld fd %d handle write", (long long) ch->id(), ch->fd());
                 ch->handleWrite();
             }

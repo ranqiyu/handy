@@ -75,8 +75,10 @@ void TcpConn::connect(EventBase *base, const string &host, unsigned short port, 
         // 设置连接超时
         TcpConnPtr con = shared_from_this();
         timeoutId_ = base->runAfter(timeout, [con] {
+            warn("[%p] connect的超时定时器已经到，关联fd %d", con.get(), con->channel_->fd());
             // 关键是这里，如果超时之后，这里还没有就断开。连上了就不用管了
             if (con->getState() == Handshaking) {
+                warn("[%p] connect的超时为连接成功，将关闭，关联fd %d", con.get(), con->channel_->fd());
                 con->channel_->close();
             }
         });
@@ -179,16 +181,42 @@ void TcpConn::handleRead(const TcpConnPtr &con) {
 
 int TcpConn::handleHandshake(const TcpConnPtr &con) {
     fatalif(state_ != Handshaking, "handleHandshaking called when state_=%d", state_);
+    
+    // 这段代码测试用。用来检测是否连接成功。和后面的poll的作用一样
+    if (true)
+    {
+        socklen_t lon;
+        lon = sizeof(int); 
+        int valopt = 0;
+        //getsockopt(channel_->fd(),SO_ERROR,SOL_SOCKET,(void*)(&valopt), &lon);
+        if (getsockopt(channel_->fd(), SOL_SOCKET, SO_ERROR, (void*)(&valopt), &lon) < 0) { 
+                    error("Error in getsockopt() %d - %s", errno, strerror(errno)); 
+                    // exit(0); 
+        } else {
+            // Check the value returned... 
+            if (valopt) { // != 0.  为0则表示没有错误。这里若为真就是非0，失败
+                error("fd %d error connection() %d - %s\n", channel_->fd(), valopt, strerror(valopt) ); 
+            } else {
+                // 成功
+                info("fd %d connect success", channel_->fd());
+            } 
+        }
+    }
+    
+
     struct pollfd pfd;
     pfd.fd = channel_->fd();
     pfd.events = POLLOUT | POLLERR;
+
     /*
      poll函数使用pollfd类型的结构来监控一组文件句柄，
      ufds是要监控的文件句柄集合，
      nfds是监控的文件句柄数量，
      timeout是等待的毫秒数，这段时间内无论I/O是否准备好，poll都会返回。
-     timeout为负数表示无线等待，timeout为0表示调用后立即返回。执行结果：为0表示超时前没有任何事件发生；-1表示失败；成功则返回结构体中revents不为0的文件描述符个数。
+     timeout为负数表示无线等待，timeout为0表示调用后立即返回。
+     执行结果：为0表示超时前没有任何事件发生；-1表示失败；成功则返回结构体中revents不为0的文件描述符个数。
      */
+    // 感觉在这里这个函数的目的，只是为了判断是否确实可写
     int r = poll(&pfd, 1, 0); // 使用hai在epoll之前的poll
     if (r == 1 && pfd.revents == POLLOUT) { // 可写
         channel_->enableReadWrite(true, false);
@@ -210,6 +238,7 @@ int TcpConn::handleHandshake(const TcpConnPtr &con) {
 
 void TcpConn::handleWrite(const TcpConnPtr &con) {
     if (state_ == State::Handshaking) {
+        // 当客户端连接失败也会到这里来
         handleHandshake(con);
     } else if (state_ == State::Connected) {
         ssize_t sended = isend(output_.begin(), output_.size());
