@@ -414,8 +414,11 @@ void TcpConn::reconnect() {
     {
         info("[%p] 将要删除 channel，它是[%p]", this, channel_);
     }
-    
-    delete channel_;
+    {
+        channel_->close(); // 内部也handle出来
+    info("[%p] 先不删除，直接close并且NULL.后面要修改", this);
+    }
+    //delete channel_;
     channel_ = NULL;
 }
 

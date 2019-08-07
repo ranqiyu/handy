@@ -71,7 +71,7 @@ int main(int argc, const char *argv[]) {
     int create_rate_mils = 5000; // 创建连接的速率。每隔多少一次IO。单位毫秒
     int concur_num_per_tms = 1000; // 每次的并发IO数 
 
-    int heartbeat_interval = 60 * 1000; // 心跳间隔时间，毫秒
+    int heartbeat_interval = 0;//60 * 1000; // 心跳间隔时间，毫秒
     int bsz = 64; // 心跳包大小
 
     int man_port = 10301;
