@@ -66,7 +66,7 @@ int main(int argc, const char *argv[]) {
     int begin_port = 10000; 
     int end_port = 10300;
     
-    int conn_count = 5000;  // 总的连接数
+    int conn_count = 10000;  // 总的连接数
     int processes = 1; // 连接一共用多少个进程创建
     int create_rate_mils = 5000; // 创建连接的速率。每隔多少一次IO。单位毫秒
     int concur_num_per_tms = 1000; // 每次的并发IO数 
@@ -76,6 +76,34 @@ int main(int argc, const char *argv[]) {
 
     int man_port = 10301;
 
+
+    if (argc < 9) {
+        printf("usage %s <host> <begin port> <end port> <conn count> <io interval> <concur io number> <fork work process number> <hearbeat interval> <hearbeat size> <management port>\n",
+               argv[0]);
+        printf("use default val\r\n");
+        //return 1;
+    }
+    else {
+        // 在vscode中传参数，例如
+        // "args": ["182.61.30.122", "8080", "8080", "20", "100", "100", "1", "0", "0", "1031"],
+        
+         host = argv[c++];
+         begin_port = atoi(argv[c++]);
+         end_port = atoi(argv[c++]);
+         conn_count = atoi(argv[c++]);
+         create_rate_mils = atoi(argv[c++]);
+         concur_num_per_tms = atoi(argv[c++]);
+
+         processes = atoi(argv[c++]);
+         heartbeat_interval = atoi(argv[c++]);
+         bsz = atoi(argv[c++]);
+
+         man_port = atoi(argv[c++]);
+
+        printf("使用传入的参数值，将创建 %d 个连接\r\n", conn_count);
+
+    }
+
     assert(conn_count >= processes);
     int every_process_conn_count = conn_count / processes; // 每个进程创建的连接个数
     int create_timer_cnt = every_process_conn_count / concur_num_per_tms; // 一共用这么多次的定时器
@@ -83,28 +111,6 @@ int main(int argc, const char *argv[]) {
     {
         create_timer_cnt = 1;
     }
-    
-
-    if (argc < 9) {
-        printf("usage %s <host> <begin port> <end port> <conn count> <create seconds> <subprocesses> <hearbeat interval> <send size> <management port>\n",
-               argv[0]);
-        printf("use default val\r\n");
-        //return 1;
-    }
-    else {
-        // host = argv[c++];
-        // begin_port = atoi(argv[c++]);
-        // end_port = atoi(argv[c++]);
-        // conn_count = atoi(argv[c++]);
-        // create_seconds = atof(argv[c++]);
-        // processes = atoi(argv[c++]);
-        // conn_count = conn_count / processes; // 总的连接数分摊得每一个进程上
-
-        // heartbeat_interval = atoi(argv[c++]);
-        // bsz = atoi(argv[c++]);
-        // man_port = atoi(argv[c++]);
-    }
-
 
     int pid = 1;
     if (processes > 1)
@@ -130,10 +136,10 @@ int main(int argc, const char *argv[]) {
         ExitCaller ec1([=] { delete[] buf; });
         Slice msg(buf, bsz);
         char heartbeat[] = "heartbeat";
-        int send = 0;
-        int connected = 0;
-        int retry = 0;
-        int recved = 0;
+        unsigned int send = 0;
+        unsigned int connected = 0;
+        unsigned int retry = 0;
+        unsigned int recved = 0;
 
         vector<TcpConnPtr> allConns;
        
@@ -151,7 +157,11 @@ int main(int argc, const char *argv[]) {
 
                 for (int i = 0; i < concur_num_per_tms; i++) {
                     // 这里有一个轮回，端口会被重复使用
-                    unsigned short port = begin_port + (i % (end_port - begin_port));
+                    unsigned short port = begin_port;
+                    if(begin_port != end_port){
+                        port = begin_port + (i % (end_port - begin_port));
+                    }
+
                     auto con = TcpConn::createConnection(&base, host, port, 20 * 1000);
 
                     info("%d 将创建第 %d 个连接 %s", getpid(), i, con->str().c_str());
@@ -169,9 +179,10 @@ int main(int argc, const char *argv[]) {
                     con->onState([&, i](const TcpConnPtr &con) {
                         TcpConn::State st = con->getState();
                         if (st == TcpConn::Connected) {
-                            std::string s = util::format("pid %d 连接成功, %s", getpid(), con->str().c_str());
-                            info("%s", s.c_str());
                             connected++;
+
+                            std::string s = util::format("pid %d 连接成功, %s, 这是 %d", getpid(), con->str().c_str(), connected);
+                            info("%s", s.c_str());
                             //                            send ++;
                             //                            con->sendMsg(msg);
                         } else if (st == TcpConn::Failed || st == TcpConn::Closed) {  //Failed表示连接出错
@@ -243,9 +254,9 @@ int main(int argc, const char *argv[]) {
         // 每隔2秒上报一次负载信息。当前进程有多少连接，连接失败重试了多少，发送多少，接收了多少次
         base.runAfter(2000,
                       [&]() {
-                          std::string s = util::format("%d connected: %ld retry: %ld send: %ld recved: %ld", getpid(), connected, retry, send, recved);
+                          std::string s = util::format("%d connected: %d retry: %d send: %d recved: %d", getpid(), connected, retry, send, recved);
                           //info("上报负载： %s", s.c_str());
-                          info("进程 %d 负载情况，connected: %ld ，retry: %ld ，send: %ld ，recved: %ld", getpid(), connected, retry, send, recved);
+                          info("进程 %d 负载情况，connected: %d ，retry: %d ，send: %d ，recved: %d", getpid(), connected, retry, send, recved);
                           if (report->getState() == TcpConn::Connected)
                           {
                                 report->sendMsg(s); 

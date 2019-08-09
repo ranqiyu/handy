@@ -78,7 +78,7 @@ void TcpConn::connect(EventBase *base, const string &host, unsigned short port, 
             warn("[%p] connect的超时定时器已经到，关联fd %d", con.get(), con->channel_->fd());
             // 关键是这里，如果超时之后，这里还没有就断开。连上了就不用管了
             if (con->getState() == Handshaking) {
-                warn("[%p] connect的超时为连接成功，将关闭，关联fd %d", con.get(), con->channel_->fd());
+                warn("[%p] connect的超时为连接失败，将关闭，关联fd %d", con.get(), con->channel_->fd());
                 con->channel_->close();
             }
         });
