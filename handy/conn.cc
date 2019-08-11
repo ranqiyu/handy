@@ -75,7 +75,7 @@ void TcpConn::connect(EventBase *base, const string &host, unsigned short port, 
         // 设置连接超时
         TcpConnPtr con = shared_from_this();
         timeoutId_ = base->runAfter(timeout, [con] {
-            warn("[%p] connect的超时定时器已经到，关联fd %d", con.get(), con->channel_->fd());
+            debug("[%p] connect的超时定时器已经到，关联fd %d", con.get(), con->channel_->fd());
             // 关键是这里，如果超时之后，这里还没有就断开。连上了就不用管了
             if (con->getState() == Handshaking) {
                 warn("[%p] connect的超时为连接失败，将关闭，关联fd %d", con.get(), con->channel_->fd());
@@ -128,7 +128,7 @@ void TcpConn::handleRead(const TcpConnPtr &con) {
     trace("[%p] here,handle read。当前网络状态是 %d", this, state_);
     if (!con)
     {
-        error("不应该为空 %s", str().c_str());
+        debug("不应该为空 %s", str().c_str());
     }
 
     assert(con); // 必须为真
@@ -161,8 +161,7 @@ void TcpConn::handleRead(const TcpConnPtr &con) {
                 handyUpdateIdle(getBase(), idle);
             }
             if (readcb_ && input_.size()) { // 这里是有读到值才会回调出来的
-                info("已经读到数据长度 %d, %s", input_.size(), input_.data());
-                
+                trace("已经读到数据长度 %d, 内容: %s", input_.size(), input_.data());
                 readcb_(con);
             }
             break;
@@ -195,10 +194,10 @@ int TcpConn::handleHandshake(const TcpConnPtr &con) {
         } else {
             // Check the value returned... 
             if (valopt) { // != 0.  为0则表示没有错误。这里若为真就是非0，失败
-                error("fd %d error connection() %d - %s\n", channel_->fd(), valopt, strerror(valopt) ); 
+                trace("fd %d error connection() %d - %s\n", channel_->fd(), valopt, strerror(valopt) ); 
             } else {
                 // 成功
-                info("fd %d connect success", channel_->fd());
+                trace("fd %d connect success", channel_->fd());
             } 
         }
     }
@@ -298,7 +297,7 @@ void TcpConn::send(Buffer &buf) {
             }
         }
     } else {
-        warn("connection %s - %s closed, but still writing %lu bytes", local_.toString().c_str(), peer_.toString().c_str(), buf.size());
+        trace("connection %s - %s closed, but still writing %lu bytes", local_.toString().c_str(), peer_.toString().c_str(), buf.size());
     }
 }
 
@@ -313,7 +312,7 @@ void TcpConn::send(const char *buf, size_t len) {
             output_.append(buf, len);
         }
     } else {
-        warn("connection %s - %s closed, but still writing %lu bytes", local_.toString().c_str(), peer_.toString().c_str(), len);
+        trace("connection %s - %s closed, but still writing %lu bytes", local_.toString().c_str(), peer_.toString().c_str(), len);
     }
 }
 
@@ -329,7 +328,7 @@ void TcpConn::onMsg(CodecBase *codec, const MsgCallBack &cb) {
                 con->channel_->close();
                 break;
             } else if (r > 0) {
-                info("消息解码成功. 原始长度 %d，消息长度 %ld", r, msg.size());
+                debug("消息解码成功. 原始长度 %d，消息长度 %ld", r, msg.size());
                 cb(con, msg);
                 con->getInput().consume(r);
             } 

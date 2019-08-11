@@ -159,7 +159,7 @@ void EventsImp::init() {
         char buf[1024] = {0};
         int r = ch->fd() >= 0 ? ::read(ch->fd(), buf, sizeof buf) : 0;
         if (r > 0) {
-            info("read[%d] %s", r, buf);
+            debug("read[%d] %s", r, buf);
             // 这个管道的目的是用来通知做任务的，现在不需要里面有什么数据。但是，ch->fd() 是在另外一个地方赋值
             Task task;
             // 如果有任务就一直执行
@@ -411,11 +411,11 @@ void TcpConn::reconnect() {
     });
     if (channel_)
     {
-        info("[%p] 将要删除 channel，它是[%p]", this, channel_);
+        trace("[%p] 将要删除 channel，它是[%p]", this, channel_);
     }
     {
         channel_->close(); // 内部也handle出来
-    info("[%p] 先不删除，直接close并且NULL.后面要修改", this);
+    trace("[%p] 先不删除，直接close并且NULL.后面要修改", this);
     }
     //delete channel_;
     channel_ = NULL;

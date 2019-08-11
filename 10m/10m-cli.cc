@@ -34,6 +34,7 @@ void test_one(){
                 //                            con->sendMsg(msg);
             } else if (st == TcpConn::Failed || st == TcpConn::Closed) {  //Failed表示连接出错
                 std::string s = util::format("pid %d 连接异常 %d, %s", getpid(), st, con->str().c_str());
+                info("%s", s.c_str());
 
                 if (st == TcpConn::Closed) {
                 }
@@ -47,13 +48,6 @@ int main(int argc, const char *argv[]) {
     string program = argv[0];
     string logfile = program + ".log";
 
-    setlogfile(logfile);
-    setloglevel("TRACE");
-
-    trace("process run  at %s", argv[0]);
-    info("process run  at %s", argv[0]);
-    //printf("%d%s, %s\r\n", __LINE__,__FUNCTION__, __func__);
-
     if (false) // mytest
     {
         test_one();
@@ -61,6 +55,7 @@ int main(int argc, const char *argv[]) {
     }
     
     int c = 1;
+    std::string loglevel = "error";
 
     string host = "182.61.30.122"; // 服务器IP
     int begin_port = 10000; 
@@ -73,20 +68,32 @@ int main(int argc, const char *argv[]) {
 
     int heartbeat_interval = 0;//60 * 1000; // 心跳间隔时间，毫秒
     int bsz = 64; // 心跳包大小
-
+    int hearbeat_protol = 1; // 心跳包数据协议，1换行符,2长度
     int man_port = 10301;
 
 
-    if (argc < 9) {
-        printf("usage %s <host> <begin port> <end port> <conn count> <io interval> <concur io number> <fork work process number> <hearbeat interval> <hearbeat size> <management port>\n",
+    if (argc <= 12) {
+        printf("usage %s <log level> <remote host> <remote begin port> <remote end port> <concur connect> <concur io interval> <concur io number> <fork work process> <hearbeat interval> <data size> <data protol> <management port>\n",
                argv[0]);
-        printf("use default val\r\n");
-        //return 1;
+        printf("    <log level>: 设置日志级别，可以取值如 trace, debug, info, error\n");
+        printf("    <remote host>: 指定远程服务端的主机或者IP地址\n");
+        printf("    <remote begin port>: 远程服务端的监听端口，指定开始端口\n");
+        printf("    <remote end port>: 远程服务端的监听端口，指定结束端口。end port可以等于begin port表示只监听这个端口，否则为一个连续端口\n");
+        printf("    <concur connect>: 总的并发连接数\n");
+        printf("    <concur io interval>: 每次并发IO的间隔时间，毫秒\n");
+        printf("    <concur io number>: 每次并发IO的数量\n");
+        printf("    <fork work process>: 摊派到子进程的数量\n");
+        printf("    <hearbeat interval>: 发送心跳的间隔时间，毫秒。为0表示不并发送心跳\n");
+        printf("    <data size>: 发送的数据包大小（如心跳数据包），字节\n");
+        printf("    <data protol>: 数据的格式/协议。1表示换行符结束，其它表示以长度解码\n");
+        printf("    <management port>: 多个进程时本地的管理端口\n");
+        return 1;
     }
     else {
         // 在vscode中传参数，例如
         // "args": ["182.61.30.122", "8080", "8080", "20", "100", "100", "1", "0", "0", "1031"],
         
+         loglevel = argv[c++];
          host = argv[c++];
          begin_port = atoi(argv[c++]);
          end_port = atoi(argv[c++]);
@@ -97,13 +104,29 @@ int main(int argc, const char *argv[]) {
          processes = atoi(argv[c++]);
          heartbeat_interval = atoi(argv[c++]);
          bsz = atoi(argv[c++]);
+         hearbeat_protol = atoi(argv[c++]);
 
          man_port = atoi(argv[c++]);
 
-        printf("使用传入的参数值，将创建 %d 个连接\r\n", conn_count);
-
+        info("使用传入的参数值，将创建 %d 个连接", conn_count);
     }
 
+    setlogfile(logfile);
+    setloglevel(loglevel);
+
+    //trace("process run  at %s", argv[0]);
+    info("主进程启动，在位置 %s", argv[0]);
+    //printf("%d%s, %s\r\n", __LINE__,__FUNCTION__, __func__);
+
+    CodecBase* cd = nullptr;
+    info("心跳数据包协议 %d", hearbeat_protol);
+    if (hearbeat_protol == 1) // 
+    {
+        cd = new LineCodec();
+    } else {
+        cd = new LengthCodec();
+    }
+    
     assert(conn_count >= processes);
     int every_process_conn_count = conn_count / processes; // 每个进程创建的连接个数
     int create_timer_cnt = every_process_conn_count / concur_num_per_tms; // 一共用这么多次的定时器
@@ -118,6 +141,10 @@ int main(int argc, const char *argv[]) {
         for (int i = 0; i < processes; i++) {
             pid = fork();
             if (pid == 0) {  // a child process, break
+                // 给子进程指定日志文件
+                std::string child_log_file = program + "-" + std::to_string(getpid()) + ".log";
+                setlogfile(child_log_file);
+                info("=========子进程 %d 启动========", getpid());
                 sleep(1);
                 break;
             }
@@ -134,8 +161,9 @@ int main(int argc, const char *argv[]) {
     if (pid == 0) {  // child process
         char *buf = new char[bsz];
         ExitCaller ec1([=] { delete[] buf; });
+        memset(buf, 'a', bsz);
+
         Slice msg(buf, bsz);
-        char heartbeat[] = "heartbeat";
         unsigned int send = 0;
         unsigned int connected = 0;
         unsigned int retry = 0;
@@ -148,12 +176,12 @@ int main(int argc, const char *argv[]) {
         int total_cnt = 0;
 
         for (int k = 0; k < create_timer_cnt; k++) {
-            info("进入循环 %d", k);
+            debug("进入循环 %d", k);
             
             // 一次性创建了很多的定时器
             base.runAfter(create_rate_mils * k, [&] {
 
-                info("%d 定时器 %d 已经到达，共将创建 %d 个连接", getpid(), k, concur_num_per_tms);
+                debug("%d 定时器 %d 已经到达，共将创建 %d 个连接", getpid(), k, concur_num_per_tms);
 
                 for (int i = 0; i < concur_num_per_tms; i++) {
                     // 这里有一个轮回，端口会被重复使用
@@ -164,11 +192,13 @@ int main(int argc, const char *argv[]) {
 
                     auto con = TcpConn::createConnection(&base, host, port, 20 * 1000);
 
-                    info("%d 将创建第 %d 个连接 %s", getpid(), i, con->str().c_str());
+                    debug("%d 将创建第 %d 个连接 %s", getpid(), i, con->str().c_str());
 
                     allConns.push_back(con);
                     con->setReconnectInterval(20 * 1000);
-                    con->onMsg(new LengthCodec, [&](const TcpConnPtr &con, const Slice &msg) {
+
+                    // 使用LIneCodec编码可以用来测试echo server
+                    con->onMsg(cd, [&](const TcpConnPtr &con, const Slice &msg) {
                         // 如果有心跳了，这里不echo，只收
                         if (heartbeat_interval == 0) {  // echo the msg if no interval
                             con->sendMsg(msg);
@@ -207,14 +237,14 @@ int main(int argc, const char *argv[]) {
         
         if (heartbeat_interval) {
             // 如果设置了心跳间隔，则发送心跳
-            info("%d 将要启动心跳定时期", getpid());
+            debug("%d 将要启动心跳定时期", getpid());
 
             base.runAfter(heartbeat_interval,
                           [&] {
                             // 这么多连接要分多少次定时期来发
                             int timer_cnt = allConns.size() / concur_num_per_tms; // 一共用这么多次的定时器
                             timer_cnt = std::max(timer_cnt, 1);
-                            info("%d 共有 %d 个连接，要分 %d 次定时器来发送心跳，每次发 %d 个连接", getpid(), allConns.size(), timer_cnt, concur_num_per_tms);
+                            debug("%d 共有 %d 个连接，要分 %d 次定时器来发送心跳，每次发 %d 个连接", getpid(), allConns.size(), timer_cnt, concur_num_per_tms);
 
                               for (int i = 0; i < timer_cnt; i++) {
 
@@ -225,7 +255,7 @@ int main(int argc, const char *argv[]) {
 
                                           if (allConns[j]->getState() == TcpConn::Connected) {
                                               
-                                              info("%d 将向[%d] %s 发送心跳包", getpid(), j, allConns[j]->str().c_str());
+                                              debug("%d 将向[%d] %s 发送心跳包", getpid(), j, allConns[j]->str().c_str());
 
                                               allConns[j]->sendMsg(msg);
                                               send++;
@@ -254,19 +284,19 @@ int main(int argc, const char *argv[]) {
         // 每隔2秒上报一次负载信息。当前进程有多少连接，连接失败重试了多少，发送多少，接收了多少次
         base.runAfter(2000,
                       [&]() {
-                          std::string s = util::format("%d connected: %d retry: %d send: %d recved: %d", getpid(), connected, retry, send, recved);
-                          //info("上报负载： %s", s.c_str());
-                          info("进程 %d 负载情况，connected: %d ，retry: %d ，send: %d ，recved: %d", getpid(), connected, retry, send, recved);
+                          std::string s = util::format("%d connected: %d, retry: %d, send: %d, recved: %d", getpid(), connected, retry, send, recved);
+                          info("上报负载： %s", s.c_str());
+                          //info("进程 %d 负载情况，connected: %d ，retry: %d ，send: %d ，recved: %d", getpid(), connected, retry, send, recved);
                           if (report->getState() == TcpConn::Connected)
                           {
                                 report->sendMsg(s); 
                           }
                           else {
-                              info("上报的socket没有连接成功，不会上报");
+                              debug("上报负载的本地socket没有连接成功，不会上报");
                           }
                           
                            },
-                      2000);
+                      2500);
         base.loop();
         info("%d 子进程即将退出", getpid());
     } else {  // master process
@@ -290,9 +320,8 @@ int main(int argc, const char *argv[]) {
                       [&]() {
                           for (auto &s : subs) {
                               Report &r = s.second;
-                              printf("pid: %6ld connected %6ld retry %6ld sended %6ld recved %6ld\n", (long) s.first, r.connected, r.retry, r.sended, r.recved);
+                              info("pid: %d, connected %d, retry %d, sended %d, recved %d", (long) s.first, r.connected, r.retry, r.sended, r.recved);
                           }
-                          printf("\n");
                       },
                       3000);
 

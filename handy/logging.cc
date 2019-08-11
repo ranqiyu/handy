@@ -140,6 +140,11 @@ void Logger::logv(int level, const char *file, int line, const char *func, const
     if (level == LFATAL) {
         fprintf(stderr, "%s", buffer);
         assert(0);
+    } else {
+        if (fd != 1) // 1表示stdout
+        {
+            fprintf(stdout, "%s", buffer);
+        }
     }
 }
 
