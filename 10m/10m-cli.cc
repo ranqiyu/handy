@@ -63,6 +63,7 @@ int main(int argc, const char *argv[]) {
     
     int conn_count = 10000;  // 总的连接数
     int reconnect_interval = -1; // 重连时间间隔，毫秒。-1表示不重连， 0表示立即重连
+    int connect_timedout = 0; // 重连的超时时间，毫秒。0表示不设置
     int processes = 1; // 连接一共用多少个进程创建
     int create_rate_mils = 5000; // 创建连接的速率。每隔多少一次IO。单位毫秒
     int concur_num_per_tms = 1000; // 每次的并发IO数 
@@ -73,7 +74,7 @@ int main(int argc, const char *argv[]) {
     int man_port = 10301;
 
 
-    if (argc <= 13) {
+    if (argc <= 14) {
         printf("usage %s <log level> <remote host> <remote begin port> <remote end port> <concur connect> <concur io interval> <concur io number> <fork work process> <hearbeat interval> <data size> <data protol> <management port>\n",
                argv[0]);
         printf("    <log level>: 设置日志级别，可以取值如 trace, debug, info, error\n");
@@ -82,6 +83,7 @@ int main(int argc, const char *argv[]) {
         printf("    <remote end port>: 远程服务端的监听端口，指定结束端口。end port可以等于begin port表示只监听这个端口，否则为一个连续端口\n");
         printf("    <concur connect>: 总的并发连接数\n");
         printf("    <reconnect interval>: 重连时间间隔，毫秒。-1表示不重连， 0表示立即重连\n");
+        printf("    <connect timedout>: 重连的超时时间，毫秒。0表示不设置\n");
         printf("    <concur io interval>: 每次并发IO的间隔时间，毫秒\n");
         printf("    <concur io number>: 每次并发IO的数量\n");
         printf("    <fork work process>: 摊派到子进程的数量\n");
@@ -100,6 +102,7 @@ int main(int argc, const char *argv[]) {
          end_port = atoi(argv[c++]);
          conn_count = atoi(argv[c++]);
          reconnect_interval = atoi(argv[c++]);
+         connect_timedout = atoi(argv[c++]);
          create_rate_mils = atoi(argv[c++]);
          concur_num_per_tms = atoi(argv[c++]);
 
@@ -194,7 +197,7 @@ int main(int argc, const char *argv[]) {
                     }
 
                     // 这里连接的超时时间
-                    auto con = TcpConn::createConnection(&base, host, port, 20 * 1000);
+                    auto con = TcpConn::createConnection(&base, host, port, connect_timedout);
 
                     debug("%d 定时器 %d 将创建第 %d 个连接 %s", getpid(), tk, i, con->str().c_str());
 

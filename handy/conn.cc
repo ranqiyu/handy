@@ -121,7 +121,13 @@ void TcpConn::cleanup(const TcpConnPtr &con) {
     readcb_ = writablecb_ = statecb_ = nullptr;
     Channel *ch = channel_;
     channel_ = NULL;
-    delete ch;
+    if (ch)
+    {
+        ch->close();
+        trace("[%p] 先close但不删除 channel。后续要修改，防止channel的内存泄漏", this);
+    }
+    //delete ch;
+    
 }
 
 void TcpConn::handleRead(const TcpConnPtr &con) {
