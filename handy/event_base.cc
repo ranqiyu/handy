@@ -404,9 +404,10 @@ void TcpConn::reconnect() {
     getBase()->imp_->reconnectConns_.insert(con);
     long long interval = reconnectInterval_ - (util::timeMilli() - connectedTime_);
     interval = interval > 0 ? interval : 0;
-    info("[%p] tcp reconnect interval: %d will reconnect after %lld ms", this, reconnectInterval_, interval);
+    info("[%p] tcp 重连间隔时间: %d ms, 在 %lld ms 后启动重连", this, reconnectInterval_, interval);
     getBase()->runAfter(interval, [this, con]() {
         getBase()->imp_->reconnectConns_.erase(con);
+        info("[%p] 将要重连到 %s:%d", this, destHost_.c_str(), destPort_);
         connect(getBase(), destHost_, (unsigned short) destPort_, connectTimeout_, localIp_);
     });
     if (channel_)

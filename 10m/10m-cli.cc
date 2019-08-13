@@ -62,6 +62,7 @@ int main(int argc, const char *argv[]) {
     int end_port = 10300;
     
     int conn_count = 10000;  // 总的连接数
+    int reconnect_interval = -1; // 重连时间间隔，毫秒。-1表示不重连， 0表示立即重连
     int processes = 1; // 连接一共用多少个进程创建
     int create_rate_mils = 5000; // 创建连接的速率。每隔多少一次IO。单位毫秒
     int concur_num_per_tms = 1000; // 每次的并发IO数 
@@ -72,7 +73,7 @@ int main(int argc, const char *argv[]) {
     int man_port = 10301;
 
 
-    if (argc <= 12) {
+    if (argc <= 13) {
         printf("usage %s <log level> <remote host> <remote begin port> <remote end port> <concur connect> <concur io interval> <concur io number> <fork work process> <hearbeat interval> <data size> <data protol> <management port>\n",
                argv[0]);
         printf("    <log level>: 设置日志级别，可以取值如 trace, debug, info, error\n");
@@ -80,6 +81,7 @@ int main(int argc, const char *argv[]) {
         printf("    <remote begin port>: 远程服务端的监听端口，指定开始端口\n");
         printf("    <remote end port>: 远程服务端的监听端口，指定结束端口。end port可以等于begin port表示只监听这个端口，否则为一个连续端口\n");
         printf("    <concur connect>: 总的并发连接数\n");
+        printf("    <reconnect interval>: 重连时间间隔，毫秒。-1表示不重连， 0表示立即重连\n");
         printf("    <concur io interval>: 每次并发IO的间隔时间，毫秒\n");
         printf("    <concur io number>: 每次并发IO的数量\n");
         printf("    <fork work process>: 摊派到子进程的数量\n");
@@ -91,13 +93,13 @@ int main(int argc, const char *argv[]) {
     }
     else {
         // 在vscode中传参数，例如
-        // "args": ["182.61.30.122", "8080", "8080", "20", "100", "100", "1", "0", "0", "1031"],
         
          loglevel = argv[c++];
          host = argv[c++];
          begin_port = atoi(argv[c++]);
          end_port = atoi(argv[c++]);
          conn_count = atoi(argv[c++]);
+         reconnect_interval = atoi(argv[c++]);
          create_rate_mils = atoi(argv[c++]);
          concur_num_per_tms = atoi(argv[c++]);
 
@@ -195,7 +197,7 @@ int main(int argc, const char *argv[]) {
                     debug("%d 将创建第 %d 个连接 %s", getpid(), i, con->str().c_str());
 
                     allConns.push_back(con);
-                    con->setReconnectInterval(20 * 1000);
+                    con->setReconnectInterval(reconnect_interval);
 
                     // 使用LIneCodec编码可以用来测试echo server
                     con->onMsg(cd, [&](const TcpConnPtr &con, const Slice &msg) {
