@@ -42,6 +42,7 @@ void TcpConn::connect(EventBase *base, const string &host, unsigned short port, 
 
     // 可靠连接的套接字 SOCK_STREAM
     int fd = socket(AF_INET, SOCK_STREAM, 0);
+    
     fatalif(fd < 0, "socket failed %d %s", errno, strerror(errno));
     net::setNonBlock(fd);
     int t = util::addFdFlag(fd, FD_CLOEXEC);

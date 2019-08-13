@@ -181,9 +181,10 @@ int main(int argc, const char *argv[]) {
             debug("进入循环 %d", k);
             
             // 一次性创建了很多的定时器
-            base.runAfter(create_rate_mils * k, [&] {
+            int tk = k;
+            base.runAfter(create_rate_mils * k, [&, tk] {
 
-                debug("%d 定时器 %d 已经到达，共将创建 %d 个连接", getpid(), k, concur_num_per_tms);
+                debug("%d 定时器 %d 已经到达，共将创建 %d 个连接", getpid(), tk, concur_num_per_tms);
 
                 for (int i = 0; i < concur_num_per_tms; i++) {
                     // 这里有一个轮回，端口会被重复使用
@@ -192,9 +193,10 @@ int main(int argc, const char *argv[]) {
                         port = begin_port + (i % (end_port - begin_port));
                     }
 
+                    // 这里连接的超时时间
                     auto con = TcpConn::createConnection(&base, host, port, 20 * 1000);
 
-                    debug("%d 将创建第 %d 个连接 %s", getpid(), i, con->str().c_str());
+                    debug("%d 定时器 %d 将创建第 %d 个连接 %s", getpid(), tk, i, con->str().c_str());
 
                     allConns.push_back(con);
                     con->setReconnectInterval(reconnect_interval);
@@ -223,7 +225,10 @@ int main(int argc, const char *argv[]) {
                             if (st == TcpConn::Closed) {
                                 connected--;
                             }
-                            retry++;
+                            if (reconnect_interval != -1) // 内部只在指定了重连时才会重连
+                            {
+                                retry++;                                
+                            }
                         }
                     });
 
@@ -299,6 +304,7 @@ int main(int argc, const char *argv[]) {
                           
                            },
                       2500);
+        info("%d 进程启动事件循环", getpid());
         base.loop();
         info("%d 子进程即将退出", getpid());
     } else {  // master process
