@@ -21,6 +21,7 @@ struct net {
     static int setReuseAddr(int fd, bool value = true);
     static int setReusePort(int fd, bool value = true);
     static int setNoDelay(int fd, bool value = true);
+    static int setKeepAlived(int fd, int idle, int interval, int keepcnt);
 };
 
 struct Ip4Addr {

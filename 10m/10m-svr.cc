@@ -18,8 +18,8 @@ int main(int argc, const char *argv[]) {
 
     if (argc < 5) {
         printf("usage: %s <begin port> <end port> <subprocesses> <management port>\n", argv[0]);
-        printf("current use default param\r\n");
-        //return 1;
+        //printf("current use default param\r\n");
+        return 1;
     }
     else {
         begin_port = atoi(argv[1]);
@@ -43,7 +43,7 @@ int main(int argc, const char *argv[]) {
         long connected = 0, closed = 0, recved = 0;
 
         // 这个循环是为了，同一个进程在一个大的监听端口范围进行监听
-        for (int i = 0; i < end_port - begin_port; i++) {
+        for (int i = 0; i <= end_port - begin_port; i++) {
             // reusepor为true，则多个进程可以共用一个端口
             TcpServerPtr p = TcpServer::startServer(&base, "", begin_port + i, true);
             p->onConnCreate([&] {

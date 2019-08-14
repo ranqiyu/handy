@@ -159,10 +159,18 @@ int main(int argc, const char *argv[]) {
         pid = 0;
     }
     
-    // 捕获信号SIGPIPE，防止进程异常退出
-    Signal::signal(SIGPIPE, [] {});
-
     EventBase base;
+
+    // 捕获信号SIGPIPE，防止进程异常退出
+    Signal::signal(SIGPIPE, [] {
+        info("捕获信号 SIGPIPE");
+    });
+    Signal::signal(SIGINT, [&] {
+        // ctrl + c 
+        info("捕获终止信号 SIGINT，将要退出");
+        base.exit();
+    });
+
     if (pid == 0) {  // child process
         char *buf = new char[bsz];
         ExitCaller ec1([=] { delete[] buf; });
@@ -309,7 +317,7 @@ int main(int argc, const char *argv[]) {
                       2500);
         info("%d 进程启动事件循环", getpid());
         base.loop();
-        info("%d 子进程即将退出", getpid());
+        info("%d 进程即将退出", getpid());
     } else {  // master process
         map<int, Report> subs;
         TcpServerPtr master = TcpServer::startServer(&base, "127.0.0.1", man_port);

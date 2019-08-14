@@ -357,6 +357,8 @@ void TcpConn::sendMsg(Slice msg) {
 TcpServer::TcpServer(EventBases *bases) : base_(bases->allocBase()), bases_(bases), listen_channel_(NULL), createcb_([] { return TcpConnPtr(new TcpConn); }) {}
 
 int TcpServer::bind(const std::string &host, unsigned short port, bool reusePort) {
+    info("[%p] 将要启动tcp监听 %s:%d", this, host.c_str(), port);
+
     addr_ = Ip4Addr(host, port);
     int fd = socket(AF_INET, SOCK_STREAM, 0);
     int r = net::setReuseAddr(fd);
@@ -408,6 +410,9 @@ void TcpServer::handleAccept() {
         }
         r = util::addFdFlag(cfd, FD_CLOEXEC);
         fatalif(r, "addFdFlag FD_CLOEXEC failed");
+        //r = net::setKeepAlived(cfd, 30, 30, 10);
+        //fatalif(r, "set keepalived failed");
+
         EventBase *b = bases_->allocBase();
         auto addcon = [=] {
             TcpConnPtr con = createcb_();

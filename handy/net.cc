@@ -44,6 +44,31 @@ int net::setNoDelay(int fd, bool value) {
     return setsockopt(fd, SOL_SOCKET, TCP_NODELAY, &flag, len);
 }
 
+int net::setKeepAlived(int fd, int idle, int interval, int keepcnt) {
+    int yes = 1;
+    // 启用 keepalive
+    if (setsockopt(fd, SOL_SOCKET, SO_KEEPALIVE, &yes, sizeof(int)) == -1)
+    {
+        return -1;
+    }
+    // TCP_KEEPIDLE：覆盖内核参数 tcp_keepalive_time
+    // 在TCP保活打开的情况下，最后一次数据交换到TCP发送第一个保活探测消息的时间，即允许的持续空闲时间。默认值为7200s（2h）。
+    if(setsockopt(fd, IPPROTO_TCP, TCP_KEEPIDLE, &idle, sizeof(int)) == -1){
+        return -1;
+    }
+
+    // TCP_KEEPINTVL：覆盖 tcp_keepalive_intvl
+    // 保活探测消息的发送频率。默认值为75s。
+    // 发送频率tcp_keepalive_intvl乘以发送次数tcp_keepalive_probes，就得到了从开始探测直到放弃探测确定连接断开的时间，大约为11min。
+    if(setsockopt(fd, IPPROTO_TCP, TCP_KEEPINTVL, &interval, sizeof(int)) == -1){
+        return -1;
+    }
+
+    // TCP_KEEPCNT：覆盖内核参数 tcp_keepalive_probes
+    // TCP发送保活探测消息以确定连接是否已断开的次数。默认值为9（次）
+    return setsockopt(fd, IPPROTO_TCP, TCP_KEEPCNT, &keepcnt, sizeof(int));
+}
+    
 Ip4Addr::Ip4Addr(const string &host, unsigned short port) {
     memset(&addr_, 0, sizeof addr_);
     addr_.sin_family = AF_INET;
