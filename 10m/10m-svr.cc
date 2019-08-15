@@ -4,37 +4,65 @@ using namespace std;
 using namespace handy;
 
 struct Report {
-    long connected;
-    long closed;
-    long recved;
+    unsigned long connected;
+    unsigned long closed;
+    unsigned long recved;
     Report() { memset(this, 0, sizeof(*this)); }
 };
 
 int main(int argc, const char *argv[]) {
+
+    string program = argv[0];
+    string logfile = program + ".log";
+
     int begin_port = 25001;
     int end_port = 25005;
     int processes = 2;
     int man_port = 25000;
 
-    if (argc < 5) {
-        printf("usage: %s <begin port> <end port> <subprocesses> <management port>\n", argv[0]);
+    std::string loglevel = "error";
+
+    if (argc != 6) {
+        printf("usage: %s <log level> <begin port> <end port> <fork work process> <management port>\n", argv[0]);
         //printf("current use default param\r\n");
+        printf("    <log level>: 设置日志级别，可以取值如 trace, debug, info, error\n");
+        printf("    <begin port>: 远程服务端的监听端口，指定开始端口\n");
+        printf("    <end port>: 远程服务端的监听端口，指定结束端口。end port可以等于begin port表示只监听这个端口，否则为一个连续端口\n");
+        printf("    <fork work process>: 摊派到子进程的数量\n");
+        printf("    <management port>: 多个进程时本地的管理端口\n");
         return 1;
     }
     else {
-        begin_port = atoi(argv[1]);
-        end_port = atoi(argv[2]);
-        processes = atoi(argv[3]);
-        man_port = atoi(argv[4]);
+        loglevel = argv[1];
+        begin_port = atoi(argv[2]);
+        end_port = atoi(argv[3]);
+        processes = atoi(argv[4]);
+        man_port = atoi(argv[5]);
     }
     
+    setlogfile(logfile);
+    setloglevel(loglevel);
+
+    info("主进程启动，在位置 %s", argv[0]);
+
     int pid = 1;
-    for (int i = 0; i < processes; i++) {
-        pid = fork();
-        if (pid == 0) {  // a child process, break
-            break;
+    if (processes > 1)
+    {
+        for (int i = 0; i < processes; i++) {
+            pid = fork();
+            if (pid == 0) {  // a child process, break
+                        // 给子进程指定日志文件
+                std::string child_log_file = program + "-" + std::to_string(getpid()) + ".log";
+                setlogfile(child_log_file);
+                info("=========子进程 %d 启动========", getpid());
+                sleep(1);
+                break;
+            }
         }
+    } else {
+        pid = 0;
     }
+    
     EventBase base;
     if (pid == 0) {          // child process
         usleep(100 * 1000);  // wait master to listen management port
@@ -88,8 +116,14 @@ int main(int argc, const char *argv[]) {
 
         // 定时上报消息
         base.runAfter(100, [&]() { 
-            report->sendMsg(util::format("%d connected: %ld closed: %ld recved: %ld", getpid(), connected, closed, recved)); 
-            }, 100);
+            std::string ss = util::format("%d, connected: %ld, closed: %ld, recved: %ld", getpid(), connected, closed, recved);
+            info("%s", ss.c_str());
+
+            if (report->getState() == TcpConn::Connected)
+            {
+                report->sendMsg(ss);                 
+            }
+        }, 2000);
 
         base.loop();
     } else {
@@ -115,9 +149,8 @@ int main(int argc, const char *argv[]) {
                       [&]() {
                           for (auto &s : subs) {
                               Report r = s.second;
-                              printf("pid: %6d connected %6ld closed: %6ld recved %6ld\n", s.first, r.connected, r.closed, r.recved);
+                              info("pid: %6d, connected: %6ld, closed: %6ld, recved %6ld", s.first, r.connected, r.closed, r.recved);
                           }
-                          printf("\n");
                       },
                       3000);
         base.loop();

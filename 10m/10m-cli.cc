@@ -119,9 +119,7 @@ int main(int argc, const char *argv[]) {
     setlogfile(logfile);
     setloglevel(loglevel);
 
-    //trace("process run  at %s", argv[0]);
     info("主进程启动，在位置 %s", argv[0]);
-    //printf("%d%s, %s\r\n", __LINE__,__FUNCTION__, __func__);
 
     CodecBase* cd = nullptr;
     info("心跳数据包协议 %d", hearbeat_protol);
