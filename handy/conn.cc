@@ -1,6 +1,7 @@
 #include "conn.h"
 #include <fcntl.h>
 #include <poll.h>
+#include <arpa/inet.h>
 #include "logging.h"
 #include "poller.h"
 
@@ -64,12 +65,19 @@ void TcpConn::connect(EventBase *base, const string &host, unsigned short port, 
 
     sockaddr_in local;
     socklen_t alen = sizeof(local);
-    if (r == 0) {
+    if (true) { // 之前是 r==0，导致无法进入
+        // 在一个没有调用bind的TCP客户上，getsockname用于返回由内核赋予该连接的本地IP地址和本地端口号
         r = getsockname(fd, (sockaddr *) &local, &alen);
         if (r < 0) {
             error("getsockname failed %d %s", errno, strerror(errno));
         }
+
+        // char sip[INET_ADDRSTRLEN] = { 0 };
+	    // inet_ntop(AF_INET, &(((struct sockaddr_in *)&local)->sin_addr), sip, INET_ADDRSTRLEN);
+        // Ip4Addr t1(local);
+        // info("kernel assign address %s:%d, %s", sip, local.sin_port, t1.toString().c_str());
     }
+
     state_ = State::Handshaking;
     attach(base, fd, Ip4Addr(local), addr);
     if (timeout) {
@@ -230,6 +238,23 @@ int TcpConn::handleHandshake(const TcpConnPtr &con) {
         if (state_ == State::Connected) {
             connectedTime_ = util::timeMilli();
             trace("tcp connected %s - %s fd %d", local_.toString().c_str(), peer_.toString().c_str(), channel_->fd());
+
+            // {
+            //     sockaddr_in local;
+            //     socklen_t alen = sizeof(local);
+            //     // 在一个没有调用bind的TCP客户上，getsockname用于返回由内核赋予该连接的本地IP地址和本地端口号
+            //     // 即使没有connect成功也可以获取本地地址
+            //     r = getsockname(channel_->fd(), (sockaddr *) &local, &alen);
+            //     if (r < 0) {
+            //         error("getsockname failed %d %s", errno, strerror(errno));
+            //     }
+            //     char sip[INET_ADDRSTRLEN] = { 0 };
+            //     inet_ntop(AF_INET, &(((struct sockaddr_in *)&local)->sin_addr), sip, INET_ADDRSTRLEN);
+
+            //     Ip4Addr t1(local);
+            //     info("kernel assign address %s:%d, %s", sip, ntohs(local.sin_port), t1.toString().c_str());
+            // }
+
             if (statecb_) {
                 statecb_(con);
             }

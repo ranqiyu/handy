@@ -55,13 +55,13 @@ int main(int argc, const char *argv[]) {
     }
     
     int c = 1;
-    std::string loglevel = "error";
+    std::string loglevel = "trace";
 
-    string host = "182.61.30.122"; // 服务器IP
-    int begin_port = 10000; 
-    int end_port = 10300;
+    string host = "39.106.230.84"; // 服务器IP
+    int begin_port = 9500; 
+    int end_port = 9500;
     
-    int conn_count = 10000;  // 总的连接数
+    int conn_count = 1;  // 总的连接数
     int reconnect_interval = -1; // 重连时间间隔，毫秒。-1表示不重连， 0表示立即重连
     int connect_timedout = 0; // 重连的超时时间，毫秒。0表示不设置
     int processes = 1; // 连接一共用多少个进程创建
@@ -71,7 +71,7 @@ int main(int argc, const char *argv[]) {
     int heartbeat_interval = 0;//60 * 1000; // 心跳间隔时间，毫秒
     int bsz = 64; // 心跳包大小
     int hearbeat_protol = 1; // 心跳包数据协议，1换行符,2长度
-    int man_port = 10301;
+    int man_port = 3031;
 
 
     if (argc <= 14) {
@@ -91,7 +91,7 @@ int main(int argc, const char *argv[]) {
         printf("    <data size>: 发送的数据包大小（如心跳数据包），字节\n");
         printf("    <data protol>: 数据的格式/协议。1表示换行符结束，其它表示以长度解码\n");
         printf("    <management port>: 多个进程时本地的管理端口\n");
-        return 1;
+        printf("使用测试的默认值\n");
     }
     else {
         // 在vscode中传参数，例如
