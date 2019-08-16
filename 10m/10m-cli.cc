@@ -119,7 +119,7 @@ int main(int argc, const char *argv[]) {
     setlogfile(logfile);
     setloglevel(loglevel);
 
-    info("主进程启动，在位置 %s", argv[0]);
+    info("%d 主进程启动，在位置 %s", getpid(), argv[0]);
 
     CodecBase* cd = nullptr;
     info("心跳数据包协议 %d", hearbeat_protol);
@@ -223,14 +223,11 @@ int main(int argc, const char *argv[]) {
                         TcpConn::State st = con->getState();
                         if (st == TcpConn::Connected) {
                             connected++;
+                            info("本地 %s，远程 %s，tcp连接成功, 当前共有 %d 个连接", con->local_.toString().c_str(), con->peer_.toString().c_str(), connected);
 
-                            std::string s = util::format("pid %d 连接成功, %s, 这是 %d", getpid(), con->str().c_str(), connected);
-                            info("%s", s.c_str());
                             //                            send ++;
                             //                            con->sendMsg(msg);
                         } else if (st == TcpConn::Failed || st == TcpConn::Closed) {  //Failed表示连接出错
-                            std::string s = util::format("pid %d 连接异常 %d, %s", getpid(), st, con->str().c_str());
-                            warn("%s", s.c_str());
                             if (st == TcpConn::Closed) {
                                 connected--;
                             }
@@ -238,6 +235,8 @@ int main(int argc, const char *argv[]) {
                             {
                                 retry++;                                
                             }
+
+                            info("本地 %s，远程 %s，tcp连接异常[%d], 还有 %d 个", con->local_.toString().c_str(), con->peer_.toString().c_str(), st, connected);
                         }
                     });
 

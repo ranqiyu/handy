@@ -43,7 +43,7 @@ int main(int argc, const char *argv[]) {
     setlogfile(logfile);
     setloglevel(loglevel);
 
-    info("主进程启动，在位置 %s", argv[0]);
+    info("%d 主进程启动，在位置 %s", getpid(), argv[0]);
 
     int pid = 1;
     if (processes > 1)
@@ -81,9 +81,11 @@ int main(int argc, const char *argv[]) {
                     auto st = con->getState();
                     if (st == TcpConn::Connected) {
                         connected++;
+                        info("本地 %s，远程 %s，tcp连接成功, 当前共有 %d 个连接", con->local_.toString().c_str(), con->peer_.toString().c_str(), connected);
                     } else if (st == TcpConn::Closed || st == TcpConn::Failed) {
                         closed++;
                         connected--;
+                        info("本地 %s，远程 %s，tcp连接异常[%d], 还有 %d 个", con->local_.toString().c_str(), con->peer_.toString().c_str(), st, connected);
                     }
                 });
                 con->onMsg(new LengthCodec, [&](const TcpConnPtr &con, Slice msg) {
