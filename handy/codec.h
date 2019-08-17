@@ -26,4 +26,11 @@ struct LengthCodec : public CodecBase {
     CodecBase *clone() override { return new LengthCodec(); }
 };
 
+//以{}开始和结尾的明文消息
+struct BracketCodec : public CodecBase {
+    int tryDecode(Slice data, Slice &msg) override;
+    void encode(Slice msg, Buffer &buf) override;
+    CodecBase *clone() override { return new LineCodec(); }
+};
+
 };  // namespace handy

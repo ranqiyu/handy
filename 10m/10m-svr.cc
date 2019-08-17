@@ -15,35 +15,49 @@ int main(int argc, const char *argv[]) {
     string program = argv[0];
     string logfile = program + ".log";
 
-    int begin_port = 25001;
-    int end_port = 25005;
-    int processes = 2;
-    int man_port = 25000;
+    int begin_port = 9500;
+    int end_port = 9500;
+    int processes = 1;
+    int data_protol = 2; 
+    int man_port = 3031;
 
     std::string loglevel = "error";
 
-    if (argc != 6) {
+    if (argc != 7) {
         printf("usage: %s <log level> <begin port> <end port> <fork work process> <management port>\n", argv[0]);
         //printf("current use default param\r\n");
         printf("    <log level>: 设置日志级别，可以取值如 trace, debug, info, error\n");
         printf("    <begin port>: 远程服务端的监听端口，指定开始端口\n");
         printf("    <end port>: 远程服务端的监听端口，指定结束端口。end port可以等于begin port表示只监听这个端口，否则为一个连续端口\n");
         printf("    <fork work process>: 摊派到子进程的数量\n");
+        printf("    <data protol>: 数据的格式/协议。1表示换行符结束，其它表示以长度解码\n");
         printf("    <management port>: 多个进程时本地的管理端口\n");
-        return 1;
+        printf("使用测试的默认值\n");        
+        //return 1;
     }
     else {
-        loglevel = argv[1];
-        begin_port = atoi(argv[2]);
-        end_port = atoi(argv[3]);
-        processes = atoi(argv[4]);
-        man_port = atoi(argv[5]);
+        int c = 1;
+        loglevel = argv[c++];
+        begin_port = atoi(argv[c++]);
+        end_port = atoi(argv[c++]);
+        processes = atoi(argv[c++]);
+        data_protol = atoi(argv[c++]);
+        man_port = atoi(argv[c++]);
     }
     
     setlogfile(logfile);
     setloglevel(loglevel);
 
     info("%d 主进程启动，在位置 %s", getpid(), argv[0]);
+
+    CodecBase* cd = nullptr;
+    info("数据包协议 %d", data_protol);
+    switch (data_protol)
+    {
+    case 1: cd = new LineCodec(); break;
+    case 2: cd = new BracketCodec(); break;
+    default: cd = new LengthCodec(); break;
+    }
 
     int pid = 1;
     if (processes > 1)
@@ -88,7 +102,7 @@ int main(int argc, const char *argv[]) {
                         info("本地 %s，远程 %s，tcp连接异常[%d], 还有 %d 个", con->local_.toString().c_str(), con->peer_.toString().c_str(), st, connected);
                     }
                 });
-                con->onMsg(new LengthCodec, [&](const TcpConnPtr &con, Slice msg) {
+                con->onMsg(cd, [&](const TcpConnPtr &con, Slice msg) {
                     // 解码后的消息
                     recved++;
                     con->sendMsg(msg);

@@ -70,7 +70,7 @@ int main(int argc, const char *argv[]) {
 
     int heartbeat_interval = 0;//60 * 1000; // 心跳间隔时间，毫秒
     int bsz = 64; // 心跳包大小
-    int hearbeat_protol = 1; // 心跳包数据协议，1换行符,2长度
+    int data_protol = 1; // 心跳包数据协议，1换行符,2长度
     int man_port = 3031;
 
 
@@ -82,14 +82,14 @@ int main(int argc, const char *argv[]) {
         printf("    <remote begin port>: 远程服务端的监听端口，指定开始端口\n");
         printf("    <remote end port>: 远程服务端的监听端口，指定结束端口。end port可以等于begin port表示只监听这个端口，否则为一个连续端口\n");
         printf("    <concur connect>: 总的并发连接数\n");
-        printf("    <reconnect interval>: 重连时间间隔，毫秒。-1表示不重连， 0表示立即重连\n");
-        printf("    <connect timedout>: 重连的超时时间，毫秒。0表示不设置\n");
+        printf("    <reconnect interval>: 重连间隔时间，毫秒。-1表示不重连， 0表示立即重连\n");
+        printf("    <connect timedout>: 连接超时时间，毫秒。0表示不设置\n");
         printf("    <concur io interval>: 每次并发IO的间隔时间，毫秒\n");
         printf("    <concur io number>: 每次并发IO的数量\n");
         printf("    <fork work process>: 摊派到子进程的数量\n");
         printf("    <hearbeat interval>: 发送心跳的间隔时间，毫秒。为0表示不并发送心跳\n");
         printf("    <data size>: 发送的数据包大小（如心跳数据包），字节\n");
-        printf("    <data protol>: 数据的格式/协议。1表示换行符结束，其它表示以长度解码\n");
+        printf("    <data protol>: 数据的格式/协议。1表示换行符结束，2使用{}，其它表示以长度解码\n");
         printf("    <management port>: 多个进程时本地的管理端口\n");
         printf("使用测试的默认值\n");
     }
@@ -109,7 +109,7 @@ int main(int argc, const char *argv[]) {
          processes = atoi(argv[c++]);
          heartbeat_interval = atoi(argv[c++]);
          bsz = atoi(argv[c++]);
-         hearbeat_protol = atoi(argv[c++]);
+         data_protol = atoi(argv[c++]);
 
          man_port = atoi(argv[c++]);
 
@@ -122,12 +122,12 @@ int main(int argc, const char *argv[]) {
     info("%d 主进程启动，在位置 %s", getpid(), argv[0]);
 
     CodecBase* cd = nullptr;
-    info("心跳数据包协议 %d", hearbeat_protol);
-    if (hearbeat_protol == 1) // 
+    info("数据包协议 %d", data_protol);
+    switch (data_protol)
     {
-        cd = new LineCodec();
-    } else {
-        cd = new LengthCodec();
+    case 1: cd = new LineCodec(); break;
+    case 2: cd = new BracketCodec(); break;
+    default: cd = new LengthCodec(); break;
     }
     
     assert(conn_count >= processes);
@@ -172,7 +172,9 @@ int main(int argc, const char *argv[]) {
     if (pid == 0) {  // child process
         char *buf = new char[bsz];
         ExitCaller ec1([=] { delete[] buf; });
-        memset(buf, 'a', bsz);
+        memset(buf, '0', bsz);
+        const char *tbuf = "heartbeat";
+        memcpy(buf, tbuf, std::min((int)(strlen(tbuf)), bsz));
 
         Slice msg(buf, bsz);
         unsigned int send = 0;
@@ -269,6 +271,7 @@ int main(int argc, const char *argv[]) {
                                       for (size_t j = i*concur_num_per_tms; (j < allConns.size()) && (i < concur_num_per_tms); j++) {
 
                                           if (allConns[j]->getState() == TcpConn::Connected) {
+                                              
                                               
                                               debug("%d 将向[%d] %s 发送心跳包", getpid(), j, allConns[j]->str().c_str());
 

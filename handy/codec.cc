@@ -26,6 +26,32 @@ void LineCodec::encode(Slice msg, Buffer &buf) {
     buf.append(msg).append("\r\n");
 }
 
+int BracketCodec::tryDecode(Slice data, Slice &msg) {
+    if (data.size() == 1 && data[0] == 0x04) {
+        msg = data;
+        return 1;
+    }
+    if (data.size() <= 2)
+    {
+        return 0;
+    }
+    if (data[0] != '{')
+    {
+        return 0;
+    }
+    
+    for (size_t i = 0; i < data.size(); i++) {
+        if (data[i] == '}') {
+            msg = Slice(data.data(), i+1);
+            return i+1;
+        }
+    }
+    return 0;
+}
+void BracketCodec::encode(Slice msg, Buffer &buf) {
+    buf.append("{").append(msg).append("}");
+}
+
 int LengthCodec::tryDecode(Slice data, Slice &msg) {
     if (data.size() < 8) {
         return 0;
