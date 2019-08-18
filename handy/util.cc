@@ -46,10 +46,14 @@ string util::format(const char *fmt, ...) {
 }
 
 int64_t util::timeMicro() {
+    // system_clock：用在需要得到绝对时点的场景
+    // 刻度是1纳秒
     chrono::time_point<chrono::system_clock> p = chrono::system_clock::now();
     return chrono::duration_cast<chrono::microseconds>(p.time_since_epoch()).count();
 }
 int64_t util::steadyMicro() {
+    // steady_clock：用在需要得到时间间隔，并且这个时间间隔不会因为修改系统时间而受影响的场景,一般是系统启动时间
+    // 刻度是1纳秒
     chrono::time_point<chrono::steady_clock> p = chrono::steady_clock::now();
     return chrono::duration_cast<chrono::microseconds>(p.time_since_epoch()).count();
 }

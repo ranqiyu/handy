@@ -30,7 +30,7 @@ int main(int argc, const char *argv[]) {
         printf("    <begin port>: 远程服务端的监听端口，指定开始端口\n");
         printf("    <end port>: 远程服务端的监听端口，指定结束端口。end port可以等于begin port表示只监听这个端口，否则为一个连续端口\n");
         printf("    <fork work process>: 摊派到子进程的数量\n");
-        printf("    <data protol>: 数据的格式/协议。1表示换行符结束，其它表示以长度解码\n");
+        printf("    <data protol>: 数据的格式/协议。1表示换行符结束，2使用{}，其它表示以长度解码\n");
         printf("    <management port>: 多个进程时本地的管理端口\n");
         printf("使用测试的默认值\n");        
         //return 1;

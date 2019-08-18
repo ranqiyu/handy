@@ -1,5 +1,6 @@
 #include <handy/handy.h>
 #include <sys/wait.h>
+#include <atomic>
 
 using namespace std;
 using namespace handy;
@@ -58,6 +59,7 @@ int main(int argc, const char *argv[]) {
     std::string loglevel = "trace";
 
     string host = "39.106.230.84"; // 服务器IP
+    //string host = "192.168.0.3"; // 服务器IP
     int begin_port = 9500; 
     int end_port = 9500;
     
@@ -68,9 +70,9 @@ int main(int argc, const char *argv[]) {
     int create_rate_mils = 5000; // 创建连接的速率。每隔多少一次IO。单位毫秒
     int concur_num_per_tms = 1000; // 每次的并发IO数 
 
-    int heartbeat_interval = 0;//60 * 1000; // 心跳间隔时间，毫秒
+    int heartbeat_interval = 5000;//60 * 1000; // 心跳间隔时间，毫秒
     int bsz = 64; // 心跳包大小
-    int data_protol = 1; // 心跳包数据协议，1换行符,2长度
+    int data_protol = 2; // 心跳包数据协议，1换行符,2长度
     int man_port = 3031;
 
 
@@ -172,7 +174,7 @@ int main(int argc, const char *argv[]) {
     if (pid == 0) {  // child process
         char *buf = new char[bsz];
         ExitCaller ec1([=] { delete[] buf; });
-        memset(buf, '0', bsz);
+        memset(buf, 'a', bsz);
         const char *tbuf = "heartbeat";
         memcpy(buf, tbuf, std::min((int)(strlen(tbuf)), bsz));
 
@@ -182,6 +184,7 @@ int main(int argc, const char *argv[]) {
         unsigned int retry = 0;
         unsigned int recved = 0;
 
+        std::map<TcpConnPtr, int64_t> active_con; // 受到服务端心跳的连接
         vector<TcpConnPtr> allConns;
        
         info("process %d will create %d connect, with %d timer", getpid(), every_process_conn_count, create_timer_cnt);
@@ -214,11 +217,15 @@ int main(int argc, const char *argv[]) {
 
                     // 使用LIneCodec编码可以用来测试echo server
                     con->onMsg(cd, [&](const TcpConnPtr &con, const Slice &msg) {
+                        std::string t = msg;
+                        info("收到服务端[%s]消息： %s", con->peer_.toString().c_str(), t.c_str());
+
                         // 如果有心跳了，这里不echo，只收
+                        /*
                         if (heartbeat_interval == 0) {  // echo the msg if no interval
                             con->sendMsg(msg);
                             send++;
-                        }
+                        }*/
                         recved++;
                     });
                     con->onState([&, i](const TcpConnPtr &con) {
@@ -272,11 +279,17 @@ int main(int argc, const char *argv[]) {
 
                                           if (allConns[j]->getState() == TcpConn::Connected) {
                                               
-                                              
-                                              debug("%d 将向[%d] %s 发送心跳包", getpid(), j, allConns[j]->str().c_str());
+                                            static std::atomic<uint32_t> idx(0);
+                                            idx++;
+                                            
+                                            std::string s1 =std::to_string(idx);
+                                            memcpy(buf, s1.c_str(), std::min((int)s1.length(), bsz));      
+                                            Slice msg(buf, bsz);
 
-                                              allConns[j]->sendMsg(msg);
-                                              send++;
+                                            info("向服务端[%s]发送消息：%s", allConns[j]->peer_.toString().c_str(), buf);
+
+                                            allConns[j]->sendMsg(msg);
+                                            send++;
                                           }
                                       }
                                   });
