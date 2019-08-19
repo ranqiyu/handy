@@ -23,7 +23,7 @@ int main(int argc, const char *argv[]) {
 
     std::string loglevel = "error";
 
-    if (argc != 7) {
+    if (argc < 7) {
         printf("usage: %s <log level> <begin port> <end port> <fork work process> <management port>\n", argv[0]);
         //printf("current use default param\r\n");
         printf("    <log level>: 设置日志级别，可以取值如 trace, debug, info, error\n");
@@ -32,6 +32,11 @@ int main(int argc, const char *argv[]) {
         printf("    <fork work process>: 摊派到子进程的数量\n");
         printf("    <data protol>: 数据的格式/协议。1表示换行符结束，2使用{}，其它表示以长度解码\n");
         printf("    <management port>: 多个进程时本地的管理端口\n");
+        if (argc != 1)
+        {
+            return 0;
+        }
+        
         printf("使用测试的默认值\n");        
         //return 1;
     }

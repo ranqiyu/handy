@@ -76,7 +76,7 @@ int main(int argc, const char *argv[]) {
     int man_port = 3031;
 
 
-    if (argc <= 14) {
+    if (argc < 15) {
         printf("usage %s <log level> <remote host> <remote begin port> <remote end port> <concur connect> <concur io interval> <concur io number> <fork work process> <hearbeat interval> <data size> <data protol> <management port>\n",
                argv[0]);
         printf("    <log level>: 设置日志级别，可以取值如 trace, debug, info, error\n");
@@ -93,6 +93,11 @@ int main(int argc, const char *argv[]) {
         printf("    <data size>: 发送的数据包大小（如心跳数据包），字节\n");
         printf("    <data protol>: 数据的格式/协议。1表示换行符结束，2使用{}，其它表示以长度解码\n");
         printf("    <management port>: 多个进程时本地的管理端口\n");
+        if (argc != 1)
+        {
+            return 0;
+        }
+        
         printf("使用测试的默认值\n");
     }
     else {
@@ -163,11 +168,11 @@ int main(int argc, const char *argv[]) {
 
     // 捕获信号SIGPIPE，防止进程异常退出
     Signal::signal(SIGPIPE, [] {
-        info("捕获信号 SIGPIPE");
+        warn("捕获信号 SIGPIPE");
     });
     Signal::signal(SIGINT, [&] {
         // ctrl + c 
-        info("捕获终止信号 SIGINT，将要退出");
+        warn("捕获终止信号 SIGINT，将要退出");
         base.exit();
     });
 
@@ -226,6 +231,7 @@ int main(int argc, const char *argv[]) {
                             con->sendMsg(msg);
                             send++;
                         }*/
+                        active_con[con] = util::timeMilli();
                         recved++;
                     });
                     con->onState([&, i](const TcpConnPtr &con) {

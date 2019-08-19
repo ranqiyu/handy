@@ -66,6 +66,7 @@ struct EventsImp {
     EventBase &exit() {
         exit_ = true;
         wakeup();
+        poller_->exited(); // 这里再退出一下。没必要将读写事件回调出来
         return *base_;
     }
     bool exited() { return exit_; }
@@ -160,7 +161,9 @@ void EventsImp::init() {
         int r = ch->fd() >= 0 ? ::read(ch->fd(), buf, sizeof buf) : 0;
         if (r > 0) {
             debug("read[%d] %s", r, buf);
-            // 这个管道的目的是用来通知做任务的，现在不需要里面有什么数据。但是，ch->fd() 是在另外一个地方赋值
+            // 这个管道的目的是用来通知做任务的，现在不需要里面有什么数据。
+            // 外部只需要将 tasks_ 里添加任务就行，这里从里边去数据
+            //但是，ch->fd() 是在另外一个地方赋值
             Task task;
             // 如果有任务就一直执行
             while (tasks_.pop_wait(&task, 0)) {
@@ -402,7 +405,8 @@ void TcpConn::addIdleCB(int idle, const TcpCallBack &cb) {
 void TcpConn::reconnect() {
     auto con = shared_from_this();
     getBase()->imp_->reconnectConns_.insert(con);
-    long long interval = reconnectInterval_ - (util::timeMilli() - connectedTime_);
+    //long long interval = reconnectInterval_ - (util::timeMilli() - connectedTime_);
+    long long interval = reconnectInterval_; // 个人觉得直接用原始值就可以了，意义更明确
     interval = interval > 0 ? interval : 0;
     info("[%p] tcp 重连间隔时间: %d ms, 在 %lld ms 后启动重连", this, reconnectInterval_, interval);
     getBase()->runAfter(interval, [this, con]() {

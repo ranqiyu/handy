@@ -92,7 +92,7 @@ void PollerEpoll::loop_once(int waitMs) {
     int64_t used = util::timeMilli() - ticks;
     trace("epoll wait %d return %d errno %d used %lld millsecond", waitMs, lastActive_, errno, (long long) used);
     fatalif(lastActive_ == -1 && errno != EINTR, "epoll return error %d %s", errno, strerror(errno));
-    while (--lastActive_ >= 0) {
+    while ((--lastActive_ >= 0) && (!exited_)) {
         int i = lastActive_;
         Channel *ch = (Channel *) activeEvs_[i].data.ptr;
         int events = activeEvs_[i].events;

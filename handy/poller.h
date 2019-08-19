@@ -16,10 +16,13 @@ const int kWriteEvent = POLLOUT;
 struct PollerBase : private noncopyable {
     int64_t id_;
     int lastActive_;
+    bool exited_ = false;
     PollerBase() : lastActive_(-1) {
         static std::atomic<int64_t> id(0);
         id_ = ++id;
     }
+    void exited(){exited_ = true; }
+
     virtual void addChannel(Channel *ch) = 0;
     virtual void removeChannel(Channel *ch) = 0;
     virtual void updateChannel(Channel *ch) = 0;
