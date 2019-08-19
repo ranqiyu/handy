@@ -273,9 +273,15 @@ void TcpConn::handleWrite(const TcpConnPtr &con) {
         handleHandshake(con);
     } else if (state_ == State::Connected) {
         ssize_t sended = isend(output_.begin(), output_.size());
+        if (sended == -1)
+        {
+            cleanup(con);
+            return;
+        }
+        
         output_.consume(sended);
 
-        // 回调给客户端
+        // 只有当为空的时候才回调给客户端。否则说明数据没有写完，不能再写了
         if (output_.empty() && writablecb_) {
             writablecb_(con);
         }
@@ -306,6 +312,13 @@ ssize_t TcpConn::isend(const char *buf, size_t len) {
             break;
         } else { // 这里还有一些未处理掉的，如 SIGPIPE。表示往对端已经关闭的socket上写数据时就会触发
             error("write error: channel %lld fd %d wd %ld %d %s", (long long) channel_->id(), channel_->fd(), wd, errno, strerror(errno));
+            // ECONNRESET 104 /* Connection reset by peer */
+            if (errno == ECONNRESET)
+            {
+                // 远程已经断开连接没有必要继续了
+                return -1;
+            }
+            
             break;
         }
     }
@@ -320,6 +333,13 @@ void TcpConn::send(Buffer &buf) {
         }
         if (buf.size()) { // 如果合并字符串了，这里就会为false，就不会进来
             ssize_t sended = isend(buf.begin(), buf.size());
+            if (sended == -1)
+            {
+                TcpConnPtr con1 = shared_from_this();
+                cleanup(con1);
+                return;
+            }
+
             buf.consume(sended); // 将消费了的字符串丢掉
         }
         if (buf.size()) { // 如果本次没有消费完，则保留到 output
@@ -337,6 +357,13 @@ void TcpConn::send(const char *buf, size_t len) {
     if (channel_) {
         if (output_.empty()) {
             ssize_t sended = isend(buf, len);
+            if (sended == -1)
+            {
+                TcpConnPtr con1 = shared_from_this();
+                cleanup(con1);
+                return;
+            }
+            
             buf += sended;
             len -= sended;
         }
