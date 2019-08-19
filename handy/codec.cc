@@ -42,7 +42,7 @@ int BracketCodec::tryDecode(Slice data, Slice &msg) {
     
     for (size_t i = 0; i < data.size(); i++) {
         if (data[i] == '}') {
-            msg = Slice(data.data()+1, i); // 不需要将{}作为数据的一部分
+            msg = Slice(data.data()+1, i-1); // 不需要将{}作为数据的一部分
             return i+1;
         }
     }

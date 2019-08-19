@@ -104,6 +104,8 @@ int main(int argc, const char *argv[]) {
                 });
                 con->onMsg(cd, [&](const TcpConnPtr &con, Slice msg) {
                     // 解码后的消息
+                    std::string str = msg;
+                    info("收到客户端[%s]消息: %s", con->peer_.toString().c_str(), str.c_str());
                     recved++;
                     con->sendMsg(msg);
                 });

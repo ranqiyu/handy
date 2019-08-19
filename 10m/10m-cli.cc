@@ -218,7 +218,7 @@ int main(int argc, const char *argv[]) {
                     // 使用LIneCodec编码可以用来测试echo server
                     con->onMsg(cd, [&](const TcpConnPtr &con, const Slice &msg) {
                         std::string t = msg;
-                        info("收到服务端[%s]消息： %s", con->peer_.toString().c_str(), t.c_str());
+                        info("[%s]收到服务端[%s]消息： %s", con->local_.toString().c_str(), con->peer_.toString().c_str(), t.c_str());
 
                         // 如果有心跳了，这里不echo，只收
                         /*
@@ -286,7 +286,7 @@ int main(int argc, const char *argv[]) {
                                             memcpy(buf, s1.c_str(), std::min((int)s1.length(), bsz));      
                                             Slice msg(buf, bsz);
 
-                                            info("向服务端[%s]发送消息：%s", allConns[j]->peer_.toString().c_str(), buf);
+                                            info("[%s]向服务端[%s]发送消息：%s", allConns[j]->local_.toString().c_str(), allConns[j]->peer_.toString().c_str(), buf);
 
                                             allConns[j]->sendMsg(msg);
                                             send++;
