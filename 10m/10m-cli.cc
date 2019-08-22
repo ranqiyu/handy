@@ -125,7 +125,7 @@ int main(int argc, const char *argv[]) {
 
     setlogfile(logfile);
     setloglevel(loglevel);
-
+    
     info("%d 主进程启动，在位置 %s", getpid(), argv[0]);
 
     CodecBase* cd = nullptr;
@@ -155,7 +155,7 @@ int main(int argc, const char *argv[]) {
                 std::string child_log_file = program + "-" + std::to_string(getpid()) + ".log";
                 setlogfile(child_log_file);
                 info("=========子进程 %d 启动========", getpid());
-                sleep(1);
+                sleep(5*(i+1)); // 这里多等一会不然大家都太集中了
                 break;
             }
         }
