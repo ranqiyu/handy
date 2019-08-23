@@ -60,7 +60,7 @@ void Logger::setFileName(const string &filename) {
     if (fd_ == -1) {
         fd_ = fd;
     } else {
-        int r = dup2(fd, fd_);
+        int r = dup2(fd, fd_); // 如果之前 fd_ 已经存在，则先关闭。再复制一个 fd
         fatalif(r < 0, "dup2 failed");
         close(fd);
     }

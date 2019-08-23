@@ -47,7 +47,7 @@ void test_one(){
 int main(int argc, const char *argv[]) {
 
     string program = argv[0];
-    string logfile = program + ".log";
+    string logfile = program + "-master-" + std::to_string(getpid()) + ".log";
 
     if (false) // mytest
     {
@@ -151,11 +151,12 @@ int main(int argc, const char *argv[]) {
         for (int i = 0; i < processes; i++) {
             pid = fork();
             if (pid == 0) {  // a child process, break
+                sleep(5*(i+1)); // 这里多等一会不然大家都太集中了
+
                 // 给子进程指定日志文件
                 std::string child_log_file = program + "-" + std::to_string(getpid()) + ".log";
                 setlogfile(child_log_file);
                 info("=========子进程 %d 启动========", getpid());
-                sleep(5*(i+1)); // 这里多等一会不然大家都太集中了
                 break;
             }
         }
