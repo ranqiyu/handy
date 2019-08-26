@@ -313,9 +313,10 @@ ssize_t TcpConn::isend(const char *buf, size_t len) {
         } else { // 这里还有一些未处理掉的，如 SIGPIPE。表示往对端已经关闭的socket上写数据时就会触发
             error("write error: channel %lld fd %d wd %ld %d %s", (long long) channel_->id(), channel_->fd(), wd, errno, strerror(errno));
             // ECONNRESET 104 /* Connection reset by peer */
-            if (errno == ECONNRESET)
+            if ((errno == ECONNRESET) || (errno == ETIMEDOUT) || (errno == EPIPE))
             {
                 // 远程已经断开连接没有必要继续了
+                // 在服务端依然会崩溃，加入ETIMEDOUT 和 EPIPE 的判断
                 return -1;
             }
             

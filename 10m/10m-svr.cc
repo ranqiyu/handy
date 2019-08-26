@@ -83,6 +83,17 @@ int main(int argc, const char *argv[]) {
     }
     
     EventBase base;
+
+    // 捕获信号SIGPIPE，防止进程异常退出
+    Signal::signal(SIGPIPE, [] {
+        warn("捕获信号 SIGPIPE");
+    });
+    Signal::signal(SIGINT, [&] {
+        // ctrl + c 
+        warn("捕获终止信号 SIGINT，将要退出");
+        base.exit();
+    });
+
     if (pid == 0) {          // child process
         usleep(100 * 1000);  // wait master to listen management port
         vector<TcpServerPtr> svrs;
