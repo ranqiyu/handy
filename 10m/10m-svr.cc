@@ -52,7 +52,7 @@ int main(int argc, const char *argv[]) {
     
     setlogfile(logfile);
     setloglevel(loglevel);
-    setlogRotateInterval(300); // 每5分钟滚动一次日志
+    setlogRotateInterval(180); // 每3分钟滚动一次日志
 
     info("%d 主进程启动，在位置 %s", getpid(), argv[0]);
 
