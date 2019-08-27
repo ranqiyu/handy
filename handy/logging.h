@@ -51,6 +51,8 @@
 
 #define setloglevel(l) Logger::getLogger().setLogLevel(l)
 #define setlogfile(n) Logger::getLogger().setFileName(n)
+// 设置日志轮动时间间隔，毫秒。毫秒是1天
+#define setlogRotateInterval(n) Logger::getLogger().setRotateInterval(n)
 
 namespace handy {
 

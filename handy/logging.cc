@@ -80,7 +80,9 @@ void Logger::maybeRotate() {
     struct tm ntm;
     localtime_r(&now, &ntm);
     char newname[4096];
-    snprintf(newname, sizeof(newname), "%s.%d%02d%02d%02d%02d", filename_.c_str(), ntm.tm_year + 1900, ntm.tm_mon + 1, ntm.tm_mday, ntm.tm_hour, ntm.tm_min);
+    //snprintf(newname, sizeof(newname), "%s.%d%02d%02d%02d%02d%02d", filename_.c_str(), ntm.tm_year + 1900, ntm.tm_mon + 1, ntm.tm_mday, ntm.tm_hour, ntm.tm_min, ntm.tm_sec);
+    // 直接覆盖上一个文件，避免太多，后续可将代码恢复
+    snprintf(newname, sizeof(newname), "%s.backup", filename_.c_str());
     const char *oldname = filename_.c_str();
     int err = rename(oldname, newname);
     if (err != 0) {
