@@ -1,0 +1,637 @@
+2019/08/28-16:39:00.537632 4b9d TRACE handy/poller.cc:93 loop_once: epoll wait 2381 return 1 errno 11 used 1999 millsecond
+2019/08/28-16:39:00.537667 4b9d TRACE handy/poller.cc:108 loop_once: channel[0x17d2730] 8 fd 8 handle read
+2019/08/28-16:39:00.537678 4b9d TRACE handy/conn.cc:143 handleRead: [0x17d2570] here,handle read。当前网络状态是 3
+2019/08/28-16:39:00.537688 4b9d TRACE handy/conn.cc:158 handleRead: [0x17d2570] 准备读数据，他的 channel 是 [0x17d2730]
+2019/08/28-16:39:00.537695 4b9d TRACE handy/conn.cc:168 handleRead: [0x17d2570] debug: fd 8, 0x17d28a0, 0x200
+2019/08/28-16:39:00.537706 4b9d TRACE handy/conn.cc:170 handleRead: [0x17d2570] channel 8 fd 8 readed 56 bytes
+2019/08/28-16:39:00.537713 4b9d TRACE handy/conn.cc:158 handleRead: [0x17d2570] 准备读数据，他的 channel 是 [0x17d2730]
+2019/08/28-16:39:00.537719 4b9d TRACE handy/conn.cc:168 handleRead: [0x17d2570] debug: fd 8, 0x17d2ae8, 0x3c8
+2019/08/28-16:39:00.537726 4b9d TRACE handy/conn.cc:170 handleRead: [0x17d2570] channel 8 fd 8 readed -1 bytes
+2019/08/28-16:39:00.537734 4b9d TRACE handy/conn.cc:179 handleRead: 已经读到数据长度 56, 内容: 24016, connected: 12501, closed: 12500, recved: 172596
+2019/08/28-16:39:00.537744 4b9d DEBUG handy/conn.cc:391 operator(): 消息解码成功. 原始长度 56，消息长度 54
+2019/08/28-16:39:00.920177 4b9d TRACE handy/poller.cc:93 loop_once: epoll wait 382 return 0 errno 11 used 383 millsecond
+2019/08/28-16:39:00.920233 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19358, connected:   7139, closed:   5942, recved 4158514
+2019/08/28-16:39:00.920241 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19359, connected:   7432, closed:   5912, recved 3942817
+2019/08/28-16:39:00.920247 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19360, connected:   7392, closed:   5735, recved 3890476
+2019/08/28-16:39:00.920253 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19361, connected:   7224, closed:   5969, recved 3980020
+2019/08/28-16:39:00.920259 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19362, connected:   7428, closed:   5780, recved 3802686
+2019/08/28-16:39:00.920265 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  24016, connected:  12501, closed:  12500, recved 172596
+2019/08/28-16:39:02.538018 4b9d TRACE handy/poller.cc:93 loop_once: epoll wait 2999 return 1 errno 11 used 1618 millsecond
+2019/08/28-16:39:02.538071 4b9d TRACE handy/poller.cc:108 loop_once: channel[0x17d2730] 8 fd 8 handle read
+2019/08/28-16:39:02.538083 4b9d TRACE handy/conn.cc:143 handleRead: [0x17d2570] here,handle read。当前网络状态是 3
+2019/08/28-16:39:02.538092 4b9d TRACE handy/conn.cc:158 handleRead: [0x17d2570] 准备读数据，他的 channel 是 [0x17d2730]
+2019/08/28-16:39:02.538098 4b9d TRACE handy/conn.cc:168 handleRead: [0x17d2570] debug: fd 8, 0x17d28a0, 0x200
+2019/08/28-16:39:02.538108 4b9d TRACE handy/conn.cc:170 handleRead: [0x17d2570] channel 8 fd 8 readed 56 bytes
+2019/08/28-16:39:02.538119 4b9d TRACE handy/conn.cc:158 handleRead: [0x17d2570] 准备读数据，他的 channel 是 [0x17d2730]
+2019/08/28-16:39:02.538125 4b9d TRACE handy/conn.cc:168 handleRead: [0x17d2570] debug: fd 8, 0x17d2ae8, 0x3c8
+2019/08/28-16:39:02.538131 4b9d TRACE handy/conn.cc:170 handleRead: [0x17d2570] channel 8 fd 8 readed -1 bytes
+2019/08/28-16:39:02.538139 4b9d TRACE handy/conn.cc:179 handleRead: 已经读到数据长度 56, 内容: 24016, connected: 12500, closed: 12501, recved: 181085
+2019/08/28-16:39:02.538147 4b9d DEBUG handy/conn.cc:391 operator(): 消息解码成功. 原始长度 56，消息长度 54
+2019/08/28-16:39:03.920578 4b9d TRACE handy/poller.cc:93 loop_once: epoll wait 1381 return 0 errno 11 used 1382 millsecond
+2019/08/28-16:39:03.920635 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19358, connected:   7139, closed:   5942, recved 4158514
+2019/08/28-16:39:03.920644 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19359, connected:   7432, closed:   5912, recved 3942817
+2019/08/28-16:39:03.920649 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19360, connected:   7392, closed:   5735, recved 3890476
+2019/08/28-16:39:03.920655 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19361, connected:   7224, closed:   5969, recved 3980020
+2019/08/28-16:39:03.920673 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19362, connected:   7428, closed:   5780, recved 3802686
+2019/08/28-16:39:03.920679 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  24016, connected:  12500, closed:  12501, recved 181085
+2019/08/28-16:39:04.537687 4b9d TRACE handy/poller.cc:93 loop_once: epoll wait 2999 return 1 errno 11 used 617 millsecond
+2019/08/28-16:39:04.537733 4b9d TRACE handy/poller.cc:108 loop_once: channel[0x17d2730] 8 fd 8 handle read
+2019/08/28-16:39:04.537743 4b9d TRACE handy/conn.cc:143 handleRead: [0x17d2570] here,handle read。当前网络状态是 3
+2019/08/28-16:39:04.537752 4b9d TRACE handy/conn.cc:158 handleRead: [0x17d2570] 准备读数据，他的 channel 是 [0x17d2730]
+2019/08/28-16:39:04.537758 4b9d TRACE handy/conn.cc:168 handleRead: [0x17d2570] debug: fd 8, 0x17d28a0, 0x200
+2019/08/28-16:39:04.537768 4b9d TRACE handy/conn.cc:170 handleRead: [0x17d2570] channel 8 fd 8 readed 56 bytes
+2019/08/28-16:39:04.537775 4b9d TRACE handy/conn.cc:158 handleRead: [0x17d2570] 准备读数据，他的 channel 是 [0x17d2730]
+2019/08/28-16:39:04.537781 4b9d TRACE handy/conn.cc:168 handleRead: [0x17d2570] debug: fd 8, 0x17d2ae8, 0x3c8
+2019/08/28-16:39:04.537788 4b9d TRACE handy/conn.cc:170 handleRead: [0x17d2570] channel 8 fd 8 readed -1 bytes
+2019/08/28-16:39:04.537795 4b9d TRACE handy/conn.cc:179 handleRead: 已经读到数据长度 56, 内容: 24016, connected: 12501, closed: 12501, recved: 188493
+2019/08/28-16:39:04.537804 4b9d DEBUG handy/conn.cc:391 operator(): 消息解码成功. 原始长度 56，消息长度 54
+2019/08/28-16:39:06.538487 4b9d TRACE handy/poller.cc:93 loop_once: epoll wait 2382 return 1 errno 11 used 2001 millsecond
+2019/08/28-16:39:06.538533 4b9d TRACE handy/poller.cc:108 loop_once: channel[0x17d2730] 8 fd 8 handle read
+2019/08/28-16:39:06.538543 4b9d TRACE handy/conn.cc:143 handleRead: [0x17d2570] here,handle read。当前网络状态是 3
+2019/08/28-16:39:06.538553 4b9d TRACE handy/conn.cc:158 handleRead: [0x17d2570] 准备读数据，他的 channel 是 [0x17d2730]
+2019/08/28-16:39:06.538559 4b9d TRACE handy/conn.cc:168 handleRead: [0x17d2570] debug: fd 8, 0x17d28a0, 0x200
+2019/08/28-16:39:06.538568 4b9d TRACE handy/conn.cc:170 handleRead: [0x17d2570] channel 8 fd 8 readed 56 bytes
+2019/08/28-16:39:06.538575 4b9d TRACE handy/conn.cc:158 handleRead: [0x17d2570] 准备读数据，他的 channel 是 [0x17d2730]
+2019/08/28-16:39:06.538581 4b9d TRACE handy/conn.cc:168 handleRead: [0x17d2570] debug: fd 8, 0x17d2ae8, 0x3c8
+2019/08/28-16:39:06.538587 4b9d TRACE handy/conn.cc:170 handleRead: [0x17d2570] channel 8 fd 8 readed -1 bytes
+2019/08/28-16:39:06.538594 4b9d TRACE handy/conn.cc:179 handleRead: 已经读到数据长度 56, 内容: 24016, connected: 12500, closed: 12502, recved: 188495
+2019/08/28-16:39:06.538604 4b9d DEBUG handy/conn.cc:391 operator(): 消息解码成功. 原始长度 56，消息长度 54
+2019/08/28-16:39:06.920034 4b9d TRACE handy/poller.cc:93 loop_once: epoll wait 381 return 0 errno 11 used 382 millsecond
+2019/08/28-16:39:06.920091 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19358, connected:   7139, closed:   5942, recved 4158514
+2019/08/28-16:39:06.920100 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19359, connected:   7432, closed:   5912, recved 3942817
+2019/08/28-16:39:06.920107 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19360, connected:   7392, closed:   5735, recved 3890476
+2019/08/28-16:39:06.920113 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19361, connected:   7224, closed:   5969, recved 3980020
+2019/08/28-16:39:06.920119 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19362, connected:   7428, closed:   5780, recved 3802686
+2019/08/28-16:39:06.920125 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  24016, connected:  12500, closed:  12502, recved 188495
+2019/08/28-16:39:08.537663 4b9d TRACE handy/poller.cc:93 loop_once: epoll wait 2999 return 1 errno 11 used 1617 millsecond
+2019/08/28-16:39:08.537713 4b9d TRACE handy/poller.cc:108 loop_once: channel[0x17d2730] 8 fd 8 handle read
+2019/08/28-16:39:08.537734 4b9d TRACE handy/conn.cc:143 handleRead: [0x17d2570] here,handle read。当前网络状态是 3
+2019/08/28-16:39:08.537744 4b9d TRACE handy/conn.cc:158 handleRead: [0x17d2570] 准备读数据，他的 channel 是 [0x17d2730]
+2019/08/28-16:39:08.537751 4b9d TRACE handy/conn.cc:168 handleRead: [0x17d2570] debug: fd 8, 0x17d28a0, 0x200
+2019/08/28-16:39:08.537760 4b9d TRACE handy/conn.cc:170 handleRead: [0x17d2570] channel 8 fd 8 readed 56 bytes
+2019/08/28-16:39:08.537768 4b9d TRACE handy/conn.cc:158 handleRead: [0x17d2570] 准备读数据，他的 channel 是 [0x17d2730]
+2019/08/28-16:39:08.537773 4b9d TRACE handy/conn.cc:168 handleRead: [0x17d2570] debug: fd 8, 0x17d2ae8, 0x3c8
+2019/08/28-16:39:08.537780 4b9d TRACE handy/conn.cc:170 handleRead: [0x17d2570] channel 8 fd 8 readed -1 bytes
+2019/08/28-16:39:08.537787 4b9d TRACE handy/conn.cc:179 handleRead: 已经读到数据长度 56, 内容: 24016, connected: 12501, closed: 12502, recved: 188497
+2019/08/28-16:39:08.537796 4b9d DEBUG handy/conn.cc:391 operator(): 消息解码成功. 原始长度 56，消息长度 54
+2019/08/28-16:39:09.921228 4b9d TRACE handy/poller.cc:93 loop_once: epoll wait 1382 return 0 errno 11 used 1384 millsecond
+2019/08/28-16:39:09.921287 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19358, connected:   7139, closed:   5942, recved 4158514
+2019/08/28-16:39:09.921295 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19359, connected:   7432, closed:   5912, recved 3942817
+2019/08/28-16:39:09.921301 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19360, connected:   7392, closed:   5735, recved 3890476
+2019/08/28-16:39:09.921307 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19361, connected:   7224, closed:   5969, recved 3980020
+2019/08/28-16:39:09.921312 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19362, connected:   7428, closed:   5780, recved 3802686
+2019/08/28-16:39:09.921318 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  24016, connected:  12501, closed:  12502, recved 188497
+2019/08/28-16:39:10.537975 4b9d TRACE handy/poller.cc:93 loop_once: epoll wait 2998 return 1 errno 11 used 616 millsecond
+2019/08/28-16:39:10.538021 4b9d TRACE handy/poller.cc:108 loop_once: channel[0x17d2730] 8 fd 8 handle read
+2019/08/28-16:39:10.538031 4b9d TRACE handy/conn.cc:143 handleRead: [0x17d2570] here,handle read。当前网络状态是 3
+2019/08/28-16:39:10.538040 4b9d TRACE handy/conn.cc:158 handleRead: [0x17d2570] 准备读数据，他的 channel 是 [0x17d2730]
+2019/08/28-16:39:10.538046 4b9d TRACE handy/conn.cc:168 handleRead: [0x17d2570] debug: fd 8, 0x17d28a0, 0x200
+2019/08/28-16:39:10.538056 4b9d TRACE handy/conn.cc:170 handleRead: [0x17d2570] channel 8 fd 8 readed 56 bytes
+2019/08/28-16:39:10.538064 4b9d TRACE handy/conn.cc:158 handleRead: [0x17d2570] 准备读数据，他的 channel 是 [0x17d2730]
+2019/08/28-16:39:10.538071 4b9d TRACE handy/conn.cc:168 handleRead: [0x17d2570] debug: fd 8, 0x17d2ae8, 0x3c8
+2019/08/28-16:39:10.538078 4b9d TRACE handy/conn.cc:170 handleRead: [0x17d2570] channel 8 fd 8 readed -1 bytes
+2019/08/28-16:39:10.538085 4b9d TRACE handy/conn.cc:179 handleRead: 已经读到数据长度 56, 内容: 24016, connected: 12500, closed: 12503, recved: 190358
+2019/08/28-16:39:10.538094 4b9d DEBUG handy/conn.cc:391 operator(): 消息解码成功. 原始长度 56，消息长度 54
+2019/08/28-16:39:12.538260 4b9d TRACE handy/poller.cc:93 loop_once: epoll wait 2381 return 1 errno 11 used 2000 millsecond
+2019/08/28-16:39:12.538303 4b9d TRACE handy/poller.cc:108 loop_once: channel[0x17d2730] 8 fd 8 handle read
+2019/08/28-16:39:12.538314 4b9d TRACE handy/conn.cc:143 handleRead: [0x17d2570] here,handle read。当前网络状态是 3
+2019/08/28-16:39:12.538324 4b9d TRACE handy/conn.cc:158 handleRead: [0x17d2570] 准备读数据，他的 channel 是 [0x17d2730]
+2019/08/28-16:39:12.538330 4b9d TRACE handy/conn.cc:168 handleRead: [0x17d2570] debug: fd 8, 0x17d28a0, 0x200
+2019/08/28-16:39:12.538340 4b9d TRACE handy/conn.cc:170 handleRead: [0x17d2570] channel 8 fd 8 readed 56 bytes
+2019/08/28-16:39:12.538367 4b9d TRACE handy/conn.cc:158 handleRead: [0x17d2570] 准备读数据，他的 channel 是 [0x17d2730]
+2019/08/28-16:39:12.538373 4b9d TRACE handy/conn.cc:168 handleRead: [0x17d2570] debug: fd 8, 0x17d2ae8, 0x3c8
+2019/08/28-16:39:12.538379 4b9d TRACE handy/conn.cc:170 handleRead: [0x17d2570] channel 8 fd 8 readed -1 bytes
+2019/08/28-16:39:12.538386 4b9d TRACE handy/conn.cc:179 handleRead: 已经读到数据长度 56, 内容: 24016, connected: 12501, closed: 12503, recved: 199347
+2019/08/28-16:39:12.538396 4b9d DEBUG handy/conn.cc:391 operator(): 消息解码成功. 原始长度 56，消息长度 54
+2019/08/28-16:39:12.919823 4b9d TRACE handy/poller.cc:93 loop_once: epoll wait 381 return 0 errno 11 used 381 millsecond
+2019/08/28-16:39:12.919880 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19358, connected:   7139, closed:   5942, recved 4158514
+2019/08/28-16:39:12.919888 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19359, connected:   7432, closed:   5912, recved 3942817
+2019/08/28-16:39:12.919894 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19360, connected:   7392, closed:   5735, recved 3890476
+2019/08/28-16:39:12.919899 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19361, connected:   7224, closed:   5969, recved 3980020
+2019/08/28-16:39:12.919904 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19362, connected:   7428, closed:   5780, recved 3802686
+2019/08/28-16:39:12.919909 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  24016, connected:  12501, closed:  12503, recved 199347
+2019/08/28-16:39:14.537989 4b9d TRACE handy/poller.cc:93 loop_once: epoll wait 3000 return 1 errno 11 used 1618 millsecond
+2019/08/28-16:39:14.538038 4b9d TRACE handy/poller.cc:108 loop_once: channel[0x17d2730] 8 fd 8 handle read
+2019/08/28-16:39:14.538048 4b9d TRACE handy/conn.cc:143 handleRead: [0x17d2570] here,handle read。当前网络状态是 3
+2019/08/28-16:39:14.538057 4b9d TRACE handy/conn.cc:158 handleRead: [0x17d2570] 准备读数据，他的 channel 是 [0x17d2730]
+2019/08/28-16:39:14.538063 4b9d TRACE handy/conn.cc:168 handleRead: [0x17d2570] debug: fd 8, 0x17d28a0, 0x200
+2019/08/28-16:39:14.538073 4b9d TRACE handy/conn.cc:170 handleRead: [0x17d2570] channel 8 fd 8 readed 56 bytes
+2019/08/28-16:39:14.538081 4b9d TRACE handy/conn.cc:158 handleRead: [0x17d2570] 准备读数据，他的 channel 是 [0x17d2730]
+2019/08/28-16:39:14.538086 4b9d TRACE handy/conn.cc:168 handleRead: [0x17d2570] debug: fd 8, 0x17d2ae8, 0x3c8
+2019/08/28-16:39:14.538092 4b9d TRACE handy/conn.cc:170 handleRead: [0x17d2570] channel 8 fd 8 readed -1 bytes
+2019/08/28-16:39:14.538098 4b9d TRACE handy/conn.cc:179 handleRead: 已经读到数据长度 56, 内容: 24016, connected: 12500, closed: 12504, recved: 208131
+2019/08/28-16:39:14.538106 4b9d DEBUG handy/conn.cc:391 operator(): 消息解码成功. 原始长度 56，消息长度 54
+2019/08/28-16:39:15.920532 4b9d TRACE handy/poller.cc:93 loop_once: epoll wait 1381 return 0 errno 11 used 1382 millsecond
+2019/08/28-16:39:15.920585 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19358, connected:   7139, closed:   5942, recved 4158514
+2019/08/28-16:39:15.920593 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19359, connected:   7432, closed:   5912, recved 3942817
+2019/08/28-16:39:15.920599 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19360, connected:   7392, closed:   5735, recved 3890476
+2019/08/28-16:39:15.920605 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19361, connected:   7224, closed:   5969, recved 3980020
+2019/08/28-16:39:15.920611 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19362, connected:   7428, closed:   5780, recved 3802686
+2019/08/28-16:39:15.920616 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  24016, connected:  12500, closed:  12504, recved 208131
+2019/08/28-16:39:16.538006 4b9d TRACE handy/poller.cc:93 loop_once: epoll wait 2999 return 1 errno 11 used 617 millsecond
+2019/08/28-16:39:16.538038 4b9d TRACE handy/poller.cc:108 loop_once: channel[0x17d2730] 8 fd 8 handle read
+2019/08/28-16:39:16.538048 4b9d TRACE handy/conn.cc:143 handleRead: [0x17d2570] here,handle read。当前网络状态是 3
+2019/08/28-16:39:16.538064 4b9d TRACE handy/conn.cc:158 handleRead: [0x17d2570] 准备读数据，他的 channel 是 [0x17d2730]
+2019/08/28-16:39:16.538070 4b9d TRACE handy/conn.cc:168 handleRead: [0x17d2570] debug: fd 8, 0x17d28a0, 0x200
+2019/08/28-16:39:16.538078 4b9d TRACE handy/conn.cc:170 handleRead: [0x17d2570] channel 8 fd 8 readed 56 bytes
+2019/08/28-16:39:16.538086 4b9d TRACE handy/conn.cc:158 handleRead: [0x17d2570] 准备读数据，他的 channel 是 [0x17d2730]
+2019/08/28-16:39:16.538091 4b9d TRACE handy/conn.cc:168 handleRead: [0x17d2570] debug: fd 8, 0x17d2ae8, 0x3c8
+2019/08/28-16:39:16.538098 4b9d TRACE handy/conn.cc:170 handleRead: [0x17d2570] channel 8 fd 8 readed -1 bytes
+2019/08/28-16:39:16.538105 4b9d TRACE handy/conn.cc:179 handleRead: 已经读到数据长度 56, 内容: 24016, connected: 12500, closed: 12504, recved: 216421
+2019/08/28-16:39:16.538113 4b9d DEBUG handy/conn.cc:391 operator(): 消息解码成功. 原始长度 56，消息长度 54
+2019/08/28-16:39:18.538004 4b9d TRACE handy/poller.cc:93 loop_once: epoll wait 2381 return 1 errno 11 used 1999 millsecond
+2019/08/28-16:39:18.538049 4b9d TRACE handy/poller.cc:108 loop_once: channel[0x17d2730] 8 fd 8 handle read
+2019/08/28-16:39:18.538059 4b9d TRACE handy/conn.cc:143 handleRead: [0x17d2570] here,handle read。当前网络状态是 3
+2019/08/28-16:39:18.538069 4b9d TRACE handy/conn.cc:158 handleRead: [0x17d2570] 准备读数据，他的 channel 是 [0x17d2730]
+2019/08/28-16:39:18.538075 4b9d TRACE handy/conn.cc:168 handleRead: [0x17d2570] debug: fd 8, 0x17d28a0, 0x200
+2019/08/28-16:39:18.538084 4b9d TRACE handy/conn.cc:170 handleRead: [0x17d2570] channel 8 fd 8 readed 56 bytes
+2019/08/28-16:39:18.538092 4b9d TRACE handy/conn.cc:158 handleRead: [0x17d2570] 准备读数据，他的 channel 是 [0x17d2730]
+2019/08/28-16:39:18.538098 4b9d TRACE handy/conn.cc:168 handleRead: [0x17d2570] debug: fd 8, 0x17d2ae8, 0x3c8
+2019/08/28-16:39:18.538104 4b9d TRACE handy/conn.cc:170 handleRead: [0x17d2570] channel 8 fd 8 readed -1 bytes
+2019/08/28-16:39:18.538111 4b9d TRACE handy/conn.cc:179 handleRead: 已经读到数据长度 56, 内容: 24016, connected: 12500, closed: 12504, recved: 225514
+2019/08/28-16:39:18.538120 4b9d DEBUG handy/conn.cc:391 operator(): 消息解码成功. 原始长度 56，消息长度 54
+2019/08/28-16:39:18.919550 4b9d TRACE handy/poller.cc:93 loop_once: epoll wait 381 return 0 errno 11 used 381 millsecond
+2019/08/28-16:39:18.919612 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19358, connected:   7139, closed:   5942, recved 4158514
+2019/08/28-16:39:18.920568 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19359, connected:   7432, closed:   5912, recved 3942817
+2019/08/28-16:39:18.920584 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19360, connected:   7392, closed:   5735, recved 3890476
+2019/08/28-16:39:18.920591 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19361, connected:   7224, closed:   5969, recved 3980020
+2019/08/28-16:39:18.920598 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19362, connected:   7428, closed:   5780, recved 3802686
+2019/08/28-16:39:18.920602 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  24016, connected:  12500, closed:  12504, recved 225514
+2019/08/28-16:39:20.537951 4b9d TRACE handy/poller.cc:93 loop_once: epoll wait 2999 return 1 errno 11 used 1617 millsecond
+2019/08/28-16:39:20.537996 4b9d TRACE handy/poller.cc:108 loop_once: channel[0x17d2730] 8 fd 8 handle read
+2019/08/28-16:39:20.538007 4b9d TRACE handy/conn.cc:143 handleRead: [0x17d2570] here,handle read。当前网络状态是 3
+2019/08/28-16:39:20.538017 4b9d TRACE handy/conn.cc:158 handleRead: [0x17d2570] 准备读数据，他的 channel 是 [0x17d2730]
+2019/08/28-16:39:20.538022 4b9d TRACE handy/conn.cc:168 handleRead: [0x17d2570] debug: fd 8, 0x17d28a0, 0x200
+2019/08/28-16:39:20.538033 4b9d TRACE handy/conn.cc:170 handleRead: [0x17d2570] channel 8 fd 8 readed 56 bytes
+2019/08/28-16:39:20.538040 4b9d TRACE handy/conn.cc:158 handleRead: [0x17d2570] 准备读数据，他的 channel 是 [0x17d2730]
+2019/08/28-16:39:20.538058 4b9d TRACE handy/conn.cc:168 handleRead: [0x17d2570] debug: fd 8, 0x17d2ae8, 0x3c8
+2019/08/28-16:39:20.538064 4b9d TRACE handy/conn.cc:170 handleRead: [0x17d2570] channel 8 fd 8 readed -1 bytes
+2019/08/28-16:39:20.538071 4b9d TRACE handy/conn.cc:179 handleRead: 已经读到数据长度 56, 内容: 24016, connected: 12500, closed: 12504, recved: 233746
+2019/08/28-16:39:20.538080 4b9d DEBUG handy/conn.cc:391 operator(): 消息解码成功. 原始长度 56，消息长度 54
+2019/08/28-16:39:21.920515 4b9d TRACE handy/poller.cc:93 loop_once: epoll wait 1381 return 0 errno 11 used 1382 millsecond
+2019/08/28-16:39:21.920571 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19358, connected:   7139, closed:   5942, recved 4158514
+2019/08/28-16:39:21.920579 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19359, connected:   7432, closed:   5912, recved 3942817
+2019/08/28-16:39:21.920585 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19360, connected:   7392, closed:   5735, recved 3890476
+2019/08/28-16:39:21.920591 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19361, connected:   7224, closed:   5969, recved 3980020
+2019/08/28-16:39:21.920597 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19362, connected:   7428, closed:   5780, recved 3802686
+2019/08/28-16:39:21.920602 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  24016, connected:  12500, closed:  12504, recved 233746
+2019/08/28-16:39:22.537966 4b9d TRACE handy/poller.cc:93 loop_once: epoll wait 2999 return 1 errno 11 used 617 millsecond
+2019/08/28-16:39:22.538010 4b9d TRACE handy/poller.cc:108 loop_once: channel[0x17d2730] 8 fd 8 handle read
+2019/08/28-16:39:22.538020 4b9d TRACE handy/conn.cc:143 handleRead: [0x17d2570] here,handle read。当前网络状态是 3
+2019/08/28-16:39:22.538029 4b9d TRACE handy/conn.cc:158 handleRead: [0x17d2570] 准备读数据，他的 channel 是 [0x17d2730]
+2019/08/28-16:39:22.538035 4b9d TRACE handy/conn.cc:168 handleRead: [0x17d2570] debug: fd 8, 0x17d28a0, 0x200
+2019/08/28-16:39:22.538044 4b9d TRACE handy/conn.cc:170 handleRead: [0x17d2570] channel 8 fd 8 readed 56 bytes
+2019/08/28-16:39:22.538052 4b9d TRACE handy/conn.cc:158 handleRead: [0x17d2570] 准备读数据，他的 channel 是 [0x17d2730]
+2019/08/28-16:39:22.538057 4b9d TRACE handy/conn.cc:168 handleRead: [0x17d2570] debug: fd 8, 0x17d2ae8, 0x3c8
+2019/08/28-16:39:22.538063 4b9d TRACE handy/conn.cc:170 handleRead: [0x17d2570] channel 8 fd 8 readed -1 bytes
+2019/08/28-16:39:22.538070 4b9d TRACE handy/conn.cc:179 handleRead: 已经读到数据长度 56, 内容: 24016, connected: 12500, closed: 12504, recved: 242394
+2019/08/28-16:39:22.538079 4b9d DEBUG handy/conn.cc:391 operator(): 消息解码成功. 原始长度 56，消息长度 54
+2019/08/28-16:39:24.537797 4b9d TRACE handy/poller.cc:93 loop_once: epoll wait 2381 return 1 errno 11 used 1999 millsecond
+2019/08/28-16:39:24.537848 4b9d TRACE handy/poller.cc:108 loop_once: channel[0x17d2730] 8 fd 8 handle read
+2019/08/28-16:39:24.537866 4b9d TRACE handy/conn.cc:143 handleRead: [0x17d2570] here,handle read。当前网络状态是 3
+2019/08/28-16:39:24.537875 4b9d TRACE handy/conn.cc:158 handleRead: [0x17d2570] 准备读数据，他的 channel 是 [0x17d2730]
+2019/08/28-16:39:24.537881 4b9d TRACE handy/conn.cc:168 handleRead: [0x17d2570] debug: fd 8, 0x17d28a0, 0x200
+2019/08/28-16:39:24.537891 4b9d TRACE handy/conn.cc:170 handleRead: [0x17d2570] channel 8 fd 8 readed 56 bytes
+2019/08/28-16:39:24.537899 4b9d TRACE handy/conn.cc:158 handleRead: [0x17d2570] 准备读数据，他的 channel 是 [0x17d2730]
+2019/08/28-16:39:24.537904 4b9d TRACE handy/conn.cc:168 handleRead: [0x17d2570] debug: fd 8, 0x17d2ae8, 0x3c8
+2019/08/28-16:39:24.537911 4b9d TRACE handy/conn.cc:170 handleRead: [0x17d2570] channel 8 fd 8 readed -1 bytes
+2019/08/28-16:39:24.537919 4b9d TRACE handy/conn.cc:179 handleRead: 已经读到数据长度 56, 内容: 24016, connected: 12500, closed: 12504, recved: 250778
+2019/08/28-16:39:24.537929 4b9d DEBUG handy/conn.cc:391 operator(): 消息解码成功. 原始长度 56，消息长度 54
+2019/08/28-16:39:24.920374 4b9d TRACE handy/poller.cc:93 loop_once: epoll wait 382 return 0 errno 11 used 383 millsecond
+2019/08/28-16:39:24.920440 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19358, connected:   7139, closed:   5942, recved 4158514
+2019/08/28-16:39:24.920449 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19359, connected:   7432, closed:   5912, recved 3942817
+2019/08/28-16:39:24.920456 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19360, connected:   7392, closed:   5735, recved 3890476
+2019/08/28-16:39:24.920461 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19361, connected:   7224, closed:   5969, recved 3980020
+2019/08/28-16:39:24.920466 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19362, connected:   7428, closed:   5780, recved 3802686
+2019/08/28-16:39:24.920471 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  24016, connected:  12500, closed:  12504, recved 250778
+2019/08/28-16:39:26.537977 4b9d TRACE handy/poller.cc:93 loop_once: epoll wait 2999 return 1 errno 11 used 1617 millsecond
+2019/08/28-16:39:26.538024 4b9d TRACE handy/poller.cc:108 loop_once: channel[0x17d2730] 8 fd 8 handle read
+2019/08/28-16:39:26.538035 4b9d TRACE handy/conn.cc:143 handleRead: [0x17d2570] here,handle read。当前网络状态是 3
+2019/08/28-16:39:26.538045 4b9d TRACE handy/conn.cc:158 handleRead: [0x17d2570] 准备读数据，他的 channel 是 [0x17d2730]
+2019/08/28-16:39:26.538051 4b9d TRACE handy/conn.cc:168 handleRead: [0x17d2570] debug: fd 8, 0x17d28a0, 0x200
+2019/08/28-16:39:26.538059 4b9d TRACE handy/conn.cc:170 handleRead: [0x17d2570] channel 8 fd 8 readed 56 bytes
+2019/08/28-16:39:26.538066 4b9d TRACE handy/conn.cc:158 handleRead: [0x17d2570] 准备读数据，他的 channel 是 [0x17d2730]
+2019/08/28-16:39:26.538071 4b9d TRACE handy/conn.cc:168 handleRead: [0x17d2570] debug: fd 8, 0x17d2ae8, 0x3c8
+2019/08/28-16:39:26.538077 4b9d TRACE handy/conn.cc:170 handleRead: [0x17d2570] channel 8 fd 8 readed -1 bytes
+2019/08/28-16:39:26.538084 4b9d TRACE handy/conn.cc:179 handleRead: 已经读到数据长度 56, 内容: 24016, connected: 12500, closed: 12504, recved: 257723
+2019/08/28-16:39:26.538092 4b9d DEBUG handy/conn.cc:391 operator(): 消息解码成功. 原始长度 56，消息长度 54
+2019/08/28-16:39:27.920520 4b9d TRACE handy/poller.cc:93 loop_once: epoll wait 1381 return 0 errno 11 used 1382 millsecond
+2019/08/28-16:39:27.920578 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19358, connected:   7139, closed:   5942, recved 4158514
+2019/08/28-16:39:27.920587 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19359, connected:   7432, closed:   5912, recved 3942817
+2019/08/28-16:39:27.920593 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19360, connected:   7392, closed:   5735, recved 3890476
+2019/08/28-16:39:27.920599 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19361, connected:   7224, closed:   5969, recved 3980020
+2019/08/28-16:39:27.920604 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19362, connected:   7428, closed:   5780, recved 3802686
+2019/08/28-16:39:27.920611 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  24016, connected:  12500, closed:  12504, recved 257723
+2019/08/28-16:39:28.537990 4b9d TRACE handy/poller.cc:93 loop_once: epoll wait 2999 return 1 errno 11 used 617 millsecond
+2019/08/28-16:39:28.538038 4b9d TRACE handy/poller.cc:108 loop_once: channel[0x17d2730] 8 fd 8 handle read
+2019/08/28-16:39:28.538048 4b9d TRACE handy/conn.cc:143 handleRead: [0x17d2570] here,handle read。当前网络状态是 3
+2019/08/28-16:39:28.538056 4b9d TRACE handy/conn.cc:158 handleRead: [0x17d2570] 准备读数据，他的 channel 是 [0x17d2730]
+2019/08/28-16:39:28.538063 4b9d TRACE handy/conn.cc:168 handleRead: [0x17d2570] debug: fd 8, 0x17d28a0, 0x200
+2019/08/28-16:39:28.538073 4b9d TRACE handy/conn.cc:170 handleRead: [0x17d2570] channel 8 fd 8 readed 56 bytes
+2019/08/28-16:39:28.538081 4b9d TRACE handy/conn.cc:158 handleRead: [0x17d2570] 准备读数据，他的 channel 是 [0x17d2730]
+2019/08/28-16:39:28.538087 4b9d TRACE handy/conn.cc:168 handleRead: [0x17d2570] debug: fd 8, 0x17d2ae8, 0x3c8
+2019/08/28-16:39:28.538106 4b9d TRACE handy/conn.cc:170 handleRead: [0x17d2570] channel 8 fd 8 readed -1 bytes
+2019/08/28-16:39:28.538113 4b9d TRACE handy/conn.cc:179 handleRead: 已经读到数据长度 56, 内容: 24016, connected: 12500, closed: 12504, recved: 266194
+2019/08/28-16:39:28.538122 4b9d DEBUG handy/conn.cc:391 operator(): 消息解码成功. 原始长度 56，消息长度 54
+2019/08/28-16:39:30.537985 4b9d TRACE handy/poller.cc:93 loop_once: epoll wait 2381 return 1 errno 11 used 1999 millsecond
+2019/08/28-16:39:30.538033 4b9d TRACE handy/poller.cc:108 loop_once: channel[0x17d2730] 8 fd 8 handle read
+2019/08/28-16:39:30.538044 4b9d TRACE handy/conn.cc:143 handleRead: [0x17d2570] here,handle read。当前网络状态是 3
+2019/08/28-16:39:30.538053 4b9d TRACE handy/conn.cc:158 handleRead: [0x17d2570] 准备读数据，他的 channel 是 [0x17d2730]
+2019/08/28-16:39:30.538059 4b9d TRACE handy/conn.cc:168 handleRead: [0x17d2570] debug: fd 8, 0x17d28a0, 0x200
+2019/08/28-16:39:30.538070 4b9d TRACE handy/conn.cc:170 handleRead: [0x17d2570] channel 8 fd 8 readed 56 bytes
+2019/08/28-16:39:30.538077 4b9d TRACE handy/conn.cc:158 handleRead: [0x17d2570] 准备读数据，他的 channel 是 [0x17d2730]
+2019/08/28-16:39:30.538083 4b9d TRACE handy/conn.cc:168 handleRead: [0x17d2570] debug: fd 8, 0x17d2ae8, 0x3c8
+2019/08/28-16:39:30.538089 4b9d TRACE handy/conn.cc:170 handleRead: [0x17d2570] channel 8 fd 8 readed -1 bytes
+2019/08/28-16:39:30.538097 4b9d TRACE handy/conn.cc:179 handleRead: 已经读到数据长度 56, 内容: 24016, connected: 12500, closed: 12504, recved: 275064
+2019/08/28-16:39:30.538106 4b9d DEBUG handy/conn.cc:391 operator(): 消息解码成功. 原始长度 56，消息长度 54
+2019/08/28-16:39:30.919453 4b9d TRACE handy/poller.cc:93 loop_once: epoll wait 381 return 0 errno 11 used 381 millsecond
+2019/08/28-16:39:30.919507 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19358, connected:   7139, closed:   5942, recved 4158514
+2019/08/28-16:39:30.919515 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19359, connected:   7432, closed:   5912, recved 3942817
+2019/08/28-16:39:30.919521 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19360, connected:   7392, closed:   5735, recved 3890476
+2019/08/28-16:39:30.919527 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19361, connected:   7224, closed:   5969, recved 3980020
+2019/08/28-16:39:30.919532 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19362, connected:   7428, closed:   5780, recved 3802686
+2019/08/28-16:39:30.919537 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  24016, connected:  12500, closed:  12504, recved 275064
+2019/08/28-16:39:32.537960 4b9d TRACE handy/poller.cc:93 loop_once: epoll wait 3000 return 1 errno 11 used 1618 millsecond
+2019/08/28-16:39:32.538002 4b9d TRACE handy/poller.cc:108 loop_once: channel[0x17d2730] 8 fd 8 handle read
+2019/08/28-16:39:32.538012 4b9d TRACE handy/conn.cc:143 handleRead: [0x17d2570] here,handle read。当前网络状态是 3
+2019/08/28-16:39:32.538023 4b9d TRACE handy/conn.cc:158 handleRead: [0x17d2570] 准备读数据，他的 channel 是 [0x17d2730]
+2019/08/28-16:39:32.538028 4b9d TRACE handy/conn.cc:168 handleRead: [0x17d2570] debug: fd 8, 0x17d28a0, 0x200
+2019/08/28-16:39:32.538038 4b9d TRACE handy/conn.cc:170 handleRead: [0x17d2570] channel 8 fd 8 readed 56 bytes
+2019/08/28-16:39:32.538045 4b9d TRACE handy/conn.cc:158 handleRead: [0x17d2570] 准备读数据，他的 channel 是 [0x17d2730]
+2019/08/28-16:39:32.538050 4b9d TRACE handy/conn.cc:168 handleRead: [0x17d2570] debug: fd 8, 0x17d2ae8, 0x3c8
+2019/08/28-16:39:32.538056 4b9d TRACE handy/conn.cc:170 handleRead: [0x17d2570] channel 8 fd 8 readed -1 bytes
+2019/08/28-16:39:32.538063 4b9d TRACE handy/conn.cc:179 handleRead: 已经读到数据长度 56, 内容: 24016, connected: 12155, closed: 12849, recved: 280999
+2019/08/28-16:39:32.538071 4b9d DEBUG handy/conn.cc:391 operator(): 消息解码成功. 原始长度 56，消息长度 54
+2019/08/28-16:39:33.920502 4b9d TRACE handy/poller.cc:93 loop_once: epoll wait 1381 return 0 errno 11 used 1382 millsecond
+2019/08/28-16:39:33.920573 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19358, connected:   7139, closed:   5942, recved 4158514
+2019/08/28-16:39:33.920583 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19359, connected:   7432, closed:   5912, recved 3942817
+2019/08/28-16:39:33.920589 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19360, connected:   7392, closed:   5735, recved 3890476
+2019/08/28-16:39:33.920596 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19361, connected:   7224, closed:   5969, recved 3980020
+2019/08/28-16:39:33.920602 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19362, connected:   7428, closed:   5780, recved 3802686
+2019/08/28-16:39:33.920607 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  24016, connected:  12155, closed:  12849, recved 280999
+2019/08/28-16:39:34.537979 4b9d TRACE handy/poller.cc:93 loop_once: epoll wait 2999 return 1 errno 11 used 617 millsecond
+2019/08/28-16:39:34.538027 4b9d TRACE handy/poller.cc:108 loop_once: channel[0x17d2730] 8 fd 8 handle read
+2019/08/28-16:39:34.538038 4b9d TRACE handy/conn.cc:143 handleRead: [0x17d2570] here,handle read。当前网络状态是 3
+2019/08/28-16:39:34.538046 4b9d TRACE handy/conn.cc:158 handleRead: [0x17d2570] 准备读数据，他的 channel 是 [0x17d2730]
+2019/08/28-16:39:34.538052 4b9d TRACE handy/conn.cc:168 handleRead: [0x17d2570] debug: fd 8, 0x17d28a0, 0x200
+2019/08/28-16:39:34.538061 4b9d TRACE handy/conn.cc:170 handleRead: [0x17d2570] channel 8 fd 8 readed 56 bytes
+2019/08/28-16:39:34.538069 4b9d TRACE handy/conn.cc:158 handleRead: [0x17d2570] 准备读数据，他的 channel 是 [0x17d2730]
+2019/08/28-16:39:34.538074 4b9d TRACE handy/conn.cc:168 handleRead: [0x17d2570] debug: fd 8, 0x17d2ae8, 0x3c8
+2019/08/28-16:39:34.538080 4b9d TRACE handy/conn.cc:170 handleRead: [0x17d2570] channel 8 fd 8 readed -1 bytes
+2019/08/28-16:39:34.538087 4b9d TRACE handy/conn.cc:179 handleRead: 已经读到数据长度 56, 内容: 24016, connected: 11555, closed: 13449, recved: 280999
+2019/08/28-16:39:34.538096 4b9d DEBUG handy/conn.cc:391 operator(): 消息解码成功. 原始长度 56，消息长度 54
+2019/08/28-16:39:36.537880 4b9d TRACE handy/poller.cc:93 loop_once: epoll wait 2381 return 1 errno 11 used 1999 millsecond
+2019/08/28-16:39:36.537927 4b9d TRACE handy/poller.cc:108 loop_once: channel[0x17d2730] 8 fd 8 handle read
+2019/08/28-16:39:36.537937 4b9d TRACE handy/conn.cc:143 handleRead: [0x17d2570] here,handle read。当前网络状态是 3
+2019/08/28-16:39:36.537946 4b9d TRACE handy/conn.cc:158 handleRead: [0x17d2570] 准备读数据，他的 channel 是 [0x17d2730]
+2019/08/28-16:39:36.537952 4b9d TRACE handy/conn.cc:168 handleRead: [0x17d2570] debug: fd 8, 0x17d28a0, 0x200
+2019/08/28-16:39:36.537963 4b9d TRACE handy/conn.cc:170 handleRead: [0x17d2570] channel 8 fd 8 readed 56 bytes
+2019/08/28-16:39:36.537971 4b9d TRACE handy/conn.cc:158 handleRead: [0x17d2570] 准备读数据，他的 channel 是 [0x17d2730]
+2019/08/28-16:39:36.537978 4b9d TRACE handy/conn.cc:168 handleRead: [0x17d2570] debug: fd 8, 0x17d2ae8, 0x3c8
+2019/08/28-16:39:36.537985 4b9d TRACE handy/conn.cc:170 handleRead: [0x17d2570] channel 8 fd 8 readed -1 bytes
+2019/08/28-16:39:36.537992 4b9d TRACE handy/conn.cc:179 handleRead: 已经读到数据长度 56, 内容: 24016, connected: 10898, closed: 14106, recved: 282166
+2019/08/28-16:39:36.538000 4b9d DEBUG handy/conn.cc:391 operator(): 消息解码成功. 原始长度 56，消息长度 54
+2019/08/28-16:39:36.919436 4b9d TRACE handy/poller.cc:93 loop_once: epoll wait 381 return 0 errno 11 used 381 millsecond
+2019/08/28-16:39:36.919487 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19358, connected:   7139, closed:   5942, recved 4158514
+2019/08/28-16:39:36.919495 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19359, connected:   7432, closed:   5912, recved 3942817
+2019/08/28-16:39:36.919502 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19360, connected:   7392, closed:   5735, recved 3890476
+2019/08/28-16:39:36.919507 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19361, connected:   7224, closed:   5969, recved 3980020
+2019/08/28-16:39:36.919523 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19362, connected:   7428, closed:   5780, recved 3802686
+2019/08/28-16:39:36.919528 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  24016, connected:  10898, closed:  14106, recved 282166
+2019/08/28-16:39:38.537836 4b9d TRACE handy/poller.cc:93 loop_once: epoll wait 3000 return 1 errno 11 used 1618 millsecond
+2019/08/28-16:39:38.537880 4b9d TRACE handy/poller.cc:108 loop_once: channel[0x17d2730] 8 fd 8 handle read
+2019/08/28-16:39:38.537891 4b9d TRACE handy/conn.cc:143 handleRead: [0x17d2570] here,handle read。当前网络状态是 3
+2019/08/28-16:39:38.537899 4b9d TRACE handy/conn.cc:158 handleRead: [0x17d2570] 准备读数据，他的 channel 是 [0x17d2730]
+2019/08/28-16:39:38.537905 4b9d TRACE handy/conn.cc:168 handleRead: [0x17d2570] debug: fd 8, 0x17d28a0, 0x200
+2019/08/28-16:39:38.537915 4b9d TRACE handy/conn.cc:170 handleRead: [0x17d2570] channel 8 fd 8 readed 56 bytes
+2019/08/28-16:39:38.537922 4b9d TRACE handy/conn.cc:158 handleRead: [0x17d2570] 准备读数据，他的 channel 是 [0x17d2730]
+2019/08/28-16:39:38.537928 4b9d TRACE handy/conn.cc:168 handleRead: [0x17d2570] debug: fd 8, 0x17d2ae8, 0x3c8
+2019/08/28-16:39:38.537934 4b9d TRACE handy/conn.cc:170 handleRead: [0x17d2570] channel 8 fd 8 readed -1 bytes
+2019/08/28-16:39:38.537941 4b9d TRACE handy/conn.cc:179 handleRead: 已经读到数据长度 56, 内容: 24016, connected: 10500, closed: 14504, recved: 285553
+2019/08/28-16:39:38.537949 4b9d DEBUG handy/conn.cc:391 operator(): 消息解码成功. 原始长度 56，消息长度 54
+2019/08/28-16:39:39.921388 4b9d TRACE handy/poller.cc:93 loop_once: epoll wait 1382 return 0 errno 11 used 1384 millsecond
+2019/08/28-16:39:39.921457 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19358, connected:   7139, closed:   5942, recved 4158514
+2019/08/28-16:39:39.921466 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19359, connected:   7432, closed:   5912, recved 3942817
+2019/08/28-16:39:39.921472 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19360, connected:   7392, closed:   5735, recved 3890476
+2019/08/28-16:39:39.921477 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19361, connected:   7224, closed:   5969, recved 3980020
+2019/08/28-16:39:39.921483 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19362, connected:   7428, closed:   5780, recved 3802686
+2019/08/28-16:39:39.921488 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  24016, connected:  10500, closed:  14504, recved 285553
+2019/08/28-16:39:40.538059 4b9d TRACE handy/poller.cc:93 loop_once: epoll wait 2998 return 1 errno 11 used 617 millsecond
+2019/08/28-16:39:40.538106 4b9d TRACE handy/poller.cc:108 loop_once: channel[0x17d2730] 8 fd 8 handle read
+2019/08/28-16:39:40.538116 4b9d TRACE handy/conn.cc:143 handleRead: [0x17d2570] here,handle read。当前网络状态是 3
+2019/08/28-16:39:40.538125 4b9d TRACE handy/conn.cc:158 handleRead: [0x17d2570] 准备读数据，他的 channel 是 [0x17d2730]
+2019/08/28-16:39:40.538134 4b9d TRACE handy/conn.cc:168 handleRead: [0x17d2570] debug: fd 8, 0x17d28a0, 0x200
+2019/08/28-16:39:40.538145 4b9d TRACE handy/conn.cc:170 handleRead: [0x17d2570] channel 8 fd 8 readed 56 bytes
+2019/08/28-16:39:40.538153 4b9d TRACE handy/conn.cc:158 handleRead: [0x17d2570] 准备读数据，他的 channel 是 [0x17d2730]
+2019/08/28-16:39:40.538159 4b9d TRACE handy/conn.cc:168 handleRead: [0x17d2570] debug: fd 8, 0x17d2ae8, 0x3c8
+2019/08/28-16:39:40.538166 4b9d TRACE handy/conn.cc:170 handleRead: [0x17d2570] channel 8 fd 8 readed -1 bytes
+2019/08/28-16:39:40.538173 4b9d TRACE handy/conn.cc:179 handleRead: 已经读到数据长度 56, 内容: 24016, connected: 10500, closed: 14504, recved: 291401
+2019/08/28-16:39:40.538182 4b9d DEBUG handy/conn.cc:391 operator(): 消息解码成功. 原始长度 56，消息长度 54
+2019/08/28-16:39:42.537974 4b9d TRACE handy/poller.cc:93 loop_once: epoll wait 2381 return 1 errno 11 used 1999 millsecond
+2019/08/28-16:39:42.538020 4b9d TRACE handy/poller.cc:108 loop_once: channel[0x17d2730] 8 fd 8 handle read
+2019/08/28-16:39:42.538042 4b9d TRACE handy/conn.cc:143 handleRead: [0x17d2570] here,handle read。当前网络状态是 3
+2019/08/28-16:39:42.538051 4b9d TRACE handy/conn.cc:158 handleRead: [0x17d2570] 准备读数据，他的 channel 是 [0x17d2730]
+2019/08/28-16:39:42.538057 4b9d TRACE handy/conn.cc:168 handleRead: [0x17d2570] debug: fd 8, 0x17d28a0, 0x200
+2019/08/28-16:39:42.538065 4b9d TRACE handy/conn.cc:170 handleRead: [0x17d2570] channel 8 fd 8 readed 56 bytes
+2019/08/28-16:39:42.538072 4b9d TRACE handy/conn.cc:158 handleRead: [0x17d2570] 准备读数据，他的 channel 是 [0x17d2730]
+2019/08/28-16:39:42.538077 4b9d TRACE handy/conn.cc:168 handleRead: [0x17d2570] debug: fd 8, 0x17d2ae8, 0x3c8
+2019/08/28-16:39:42.538083 4b9d TRACE handy/conn.cc:170 handleRead: [0x17d2570] channel 8 fd 8 readed -1 bytes
+2019/08/28-16:39:42.538090 4b9d TRACE handy/conn.cc:179 handleRead: 已经读到数据长度 56, 内容: 24016, connected: 10500, closed: 14504, recved: 299448
+2019/08/28-16:39:42.538099 4b9d DEBUG handy/conn.cc:391 operator(): 消息解码成功. 原始长度 56，消息长度 54
+2019/08/28-16:39:42.919525 4b9d TRACE handy/poller.cc:93 loop_once: epoll wait 381 return 0 errno 11 used 381 millsecond
+2019/08/28-16:39:42.919581 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19358, connected:   7139, closed:   5942, recved 4158514
+2019/08/28-16:39:42.919589 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19359, connected:   7432, closed:   5912, recved 3942817
+2019/08/28-16:39:42.919595 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19360, connected:   7392, closed:   5735, recved 3890476
+2019/08/28-16:39:42.919600 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19361, connected:   7224, closed:   5969, recved 3980020
+2019/08/28-16:39:42.919606 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19362, connected:   7428, closed:   5780, recved 3802686
+2019/08/28-16:39:42.919611 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  24016, connected:  10500, closed:  14504, recved 299448
+2019/08/28-16:39:44.537984 4b9d TRACE handy/poller.cc:93 loop_once: epoll wait 3000 return 1 errno 11 used 1618 millsecond
+2019/08/28-16:39:44.538031 4b9d TRACE handy/poller.cc:108 loop_once: channel[0x17d2730] 8 fd 8 handle read
+2019/08/28-16:39:44.538041 4b9d TRACE handy/conn.cc:143 handleRead: [0x17d2570] here,handle read。当前网络状态是 3
+2019/08/28-16:39:44.538050 4b9d TRACE handy/conn.cc:158 handleRead: [0x17d2570] 准备读数据，他的 channel 是 [0x17d2730]
+2019/08/28-16:39:44.538056 4b9d TRACE handy/conn.cc:168 handleRead: [0x17d2570] debug: fd 8, 0x17d28a0, 0x200
+2019/08/28-16:39:44.538065 4b9d TRACE handy/conn.cc:170 handleRead: [0x17d2570] channel 8 fd 8 readed 56 bytes
+2019/08/28-16:39:44.538072 4b9d TRACE handy/conn.cc:158 handleRead: [0x17d2570] 准备读数据，他的 channel 是 [0x17d2730]
+2019/08/28-16:39:44.538078 4b9d TRACE handy/conn.cc:168 handleRead: [0x17d2570] debug: fd 8, 0x17d2ae8, 0x3c8
+2019/08/28-16:39:44.538088 4b9d TRACE handy/conn.cc:170 handleRead: [0x17d2570] channel 8 fd 8 readed -1 bytes
+2019/08/28-16:39:44.538095 4b9d TRACE handy/conn.cc:179 handleRead: 已经读到数据长度 56, 内容: 24016, connected: 10500, closed: 14504, recved: 308253
+2019/08/28-16:39:44.538104 4b9d DEBUG handy/conn.cc:391 operator(): 消息解码成功. 原始长度 56，消息长度 54
+2019/08/28-16:39:45.920535 4b9d TRACE handy/poller.cc:93 loop_once: epoll wait 1381 return 0 errno 11 used 1382 millsecond
+2019/08/28-16:39:45.920596 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19358, connected:   7139, closed:   5942, recved 4158514
+2019/08/28-16:39:45.920604 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19359, connected:   7432, closed:   5912, recved 3942817
+2019/08/28-16:39:45.920610 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19360, connected:   7392, closed:   5735, recved 3890476
+2019/08/28-16:39:45.920616 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19361, connected:   7224, closed:   5969, recved 3980020
+2019/08/28-16:39:45.920621 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19362, connected:   7428, closed:   5780, recved 3802686
+2019/08/28-16:39:45.920636 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  24016, connected:  10500, closed:  14504, recved 308253
+2019/08/28-16:39:46.538896 4b9d TRACE handy/poller.cc:93 loop_once: epoll wait 2999 return 1 errno 11 used 618 millsecond
+2019/08/28-16:39:46.538925 4b9d TRACE handy/poller.cc:108 loop_once: channel[0x17d2730] 8 fd 8 handle read
+2019/08/28-16:39:46.538934 4b9d TRACE handy/conn.cc:143 handleRead: [0x17d2570] here,handle read。当前网络状态是 3
+2019/08/28-16:39:46.538944 4b9d TRACE handy/conn.cc:158 handleRead: [0x17d2570] 准备读数据，他的 channel 是 [0x17d2730]
+2019/08/28-16:39:46.538951 4b9d TRACE handy/conn.cc:168 handleRead: [0x17d2570] debug: fd 8, 0x17d28a0, 0x200
+2019/08/28-16:39:46.538960 4b9d TRACE handy/conn.cc:170 handleRead: [0x17d2570] channel 8 fd 8 readed 56 bytes
+2019/08/28-16:39:46.538969 4b9d TRACE handy/conn.cc:158 handleRead: [0x17d2570] 准备读数据，他的 channel 是 [0x17d2730]
+2019/08/28-16:39:46.538975 4b9d TRACE handy/conn.cc:168 handleRead: [0x17d2570] debug: fd 8, 0x17d2ae8, 0x3c8
+2019/08/28-16:39:46.538983 4b9d TRACE handy/conn.cc:170 handleRead: [0x17d2570] channel 8 fd 8 readed -1 bytes
+2019/08/28-16:39:46.538990 4b9d TRACE handy/conn.cc:179 handleRead: 已经读到数据长度 56, 内容: 24016, connected: 10500, closed: 14504, recved: 316999
+2019/08/28-16:39:46.539000 4b9d DEBUG handy/conn.cc:391 operator(): 消息解码成功. 原始长度 56，消息长度 54
+2019/08/28-16:39:48.537964 4b9d TRACE handy/poller.cc:93 loop_once: epoll wait 2380 return 1 errno 11 used 1998 millsecond
+2019/08/28-16:39:48.538016 4b9d TRACE handy/poller.cc:108 loop_once: channel[0x17d2730] 8 fd 8 handle read
+2019/08/28-16:39:48.538026 4b9d TRACE handy/conn.cc:143 handleRead: [0x17d2570] here,handle read。当前网络状态是 3
+2019/08/28-16:39:48.538035 4b9d TRACE handy/conn.cc:158 handleRead: [0x17d2570] 准备读数据，他的 channel 是 [0x17d2730]
+2019/08/28-16:39:48.538041 4b9d TRACE handy/conn.cc:168 handleRead: [0x17d2570] debug: fd 8, 0x17d28a0, 0x200
+2019/08/28-16:39:48.538051 4b9d TRACE handy/conn.cc:170 handleRead: [0x17d2570] channel 8 fd 8 readed 56 bytes
+2019/08/28-16:39:48.538059 4b9d TRACE handy/conn.cc:158 handleRead: [0x17d2570] 准备读数据，他的 channel 是 [0x17d2730]
+2019/08/28-16:39:48.538064 4b9d TRACE handy/conn.cc:168 handleRead: [0x17d2570] debug: fd 8, 0x17d2ae8, 0x3c8
+2019/08/28-16:39:48.538070 4b9d TRACE handy/conn.cc:170 handleRead: [0x17d2570] channel 8 fd 8 readed -1 bytes
+2019/08/28-16:39:48.538078 4b9d TRACE handy/conn.cc:179 handleRead: 已经读到数据长度 56, 内容: 24016, connected: 10500, closed: 14504, recved: 323351
+2019/08/28-16:39:48.538087 4b9d DEBUG handy/conn.cc:391 operator(): 消息解码成功. 原始长度 56，消息长度 54
+2019/08/28-16:39:48.919513 4b9d TRACE handy/poller.cc:93 loop_once: epoll wait 381 return 0 errno 11 used 381 millsecond
+2019/08/28-16:39:48.919574 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19358, connected:   7139, closed:   5942, recved 4158514
+2019/08/28-16:39:48.919583 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19359, connected:   7432, closed:   5912, recved 3942817
+2019/08/28-16:39:48.919589 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19360, connected:   7392, closed:   5735, recved 3890476
+2019/08/28-16:39:48.919595 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19361, connected:   7224, closed:   5969, recved 3980020
+2019/08/28-16:39:48.919600 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19362, connected:   7428, closed:   5780, recved 3802686
+2019/08/28-16:39:48.919605 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  24016, connected:  10500, closed:  14504, recved 323351
+2019/08/28-16:39:49.080725 4b9d TRACE handy/poller.cc:93 loop_once: epoll wait 3000 return 1 errno 11 used 161 millsecond
+2019/08/28-16:39:49.080769 4b9d TRACE handy/poller.cc:108 loop_once: channel[0x17d2730] 8 fd 8 handle read
+2019/08/28-16:39:49.080858 4b9d TRACE handy/conn.cc:143 handleRead: [0x17d2570] here,handle read。当前网络状态是 3
+2019/08/28-16:39:49.080878 4b9d TRACE handy/conn.cc:158 handleRead: [0x17d2570] 准备读数据，他的 channel 是 [0x17d2730]
+2019/08/28-16:39:49.080884 4b9d TRACE handy/conn.cc:168 handleRead: [0x17d2570] debug: fd 8, 0x17d28a0, 0x200
+2019/08/28-16:39:49.080893 4b9d TRACE handy/conn.cc:170 handleRead: [0x17d2570] channel 8 fd 8 readed 0 bytes
+2019/08/28-16:39:49.080900 4b9d TRACE handy/conn.cc:187 handleRead: [0x17d2570] channel 的 fd 已经被设置为 8 了。将清理
+2019/08/28-16:39:49.080915 4b9d TRACE handy/conn.cc:116 cleanup: tcp closing 127.0.0.1:3031 - 127.0.0.1:55398 fd 8 11
+2019/08/28-16:39:49.080929 4b9d TRACE handy/event_base.cc:360 close: close channel 8 fd 8
+2019/08/28-16:39:49.080936 4b9d TRACE handy/poller.cc:74 removeChannel: deleting channel 8 fd 8 epoll 4
+2019/08/28-16:39:49.080972 4b9d TRACE handy/conn.cc:143 handleRead: [0x17d2570] here,handle read。当前网络状态是 4
+2019/08/28-16:39:49.080979 4b9d TRACE handy/conn.cc:135 cleanup: [0x17d2570] 先close但不删除 channel。后续要修改，防止channel的内存泄漏
+2019/08/28-16:39:51.922856 4b9d TRACE handy/poller.cc:93 loop_once: epoll wait 2839 return 0 errno 11 used 2842 millsecond
+2019/08/28-16:39:51.922916 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19358, connected:   7139, closed:   5942, recved 4158514
+2019/08/28-16:39:51.922925 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19359, connected:   7432, closed:   5912, recved 3942817
+2019/08/28-16:39:51.922931 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19360, connected:   7392, closed:   5735, recved 3890476
+2019/08/28-16:39:51.922937 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19361, connected:   7224, closed:   5969, recved 3980020
+2019/08/28-16:39:51.922942 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19362, connected:   7428, closed:   5780, recved 3802686
+2019/08/28-16:39:51.922948 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  24016, connected:  10500, closed:  14504, recved 323351
+2019/08/28-16:39:54.921460 4b9d TRACE handy/poller.cc:93 loop_once: epoll wait 2997 return 0 errno 11 used 2999 millsecond
+2019/08/28-16:39:54.921520 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19358, connected:   7139, closed:   5942, recved 4158514
+2019/08/28-16:39:54.921529 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19359, connected:   7432, closed:   5912, recved 3942817
+2019/08/28-16:39:54.921535 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19360, connected:   7392, closed:   5735, recved 3890476
+2019/08/28-16:39:54.921541 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19361, connected:   7224, closed:   5969, recved 3980020
+2019/08/28-16:39:54.921547 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19362, connected:   7428, closed:   5780, recved 3802686
+2019/08/28-16:39:54.921552 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  24016, connected:  10500, closed:  14504, recved 323351
+2019/08/28-16:39:57.919768 4b9d TRACE handy/poller.cc:93 loop_once: epoll wait 2998 return 0 errno 11 used 2998 millsecond
+2019/08/28-16:39:57.919837 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19358, connected:   7139, closed:   5942, recved 4158514
+2019/08/28-16:39:57.919847 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19359, connected:   7432, closed:   5912, recved 3942817
+2019/08/28-16:39:57.919853 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19360, connected:   7392, closed:   5735, recved 3890476
+2019/08/28-16:39:57.919858 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19361, connected:   7224, closed:   5969, recved 3980020
+2019/08/28-16:39:57.919865 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19362, connected:   7428, closed:   5780, recved 3802686
+2019/08/28-16:39:57.919871 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  24016, connected:  10500, closed:  14504, recved 323351
+2019/08/28-16:40:00.922911 4b9d TRACE handy/poller.cc:93 loop_once: epoll wait 3000 return 0 errno 11 used 3003 millsecond
+2019/08/28-16:40:00.922974 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19358, connected:   7139, closed:   5942, recved 4158514
+2019/08/28-16:40:00.922983 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19359, connected:   7432, closed:   5912, recved 3942817
+2019/08/28-16:40:00.923004 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19360, connected:   7392, closed:   5735, recved 3890476
+2019/08/28-16:40:00.923009 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19361, connected:   7224, closed:   5969, recved 3980020
+2019/08/28-16:40:00.923014 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19362, connected:   7428, closed:   5780, recved 3802686
+2019/08/28-16:40:00.923020 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  24016, connected:  10500, closed:  14504, recved 323351
+2019/08/28-16:40:03.921561 4b9d TRACE handy/poller.cc:93 loop_once: epoll wait 2996 return 0 errno 11 used 2998 millsecond
+2019/08/28-16:40:03.921628 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19358, connected:   7139, closed:   5942, recved 4158514
+2019/08/28-16:40:03.921637 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19359, connected:   7432, closed:   5912, recved 3942817
+2019/08/28-16:40:03.921644 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19360, connected:   7392, closed:   5735, recved 3890476
+2019/08/28-16:40:03.921650 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19361, connected:   7224, closed:   5969, recved 3980020
+2019/08/28-16:40:03.921655 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19362, connected:   7428, closed:   5780, recved 3802686
+2019/08/28-16:40:03.921661 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  24016, connected:  10500, closed:  14504, recved 323351
+2019/08/28-16:40:06.922696 4b9d TRACE handy/poller.cc:93 loop_once: epoll wait 2998 return 0 errno 11 used 3001 millsecond
+2019/08/28-16:40:06.922759 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19358, connected:   7139, closed:   5942, recved 4158514
+2019/08/28-16:40:06.922768 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19359, connected:   7432, closed:   5912, recved 3942817
+2019/08/28-16:40:06.922775 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19360, connected:   7392, closed:   5735, recved 3890476
+2019/08/28-16:40:06.922781 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19361, connected:   7224, closed:   5969, recved 3980020
+2019/08/28-16:40:06.922786 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19362, connected:   7428, closed:   5780, recved 3802686
+2019/08/28-16:40:06.922792 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  24016, connected:  10500, closed:  14504, recved 323351
+2019/08/28-16:40:09.922841 4b9d TRACE handy/poller.cc:93 loop_once: epoll wait 2997 return 0 errno 11 used 3000 millsecond
+2019/08/28-16:40:09.922908 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19358, connected:   7139, closed:   5942, recved 4158514
+2019/08/28-16:40:09.922917 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19359, connected:   7432, closed:   5912, recved 3942817
+2019/08/28-16:40:09.922924 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19360, connected:   7392, closed:   5735, recved 3890476
+2019/08/28-16:40:09.922933 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19361, connected:   7224, closed:   5969, recved 3980020
+2019/08/28-16:40:09.922938 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19362, connected:   7428, closed:   5780, recved 3802686
+2019/08/28-16:40:09.922944 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  24016, connected:  10500, closed:  14504, recved 323351
+2019/08/28-16:40:12.922979 4b9d TRACE handy/poller.cc:93 loop_once: epoll wait 2997 return 0 errno 11 used 3000 millsecond
+2019/08/28-16:40:12.923043 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19358, connected:   7139, closed:   5942, recved 4158514
+2019/08/28-16:40:12.923052 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19359, connected:   7432, closed:   5912, recved 3942817
+2019/08/28-16:40:12.923059 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19360, connected:   7392, closed:   5735, recved 3890476
+2019/08/28-16:40:12.923065 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19361, connected:   7224, closed:   5969, recved 3980020
+2019/08/28-16:40:12.923071 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19362, connected:   7428, closed:   5780, recved 3802686
+2019/08/28-16:40:12.923091 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  24016, connected:  10500, closed:  14504, recved 323351
+2019/08/28-16:40:15.922137 4b9d TRACE handy/poller.cc:93 loop_once: epoll wait 2996 return 0 errno 11 used 2999 millsecond
+2019/08/28-16:40:15.922197 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19358, connected:   7139, closed:   5942, recved 4158514
+2019/08/28-16:40:15.922206 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19359, connected:   7432, closed:   5912, recved 3942817
+2019/08/28-16:40:15.922213 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19360, connected:   7392, closed:   5735, recved 3890476
+2019/08/28-16:40:15.922219 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19361, connected:   7224, closed:   5969, recved 3980020
+2019/08/28-16:40:15.922224 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19362, connected:   7428, closed:   5780, recved 3802686
+2019/08/28-16:40:15.922230 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  24016, connected:  10500, closed:  14504, recved 323351
+2019/08/28-16:40:18.922263 4b9d TRACE handy/poller.cc:93 loop_once: epoll wait 2997 return 0 errno 11 used 3000 millsecond
+2019/08/28-16:40:18.922309 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19358, connected:   7139, closed:   5942, recved 4158514
+2019/08/28-16:40:18.922317 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19359, connected:   7432, closed:   5912, recved 3942817
+2019/08/28-16:40:18.922324 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19360, connected:   7392, closed:   5735, recved 3890476
+2019/08/28-16:40:18.922329 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19361, connected:   7224, closed:   5969, recved 3980020
+2019/08/28-16:40:18.922334 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19362, connected:   7428, closed:   5780, recved 3802686
+2019/08/28-16:40:18.922340 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  24016, connected:  10500, closed:  14504, recved 323351
+2019/08/28-16:40:21.170217 4b9d TRACE handy/poller.cc:93 loop_once: epoll wait 2997 return 1 errno 11 used 2248 millsecond
+2019/08/28-16:40:21.170270 4b9d TRACE handy/poller.cc:108 loop_once: channel[0x17d06b0] 2 fd 7 handle read
+2019/08/28-16:40:21.170300 4b9d TRACE handy/event_base.cc:389 TcpConn: [0x17d2ab0] tcp construct
+2019/08/28-16:40:21.170309 4b9d TRACE handy/event_base.cc:312 Channel: [0x17d27c0] channel constructor
+2019/08/28-16:40:21.170317 4b9d TRACE handy/poller.cc:57 addChannel: adding channel 9 fd 8 events 5 epoll 4
+2019/08/28-16:40:21.170336 4b9d TRACE handy/conn.cc:28 attach: [0x17d2ab0] tcp constructed 127.0.0.1:3031 - 127.0.0.1:55432 fd: 8。附加的 channel 是[0x17d27c0]
+2019/08/28-16:40:21.170376 4b9d TRACE handy/poller.cc:93 loop_once: epoll wait 749 return 1 errno 11 used 0 millsecond
+2019/08/28-16:40:21.170383 4b9d TRACE handy/poller.cc:102 loop_once: channel 9 fd 8 handle write
+2019/08/28-16:40:21.170391 4b9d TRACE handy/conn.cc:215 handleHandshake: fd 8 connect success
+2019/08/28-16:40:21.170401 4b9d TRACE handy/poller.cc:68 updateChannel: modifying channel 9 fd 8 events read 1 write 0 epoll 4
+2019/08/28-16:40:21.170412 4b9d TRACE handy/conn.cc:240 handleHandshake: tcp connected 127.0.0.1:3031 - 127.0.0.1:55432 fd 8
+2019/08/28-16:40:21.270443 4b9d TRACE handy/poller.cc:93 loop_once: epoll wait 749 return 1 errno 11 used 100 millsecond
+2019/08/28-16:40:21.270474 4b9d TRACE handy/poller.cc:108 loop_once: channel[0x17d27c0] 9 fd 8 handle read
+2019/08/28-16:40:21.270484 4b9d TRACE handy/conn.cc:143 handleRead: [0x17d2ab0] here,handle read。当前网络状态是 3
+2019/08/28-16:40:21.270493 4b9d TRACE handy/conn.cc:158 handleRead: [0x17d2ab0] 准备读数据，他的 channel 是 [0x17d27c0]
+2019/08/28-16:40:21.270500 4b9d TRACE handy/conn.cc:168 handleRead: [0x17d2ab0] debug: fd 8, 0x17d2c70, 0x200
+2019/08/28-16:40:21.270508 4b9d TRACE handy/conn.cc:170 handleRead: [0x17d2ab0] channel 9 fd 8 readed 43 bytes
+2019/08/28-16:40:21.270523 4b9d TRACE handy/conn.cc:158 handleRead: [0x17d2ab0] 准备读数据，他的 channel 是 [0x17d27c0]
+2019/08/28-16:40:21.270529 4b9d TRACE handy/conn.cc:168 handleRead: [0x17d2ab0] debug: fd 8, 0x17d2eab, 0x3d5
+2019/08/28-16:40:21.270546 4b9d TRACE handy/conn.cc:170 handleRead: [0x17d2ab0] channel 9 fd 8 readed -1 bytes
+2019/08/28-16:40:21.270554 4b9d TRACE handy/conn.cc:179 handleRead: 已经读到数据长度 43, 内容: 24170, connected: 0, closed: 0, recved: 0
+2019/08/28-16:40:21.270563 4b9d DEBUG handy/conn.cc:391 operator(): 消息解码成功. 原始长度 43，消息长度 41
+2019/08/28-16:40:21.920266 4b9d TRACE handy/poller.cc:93 loop_once: epoll wait 649 return 0 errno 11 used 650 millsecond
+2019/08/28-16:40:21.920320 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19358, connected:   7139, closed:   5942, recved 4158514
+2019/08/28-16:40:21.920329 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19359, connected:   7432, closed:   5912, recved 3942817
+2019/08/28-16:40:21.920335 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19360, connected:   7392, closed:   5735, recved 3890476
+2019/08/28-16:40:21.920341 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19361, connected:   7224, closed:   5969, recved 3980020
+2019/08/28-16:40:21.920347 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19362, connected:   7428, closed:   5780, recved 3802686
+2019/08/28-16:40:21.920352 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  24016, connected:  10500, closed:  14504, recved 323351
+2019/08/28-16:40:21.920365 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  24170, connected:      0, closed:      0, recved      0
+2019/08/28-16:40:23.270680 4b9d TRACE handy/poller.cc:93 loop_once: epoll wait 2999 return 1 errno 11 used 1350 millsecond
+2019/08/28-16:40:23.270724 4b9d TRACE handy/poller.cc:108 loop_once: channel[0x17d27c0] 9 fd 8 handle read
+2019/08/28-16:40:23.270734 4b9d TRACE handy/conn.cc:143 handleRead: [0x17d2ab0] here,handle read。当前网络状态是 3
+2019/08/28-16:40:23.270743 4b9d TRACE handy/conn.cc:158 handleRead: [0x17d2ab0] 准备读数据，他的 channel 是 [0x17d27c0]
+2019/08/28-16:40:23.270750 4b9d TRACE handy/conn.cc:168 handleRead: [0x17d2ab0] debug: fd 8, 0x17d2d50, 0x200
+2019/08/28-16:40:23.270759 4b9d TRACE handy/conn.cc:170 handleRead: [0x17d2ab0] channel 9 fd 8 readed 46 bytes
+2019/08/28-16:40:23.270766 4b9d TRACE handy/conn.cc:158 handleRead: [0x17d2ab0] 准备读数据，他的 channel 是 [0x17d27c0]
+2019/08/28-16:40:23.270772 4b9d TRACE handy/conn.cc:168 handleRead: [0x17d2ab0] debug: fd 8, 0x17d2f8e, 0x3d2
+2019/08/28-16:40:23.270778 4b9d TRACE handy/conn.cc:170 handleRead: [0x17d2ab0] channel 9 fd 8 readed -1 bytes
+2019/08/28-16:40:23.270785 4b9d TRACE handy/conn.cc:179 handleRead: 已经读到数据长度 46, 内容: 24170, connected: 1939, closed: 0, recved: 0
+2019/08/28-16:40:23.270795 4b9d DEBUG handy/conn.cc:391 operator(): 消息解码成功. 原始长度 46，消息长度 44
+2019/08/28-16:40:24.921494 4b9d TRACE handy/poller.cc:93 loop_once: epoll wait 1649 return 0 errno 11 used 1651 millsecond
+2019/08/28-16:40:24.921559 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19358, connected:   7139, closed:   5942, recved 4158514
+2019/08/28-16:40:24.921569 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19359, connected:   7432, closed:   5912, recved 3942817
+2019/08/28-16:40:24.921575 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19360, connected:   7392, closed:   5735, recved 3890476
+2019/08/28-16:40:24.921581 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19361, connected:   7224, closed:   5969, recved 3980020
+2019/08/28-16:40:24.921587 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19362, connected:   7428, closed:   5780, recved 3802686
+2019/08/28-16:40:24.921593 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  24016, connected:  10500, closed:  14504, recved 323351
+2019/08/28-16:40:24.921599 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  24170, connected:   1939, closed:      0, recved      0
+2019/08/28-16:40:25.271335 4b9d TRACE handy/poller.cc:93 loop_once: epoll wait 2998 return 1 errno 11 used 350 millsecond
+2019/08/28-16:40:25.271388 4b9d TRACE handy/poller.cc:108 loop_once: channel[0x17d27c0] 9 fd 8 handle read
+2019/08/28-16:40:25.271398 4b9d TRACE handy/conn.cc:143 handleRead: [0x17d2ab0] here,handle read。当前网络状态是 3
+2019/08/28-16:40:25.271419 4b9d TRACE handy/conn.cc:158 handleRead: [0x17d2ab0] 准备读数据，他的 channel 是 [0x17d27c0]
+2019/08/28-16:40:25.271441 4b9d TRACE handy/conn.cc:168 handleRead: [0x17d2ab0] debug: fd 8, 0x17d2d50, 0x200
+2019/08/28-16:40:25.271451 4b9d TRACE handy/conn.cc:170 handleRead: [0x17d2ab0] channel 9 fd 8 readed 49 bytes
+2019/08/28-16:40:25.271459 4b9d TRACE handy/conn.cc:158 handleRead: [0x17d2ab0] 准备读数据，他的 channel 是 [0x17d27c0]
+2019/08/28-16:40:25.271464 4b9d TRACE handy/conn.cc:168 handleRead: [0x17d2ab0] debug: fd 8, 0x17d2f91, 0x3cf
+2019/08/28-16:40:25.271471 4b9d TRACE handy/conn.cc:170 handleRead: [0x17d2ab0] channel 9 fd 8 readed -1 bytes
+2019/08/28-16:40:25.271478 4b9d TRACE handy/conn.cc:179 handleRead: 已经读到数据长度 49, 内容: 24170, connected: 1990, closed: 0, recved: 4104
+2019/08/28-16:40:25.271486 4b9d DEBUG handy/conn.cc:391 operator(): 消息解码成功. 原始长度 49，消息长度 47
+2019/08/28-16:40:27.270529 4b9d TRACE handy/poller.cc:93 loop_once: epoll wait 2648 return 1 errno 11 used 1999 millsecond
+2019/08/28-16:40:27.270573 4b9d TRACE handy/poller.cc:108 loop_once: channel[0x17d27c0] 9 fd 8 handle read
+2019/08/28-16:40:27.270582 4b9d TRACE handy/conn.cc:143 handleRead: [0x17d2ab0] here,handle read。当前网络状态是 3
+2019/08/28-16:40:27.270591 4b9d TRACE handy/conn.cc:158 handleRead: [0x17d2ab0] 准备读数据，他的 channel 是 [0x17d27c0]
+2019/08/28-16:40:27.270597 4b9d TRACE handy/conn.cc:168 handleRead: [0x17d2ab0] debug: fd 8, 0x17d2d50, 0x200
+2019/08/28-16:40:27.270607 4b9d TRACE handy/conn.cc:170 handleRead: [0x17d2ab0] channel 9 fd 8 readed 49 bytes
+2019/08/28-16:40:27.270615 4b9d TRACE handy/conn.cc:158 handleRead: [0x17d2ab0] 准备读数据，他的 channel 是 [0x17d27c0]
+2019/08/28-16:40:27.270620 4b9d TRACE handy/conn.cc:168 handleRead: [0x17d2ab0] debug: fd 8, 0x17d2f91, 0x3cf
+2019/08/28-16:40:27.270626 4b9d TRACE handy/conn.cc:170 handleRead: [0x17d2ab0] channel 9 fd 8 readed -1 bytes
+2019/08/28-16:40:27.270633 4b9d TRACE handy/conn.cc:179 handleRead: 已经读到数据长度 49, 内容: 24170, connected: 2719, closed: 1, recved: 9665
+2019/08/28-16:40:27.270641 4b9d DEBUG handy/conn.cc:391 operator(): 消息解码成功. 原始长度 49，消息长度 47
+2019/08/28-16:40:27.920339 4b9d TRACE handy/poller.cc:93 loop_once: epoll wait 649 return 0 errno 11 used 650 millsecond
+2019/08/28-16:40:27.920405 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19358, connected:   7139, closed:   5942, recved 4158514
+2019/08/28-16:40:27.920413 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19359, connected:   7432, closed:   5912, recved 3942817
+2019/08/28-16:40:27.920419 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19360, connected:   7392, closed:   5735, recved 3890476
+2019/08/28-16:40:27.920425 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19361, connected:   7224, closed:   5969, recved 3980020
+2019/08/28-16:40:27.920442 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19362, connected:   7428, closed:   5780, recved 3802686
+2019/08/28-16:40:27.920448 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  24016, connected:  10500, closed:  14504, recved 323351
+2019/08/28-16:40:27.920453 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  24170, connected:   2719, closed:      1, recved   9665
+2019/08/28-16:40:29.270571 4b9d TRACE handy/poller.cc:93 loop_once: epoll wait 2999 return 1 errno 11 used 1350 millsecond
+2019/08/28-16:40:29.270616 4b9d TRACE handy/poller.cc:108 loop_once: channel[0x17d27c0] 9 fd 8 handle read
+2019/08/28-16:40:29.270627 4b9d TRACE handy/conn.cc:143 handleRead: [0x17d2ab0] here,handle read。当前网络状态是 3
+2019/08/28-16:40:29.270637 4b9d TRACE handy/conn.cc:158 handleRead: [0x17d2ab0] 准备读数据，他的 channel 是 [0x17d27c0]
+2019/08/28-16:40:29.270644 4b9d TRACE handy/conn.cc:168 handleRead: [0x17d2ab0] debug: fd 8, 0x17d2d50, 0x200
+2019/08/28-16:40:29.270653 4b9d TRACE handy/conn.cc:170 handleRead: [0x17d2ab0] channel 9 fd 8 readed 50 bytes
+2019/08/28-16:40:29.270674 4b9d TRACE handy/conn.cc:158 handleRead: [0x17d2ab0] 准备读数据，他的 channel 是 [0x17d27c0]
+2019/08/28-16:40:29.270680 4b9d TRACE handy/conn.cc:168 handleRead: [0x17d2ab0] debug: fd 8, 0x17d2f92, 0x3ce
+2019/08/28-16:40:29.270686 4b9d TRACE handy/conn.cc:170 handleRead: [0x17d2ab0] channel 9 fd 8 readed -1 bytes
+2019/08/28-16:40:29.270693 4b9d TRACE handy/conn.cc:179 handleRead: 已经读到数据长度 50, 内容: 24170, connected: 2999, closed: 2, recved: 11509
+2019/08/28-16:40:29.270702 4b9d DEBUG handy/conn.cc:391 operator(): 消息解码成功. 原始长度 50，消息长度 48
+2019/08/28-16:40:30.920459 4b9d TRACE handy/poller.cc:93 loop_once: epoll wait 1649 return 0 errno 11 used 1650 millsecond
+2019/08/28-16:40:30.920517 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19358, connected:   7139, closed:   5942, recved 4158514
+2019/08/28-16:40:30.920527 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19359, connected:   7432, closed:   5912, recved 3942817
+2019/08/28-16:40:30.920534 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19360, connected:   7392, closed:   5735, recved 3890476
+2019/08/28-16:40:30.920541 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19361, connected:   7224, closed:   5969, recved 3980020
+2019/08/28-16:40:30.920547 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19362, connected:   7428, closed:   5780, recved 3802686
+2019/08/28-16:40:30.920554 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  24016, connected:  10500, closed:  14504, recved 323351
+2019/08/28-16:40:30.920560 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  24170, connected:   2999, closed:      2, recved  11509
+2019/08/28-16:40:31.270627 4b9d TRACE handy/poller.cc:93 loop_once: epoll wait 2999 return 1 errno 11 used 350 millsecond
+2019/08/28-16:40:31.270671 4b9d TRACE handy/poller.cc:108 loop_once: channel[0x17d27c0] 9 fd 8 handle read
+2019/08/28-16:40:31.270681 4b9d TRACE handy/conn.cc:143 handleRead: [0x17d2ab0] here,handle read。当前网络状态是 3
+2019/08/28-16:40:31.270690 4b9d TRACE handy/conn.cc:158 handleRead: [0x17d2ab0] 准备读数据，他的 channel 是 [0x17d27c0]
+2019/08/28-16:40:31.270696 4b9d TRACE handy/conn.cc:168 handleRead: [0x17d2ab0] debug: fd 8, 0x17d2d50, 0x200
+2019/08/28-16:40:31.270706 4b9d TRACE handy/conn.cc:170 handleRead: [0x17d2ab0] channel 9 fd 8 readed 50 bytes
+2019/08/28-16:40:31.270714 4b9d TRACE handy/conn.cc:158 handleRead: [0x17d2ab0] 准备读数据，他的 channel 是 [0x17d27c0]
+2019/08/28-16:40:31.270720 4b9d TRACE handy/conn.cc:168 handleRead: [0x17d2ab0] debug: fd 8, 0x17d2f92, 0x3ce
+2019/08/28-16:40:31.270726 4b9d TRACE handy/conn.cc:170 handleRead: [0x17d2ab0] channel 9 fd 8 readed -1 bytes
+2019/08/28-16:40:31.270733 4b9d TRACE handy/conn.cc:179 handleRead: 已经读到数据长度 50, 内容: 24170, connected: 3415, closed: 2, recved: 18714
+2019/08/28-16:40:31.270742 4b9d DEBUG handy/conn.cc:391 operator(): 消息解码成功. 原始长度 50，消息长度 48
+2019/08/28-16:40:32.573828 4b9d TRACE handy/poller.cc:93 loop_once: epoll wait 2649 return 1 errno 11 used 1303 millsecond
+2019/08/28-16:40:32.573870 4b9d TRACE handy/poller.cc:108 loop_once: channel[0x17d27c0] 9 fd 8 handle read
+2019/08/28-16:40:32.573880 4b9d TRACE handy/conn.cc:143 handleRead: [0x17d2ab0] here,handle read。当前网络状态是 3
+2019/08/28-16:40:32.573890 4b9d TRACE handy/conn.cc:158 handleRead: [0x17d2ab0] 准备读数据，他的 channel 是 [0x17d27c0]
+2019/08/28-16:40:32.573896 4b9d TRACE handy/conn.cc:168 handleRead: [0x17d2ab0] debug: fd 8, 0x17d2d50, 0x200
+2019/08/28-16:40:32.573904 4b9d TRACE handy/conn.cc:170 handleRead: [0x17d2ab0] channel 9 fd 8 readed 0 bytes
+2019/08/28-16:40:32.573910 4b9d TRACE handy/conn.cc:187 handleRead: [0x17d2ab0] channel 的 fd 已经被设置为 8 了。将清理
+2019/08/28-16:40:32.573925 4b9d TRACE handy/conn.cc:116 cleanup: tcp closing 127.0.0.1:3031 - 127.0.0.1:55432 fd 8 11
+2019/08/28-16:40:32.573938 4b9d TRACE handy/event_base.cc:360 close: close channel 9 fd 8
+2019/08/28-16:40:32.573956 4b9d TRACE handy/poller.cc:74 removeChannel: deleting channel 9 fd 8 epoll 4
+2019/08/28-16:40:32.573989 4b9d TRACE handy/conn.cc:143 handleRead: [0x17d2ab0] here,handle read。当前网络状态是 4
+2019/08/28-16:40:32.573997 4b9d TRACE handy/conn.cc:135 cleanup: [0x17d2ab0] 先close但不删除 channel。后续要修改，防止channel的内存泄漏
+2019/08/28-16:40:33.920381 4b9d TRACE handy/poller.cc:93 loop_once: epoll wait 1345 return 0 errno 11 used 1346 millsecond
+2019/08/28-16:40:33.920454 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19358, connected:   7139, closed:   5942, recved 4158514
+2019/08/28-16:40:33.920463 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19359, connected:   7432, closed:   5912, recved 3942817
+2019/08/28-16:40:33.920470 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19360, connected:   7392, closed:   5735, recved 3890476
+2019/08/28-16:40:33.920475 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19361, connected:   7224, closed:   5969, recved 3980020
+2019/08/28-16:40:33.920481 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19362, connected:   7428, closed:   5780, recved 3802686
+2019/08/28-16:40:33.920487 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  24016, connected:  10500, closed:  14504, recved 323351
+2019/08/28-16:40:33.920492 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  24170, connected:   3415, closed:      2, recved  18714
+2019/08/28-16:40:36.922528 4b9d TRACE handy/poller.cc:93 loop_once: epoll wait 2999 return 0 errno 11 used 3002 millsecond
+2019/08/28-16:40:36.922589 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19358, connected:   7139, closed:   5942, recved 4158514
+2019/08/28-16:40:36.922598 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19359, connected:   7432, closed:   5912, recved 3942817
+2019/08/28-16:40:36.922604 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19360, connected:   7392, closed:   5735, recved 3890476
+2019/08/28-16:40:36.922609 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19361, connected:   7224, closed:   5969, recved 3980020
+2019/08/28-16:40:36.922614 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19362, connected:   7428, closed:   5780, recved 3802686
+2019/08/28-16:40:36.922620 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  24016, connected:  10500, closed:  14504, recved 323351
+2019/08/28-16:40:36.922626 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  24170, connected:   3415, closed:      2, recved  18714
+2019/08/28-16:40:39.922664 4b9d TRACE handy/poller.cc:93 loop_once: epoll wait 2997 return 0 errno 11 used 3000 millsecond
+2019/08/28-16:40:39.922723 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19358, connected:   7139, closed:   5942, recved 4158514
+2019/08/28-16:40:39.922731 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19359, connected:   7432, closed:   5912, recved 3942817
+2019/08/28-16:40:39.922738 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19360, connected:   7392, closed:   5735, recved 3890476
+2019/08/28-16:40:39.922746 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19361, connected:   7224, closed:   5969, recved 3980020
+2019/08/28-16:40:39.922751 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19362, connected:   7428, closed:   5780, recved 3802686
+2019/08/28-16:40:39.922756 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  24016, connected:  10500, closed:  14504, recved 323351
+2019/08/28-16:40:39.922761 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  24170, connected:   3415, closed:      2, recved  18714
+2019/08/28-16:40:42.922794 4b9d TRACE handy/poller.cc:93 loop_once: epoll wait 2997 return 0 errno 11 used 3000 millsecond
+2019/08/28-16:40:42.922853 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19358, connected:   7139, closed:   5942, recved 4158514
+2019/08/28-16:40:42.922861 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19359, connected:   7432, closed:   5912, recved 3942817
+2019/08/28-16:40:42.922867 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19360, connected:   7392, closed:   5735, recved 3890476
+2019/08/28-16:40:42.922873 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19361, connected:   7224, closed:   5969, recved 3980020
+2019/08/28-16:40:42.922888 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19362, connected:   7428, closed:   5780, recved 3802686
+2019/08/28-16:40:42.922894 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  24016, connected:  10500, closed:  14504, recved 323351
+2019/08/28-16:40:42.922899 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  24170, connected:   3415, closed:      2, recved  18714
+2019/08/28-16:40:45.922937 4b9d TRACE handy/poller.cc:93 loop_once: epoll wait 2997 return 0 errno 11 used 3000 millsecond
+2019/08/28-16:40:45.922996 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19358, connected:   7139, closed:   5942, recved 4158514
+2019/08/28-16:40:45.923004 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19359, connected:   7432, closed:   5912, recved 3942817
+2019/08/28-16:40:45.923012 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19360, connected:   7392, closed:   5735, recved 3890476
+2019/08/28-16:40:45.923018 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19361, connected:   7224, closed:   5969, recved 3980020
+2019/08/28-16:40:45.923023 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  19362, connected:   7428, closed:   5780, recved 3802686
+2019/08/28-16:40:45.923029 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  24016, connected:  10500, closed:  14504, recved 323351
+2019/08/28-16:40:45.923035 4b9d INFO 10m/10m-svr.cc:187 operator(): pid:  24170, connected:   3415, closed:      2, recved  18714

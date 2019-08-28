@@ -57,7 +57,7 @@
 namespace handy {
 
 struct Logger : private noncopyable {
-    enum LogLevel { LFATAL = 0, LERROR, LUERR, LWARN, LINFO, LDEBUG, LTRACE, LALL };
+    enum LogLevel { LNULL = 0, LFATAL, LERROR, LUERR, LWARN, LINFO, LDEBUG, LTRACE, LALL };
     Logger();
     ~Logger();
     void logv(int level, const char *file, int line, const char *func, const char *fmt...);

@@ -31,7 +31,7 @@ Logger::~Logger() {
 }
 
 const char *Logger::levelStrs_[LALL + 1] = {
-    "FATAL", "ERROR", "UERR", "WARN", "INFO", "DEBUG", "TRACE", "ALL",
+    "NULL", "FATAL", "ERROR", "UERR", "WARN", "INFO", "DEBUG", "TRACE", "ALL",
 };
 
 Logger &Logger::getLogger() {

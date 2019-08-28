@@ -26,7 +26,7 @@ int main(int argc, const char *argv[]) {
     if (argc < 7) {
         printf("usage: %s <log level> <begin port> <end port> <fork work process> <management port>\n", argv[0]);
         //printf("current use default param\r\n");
-        printf("    <log level>: 设置日志级别，可以取值如 trace, debug, info, error\n");
+        printf("    <log level>: 设置日志级别，可以取值如 null, trace, debug, info, error。null表示不打印任何日志\n");
         printf("    <begin port>: 远程服务端的监听端口，指定开始端口\n");
         printf("    <end port>: 远程服务端的监听端口，指定结束端口。end port可以等于begin port表示只监听这个端口，否则为一个连续端口\n");
         printf("    <fork work process>: 摊派到子进程的数量\n");
