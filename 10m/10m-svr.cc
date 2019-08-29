@@ -1,4 +1,6 @@
 #include <handy/handy.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 
 using namespace std;
 using namespace handy;
