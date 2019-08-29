@@ -50,9 +50,11 @@ int main(int argc, const char *argv[]) {
         man_port = atoi(argv[c++]);
     }
     
-    setlogfile(logfile);
     setloglevel(loglevel);
     setlogRotateInterval(180); // 每3分钟滚动一次日志
+    if(loglevel != "null"){
+        setlogfile(logfile);
+    }
 
     info("%d 主进程启动，在位置 %s", getpid(), argv[0]);
 
@@ -188,6 +190,15 @@ int main(int argc, const char *argv[]) {
                           }
                       },
                       3000);
+
+                              // 主进程处理信号 SIGCHLD，
+        Signal::signal(SIGCHLD, [] {
+            // 等待子进程退出
+            int status = 0;
+            wait(&status);
+            error("wait result: status: %d is signaled: %d signal: %d", status, WIFSIGNALED(status), WTERMSIG(status));
+        });
+
         base.loop();
     }
     info("program exited");

@@ -123,10 +123,12 @@ int main(int argc, const char *argv[]) {
         info("使用传入的参数值，将创建 %d 个连接", conn_count);
     }
 
-    setlogfile(logfile);
     setloglevel(loglevel);
     setlogRotateInterval(180); // 每3分钟滚动一次日志
-
+    if(loglevel != "null"){
+        setlogfile(logfile);
+    }
+    
     info("%d 主进程启动，在位置 %s", getpid(), argv[0]);
 
     CodecBase* cd = nullptr;
