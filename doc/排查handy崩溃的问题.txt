@@ -1,0 +1,107 @@
+﻿ 升级到了centos7.6,安装snap
+再到snap安装clangd:https://snapcraft.io/install/clangd/centos
+
+终极测试
+服务端：10m/10m-svr info 9500 9500 1 3031
+客户端：10m/10m-cli info 39.106.230.84 9500 9500 66500 -1 0 2000 500 1 60000 64 2 3031
+正常点的客户端：10m/10m-cli info 39.106.230.84 9500 9500 64500 20000 20000 5000 1000 1 30000 16 2 3031nfo 39.106.230.84 9500 9500 64500 20000 20000
+
+
+崩溃疑点
+1、2019/07/28-17:03:10.937992 11f3 TRACE handy/poller.cc:103 loop_once: channel 3515 fd -1 handle read。
+刚好这里有唤醒 epoll_wait。但是此时 fd 被设置为 1了。有可能是被 close就触发了。
+
+2、但是由于是单线程。应该是要将这里，
+2019/07/28-17:03:10.937958 11f3 TRACE handy/event_base.cc:356 close: close channel 3515 fd 3015
+
+void Channel::close() {
+    if (fd_ >= 0) {
+        trace("close channel %ld fd %d", (long) id_, fd_);
+        poller_->removeChannel(this);
+        ::close(fd_);
+        fd_ = -1;
+        // 这里要回调出去。到 con->handleRead(con);
+        handleRead();
+
+应该会这里先 回调出去，然后 delete 这个 channel 成功。
+
+而外面再调用 handleRead()，实际上已经被析构了。
+所以在步骤1里应该先判断一下，如果不存在则应该删除。
+
+【3】有一点猜想，当close正在 epoll_wait 的一个fd时，应该是会触发事件 POLLERR （应该不是 kReadEvent）的。
+
+我的怀疑是，这个回调出来找到的 channel 实际是一个悬空的指针，不知道是什么样的。因为在前一步已经将它删除了。
+在主动删除 channel 时，也会回调出来  handread，但是处理了为 -1 的情况。如果网络状态是没有连接成功，则就不处理。
+
+【4】验证。
+2019/07/28-23:17:17.810984 fe6 TRACE handy/event_base.cc:320 ~Channel: [0xca3080] channel 析构完成
+2019/07/28-23:17:17.810988 fe6 TRACE handy/poller.cc:105 loop_once: channel[0xca3080] 3071 fd -1 handle read
+2019/07/28-23:17:17.810991 fe6 TRACE handy/conn.cc:126 handleRead: [0xa69250] here,handle read。当前网络状态是 3
+2019/07/28-23:17:17.810994 fe6 TRACE handy/conn.cc:141 handleRead: [0xa69250] 准备读数据，他的 channel 是 [0x20]
+
+【5】正确。
+因为在前一步已经删除了。使用，EPOLL_CTL_DEL。（好像自己会删除，但是依然会报告事件。）
+
+
+解决思路，
+1 将这个channel从监听队列移出。看看什么情况。如果主动删除后不再报告状态那就是可以的了，但是又会导致无法回调，
+从而无法触发剩下的流程。如重连等。所以，可能是有问题的。？
+2 或者，先不析构，提供一个公有的方法来close。由epoll事件报告后根据后续流程来处理后续逻辑。
+
+采用思路2，已能解决问题。
+接下来
+1需要排查这个 channel 是否有在某个环节被析构。使用内存分析工具 v 啥的。
+	似乎有严重的内存泄露。待挂机看看是否一直在增长。
+2有大量的SYN_SENT。是否服务端压力过大，还是带宽瓶颈，或者其它的limit之类的。
+	在另外一台电脑tcp客户端工具也不能连上，则说明服务端已达瓶颈了。
+可以看看是不是网络瓶颈了。
+
+3要会看这些参数htop，以及网络流量等。
+
+0802
+1、经测试当跑了一段时间后，客户端似乎有网络瓶颈了。win10和虚拟机连baidu都ping不通了。而当结束进程之后，则两者都恢复正常了。
+	可以看看当前的网络情况，看看是否占满了。
+2、当并行连服务器达到上限时，在win10通过Tcp客户端工具也连不上了。
+这个时候也可能是我们家的带宽占满了，可以试试另外一台电脑，去访问服务器。
+若能连上，则可能说明服务端未达瓶颈，而是本地达瓶颈了。则应排查是什么瓶颈，端口占完了？还是带宽占满了？还是什么资源限制。？
+
+
+0813
+1、又一个崩溃问题。当不重连时，会delete channel，当handle read时空指针而崩溃。
+解决：
+先不delete，而是close。后续还要解决内存泄露问题。
+
+0814
+1、增加功能 keepalived.
+2、10m-cli响应SIGINT信号，并退出事件循环。防止服务端有太多的tcp连接处于ESTABLISH状态而浪费资源。
+
+
+
+0819
+1、报错
+handy/conn.cc:283 isend: write error: channel 535 fd 539 wd -1 104 Connection reset by peer
+解决思路，
+1 当write时发生这种错时，直接关闭close。
+
+
+
+
+1 git clone （或者拉取最新的，合并文件，git pull ）
+2 修改添加删除文件
+3 git status 查看当前文件状态变更
+4 保险起见 git diff ，看修改了哪些
+5 加入，git add .
+6 提交到本地仓库， git commit -m "写入本次提交注释"
+7 提交到远程仓库，git push origin master(仓库名叫master)
+8 git log 查看提交日志
+
+
+
+
+
+
+
+
+
+
+
