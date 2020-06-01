@@ -42,7 +42,10 @@ struct EventBase : public EventBases {
     void safeCall(Task &&task);
     void safeCall(const Task &task) { safeCall(Task(task)); }
     //分配一个事件派发器
-    virtual EventBase *allocBase() { return this; }
+    virtual EventBase *allocBase() {
+        // 单线程版本 只返回自己
+         return this; 
+    }
 
    public:
     std::unique_ptr<EventsImp> imp_;
@@ -52,6 +55,8 @@ struct EventBase : public EventBases {
 struct MultiBase : public EventBases {
     MultiBase(int sz) : id_(0), bases_(sz) {}
     virtual EventBase *allocBase() {
+        // 轮循环使用 其中的一个 poller，避免负载不均衡。估计改一下名字最好，如 getBase，这里并没有alloc
+        // 这个 id_ 是原子的
         int c = id_++;
         return &bases_[c % bases_.size()];
     }

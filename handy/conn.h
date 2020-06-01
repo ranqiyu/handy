@@ -115,6 +115,7 @@ struct TcpConn : public std::enable_shared_from_this<TcpConn>, private noncopyab
 struct TcpServer : private noncopyable {
     TcpServer(EventBases *bases);
     // return 0 on sucess, errno on error
+    // 绑定监听端口，并进行监听。感觉改一个名字好一点，listen ？
     int bind(const std::string &host, unsigned short port, bool reusePort = false);
     static TcpServerPtr startServer(EventBases *bases, const std::string &host, unsigned short port, bool reusePort = false);
     ~TcpServer() { delete listen_channel_; }
@@ -140,8 +141,8 @@ struct TcpServer : private noncopyable {
     }
 
    private:
-    EventBase *base_;
-    EventBases *bases_;
+    EventBase *base_; // 这里有一个 poller，只负责监听client socket
+    EventBases *bases_; // 这个是对多个client socket多线程多poller处理
     Ip4Addr addr_;
     Channel *listen_channel_;
     TcpCallBack statecb_, readcb_;

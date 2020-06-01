@@ -76,6 +76,8 @@ struct EventsImp {
     }
     void loop();
     void loop_once(int waitMs) {
+        // 这里进行事件循环，并且当有可读可写事件时，直接在这个线程里回调出去
+        // 由于是在这个IO线程里处理业务，所以回调出去的业务线程不能占用太长时间
         poller_->loop_once(std::min(waitMs, nextTimeout_));
         handleTimeouts();
     }
@@ -89,6 +91,7 @@ struct EventsImp {
     TimerId runAt(int64_t milli, Task &&task, int64_t interval);
 };
 
+// 一个EventBase，只绑定了一个 epoll 实例
 EventBase::EventBase(int taskCapacity) {
     imp_.reset(new EventsImp(this, taskCapacity));
     imp_->init();
@@ -154,7 +157,7 @@ void EventsImp::init() {
     fatalif(r, "addFdFlag failed %d %s", errno, strerror(errno));
     trace("wakeup pipe created %d %d", wakeupFds_[0], wakeupFds_[1]);
 
-    // 监听匿名管道[0]读事件kReadEvent。原始指针似乎没有delete?
+    // 监听匿名管道[0]读事件kReadEvent
     Channel *ch = new Channel(base_, wakeupFds_[0], kReadEvent);
     ch->onRead([=] {
         char buf[1024] = {0};
@@ -167,9 +170,12 @@ void EventsImp::init() {
             Task task;
             // 如果有任务就一直执行
             while (tasks_.pop_wait(&task, 0)) {
+                // 通过上下文代码，可以看出这行代码绑定的lambda 仅仅是设置回调函数 onState onRead onMsg
                 task();
             }
         } else if (r == 0) {
+            // 这里删除，并将触发回调出去
+            debug("删除 pipe的wakeupFds_[0]绑定channel");
             delete ch;
         } else if (errno == EINTR) {
         } else {

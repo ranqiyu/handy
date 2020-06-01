@@ -465,9 +465,13 @@ void TcpServer::handleAccept() {
         fatalif(r, "addFdFlag FD_CLOEXEC failed");
         //r = net::setKeepAlived(cfd, 30, 30, 10);
         //fatalif(r, "set keepalived failed");
-
+        // 最关键在这里，这里的 bases_->allocBase() ，其实是筛选出一个 poller
+        // 如果是 MultiBase，则轮循选择一个，避免负载不均衡
+        // 将这个新建立的 client socket 分配给这个 筛选出来的 poller，由这个 poller负责读写
         EventBase *b = bases_->allocBase();
         auto addcon = [=] {
+            // 这个 client socket似乎没有放到一个队列的保存下来（只使用lambda捕获就够了？）
+            // 要关注 TcpConn 的析构函数是否正常析构了，避免内存泄露
             TcpConnPtr con = createcb_();
             con->attach(b, cfd, local, peer);
             if (statecb_) {
@@ -483,6 +487,10 @@ void TcpServer::handleAccept() {
         if (b == base_) {
             addcon();
         } else {
+            // 这里很重要，将有关 client socket加入到一个任务队列（参看safeCall的实现）
+            // 这内部的实现是，加入后 将触发 pipe的写通知，并执行这个回调addcon
+            // 而这个 addcon 的具体内容也是"设置"回调，onState onRead onMsg
+            // 这些真正处理 事件的回调是在 poller里的事件循环来调用
             b->safeCall(move(addcon));
         }
     }
