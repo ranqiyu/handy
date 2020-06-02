@@ -15,6 +15,7 @@ int main(int argc, const char *argv[]) {
     int r = echo.bind("", 2099);
     exitif(r, "bind failed %d %s", errno, strerror(errno));
     auto sendcb = [&](const TcpConnPtr &con) {
+        // 如果不满足条件，本次循环结束。但是会等待下一次回调。（但是实际当中可能是直接一直写，缓存到写队列；当socket可写时，从队列拿数据继续写）
         while (con->getOutput().size() == 0 && sended < total) {
             con->send(buf, sizeof buf);
             sended += sizeof buf;
@@ -29,6 +30,7 @@ int main(int argc, const char *argv[]) {
         TcpConnPtr con(new TcpConn);
         con->onState([sendcb](const TcpConnPtr &con) {
             if (con->getState() == TcpConn::Connected) {
+                // 当可写时，会回调到 sendcb。所以这里应该是多次的
                 con->onWritable(sendcb);
             }
             sendcb(con);

@@ -91,6 +91,7 @@ struct TcpConn : public std::enable_shared_from_this<TcpConn>, private noncopyab
     Buffer input_, output_;
     Ip4Addr local_, peer_;
     State state_;
+    // 读到数据时的回调，可写时回调，状态变更时回调
     TcpCallBack readcb_, writablecb_, statecb_;
     std::list<IdleId> idleIds_;
     TimerId timeoutId_;
@@ -133,10 +134,11 @@ struct TcpServer : private noncopyable {
         readcb_ = cb;
         assert(!msgcb_);
     }
-    // 消息处理与Read回调冲突，只能调用一个
+    // 设置读完消息之后的回调。改一个名称，onReadMsg ?
     void onConnMsg(CodecBase *codec, const MsgCallBack &cb) {
         codec_.reset(codec);
         msgcb_ = cb;
+        // 消息处理与Read回调冲突，只能调用一个
         assert(!readcb_);
     }
 
@@ -153,9 +155,10 @@ struct TcpServer : private noncopyable {
 };
 
 typedef std::function<std::string(const TcpConnPtr &, const std::string &msg)> RetMsgCallBack;
-//半同步半异步服务器
 struct HSHA;
 typedef std::shared_ptr<HSHA> HSHAPtr;
+// 半同步半异步服务器：
+// IO操作是异步的；而业务逻辑处理是同步的，一个请求处理需要占用线程池中的一个线程。
 struct HSHA {
     static HSHAPtr startServer(EventBase *base, const std::string &host, unsigned short port, int threads);
     HSHA(int threads) : threadPool_(threads) {}

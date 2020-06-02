@@ -28,7 +28,9 @@ void TcpConn::attach(EventBase *base, int fd, Ip4Addr local, Ip4Addr peer) {
     trace("[%p] tcp constructed %s - %s fd: %d。附加的 channel 是[%p]", this, local_.toString().c_str(), peer_.toString().c_str(), fd, channel_);
 
     TcpConnPtr con = shared_from_this();
+    // 设置回调，当可读时，回调读方法
     con->channel_->onRead([=] { con->handleRead(con); });
+    // 设置回调，当可写时，回调写方法
     con->channel_->onWrite([=] { con->handleWrite(con); });
 }
 
@@ -272,17 +274,19 @@ void TcpConn::handleWrite(const TcpConnPtr &con) {
         // 当客户端连接失败也会到这里来
         handleHandshake(con);
     } else if (state_ == State::Connected) {
+        // 会真正的写数据到对端，循环写
         ssize_t sended = isend(output_.begin(), output_.size());
         if (sended == -1)
         {
             cleanup(con);
             return;
         }
-        
+        // 写了多少这里就消费多少
         output_.consume(sended);
 
         // 只有当为空的时候才回调给客户端。否则说明数据没有写完，不能再写了
         if (output_.empty() && writablecb_) {
+            // 写完之后回调出去。如果有回调的话
             writablecb_(con);
         }
         // 当没有缓存的数据后，就取消监听可写事件
@@ -379,6 +383,8 @@ void TcpConn::send(const char *buf, size_t len) {
 void TcpConn::onMsg(CodecBase *codec, const MsgCallBack &cb) {
     assert(!readcb_);
     codec_.reset(codec);
+    // 设置回调，当读完数据之后，回调到下面的方法中来
+    // 主要内容就是解析消息
     onRead([cb](const TcpConnPtr &con) {
         int r = 1;
         while (r) {  // 当下次解析出来的为 0 时/false，就退出循环了
@@ -389,6 +395,7 @@ void TcpConn::onMsg(CodecBase *codec, const MsgCallBack &cb) {
                 break;
             } else if (r > 0) {
                 debug("消息解码成功. 原始长度 %d，消息长度 %ld", r, msg.size());
+                // 当解析消息完成之后，回调出去
                 cb(con, msg);
                 con->getInput().consume(r);
             } 
@@ -506,12 +513,18 @@ HSHAPtr HSHA::startServer(EventBase *base, const std::string &host, unsigned sho
 }
 
 void HSHA::onMsg(CodecBase *codec, const RetMsgCallBack &cb) {
+    // 当解析完成消息后回调
     server_->onConnMsg(codec, [this, cb](const TcpConnPtr &con, Slice msg) {
         std::string input = msg;
+        // 将这个消息加入到业务逻辑的工作线程池。当线程池调用到时，会触发这个任务
+        // 其实这一块（threadPool_）应该放到业务侧，而不是handy库框架侧
+        //因为业务侧才知道问题的规模和大小，需要多少业务线程，放框架侧不合适
+        // 这里就应该直接传出去
         threadPool_.addTask([=] {
-            std::string output = cb(con, input); // 处理完消息后的 response
+            std::string output = cb(con, input); // 处理完消息后，会返回业务侧给的response，并写给对端socket
+            // 将 写入消息 加入安全线程任务队列。那边的pipe会被通知到，从而执行这个任务
             server_->getBase()->safeCall([=] {
-                if (output.size()) // 将 写入消息 加入县城任务队列
+                if (output.size()) 
                     con->sendMsg(output);
             });
         });

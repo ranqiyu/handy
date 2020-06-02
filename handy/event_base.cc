@@ -160,6 +160,7 @@ void EventsImp::init() {
     // 监听匿名管道[0]读事件kReadEvent
     Channel *ch = new Channel(base_, wakeupFds_[0], kReadEvent);
     ch->onRead([=] {
+            // 通过 wakeup pipe 触发这个 回调
         char buf[1024] = {0};
         int r = ch->fd() >= 0 ? ::read(ch->fd(), buf, sizeof buf) : 0;
         if (r > 0) {
@@ -170,7 +171,7 @@ void EventsImp::init() {
             Task task;
             // 如果有任务就一直执行
             while (tasks_.pop_wait(&task, 0)) {
-                // 通过上下文代码，可以看出这行代码绑定的lambda 仅仅是设置回调函数 onState onRead onMsg
+                // 通过上下文代码，可以看出这行代码绑定的lambda 。（例如，设置回调函数 onState onRead onMsg）
                 task();
             }
         } else if (r == 0) {
