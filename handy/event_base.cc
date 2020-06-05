@@ -57,6 +57,7 @@ struct EventsImp {
     void callIdles();
     IdleId registerIdle(int idle, const TcpConnPtr &con, const TcpCallBack &cb);
     void unregisterIdle(const IdleId &id);
+    // 更新空闲的时机
     void updateIdle(const IdleId &id);
     void handleTimeouts();
     void refreshNearest(const TimerId *tid = NULL);
@@ -189,12 +190,15 @@ void EventsImp::handleTimeouts() {
     int64_t now = util::timeMilli();
     TimerId tid{now, 1L << 62};
     
+    // std::paire可以比较大小，先按first比较，如果相等，再按照second比较。tid的second是一个很大的值，所在主要是 now
     // 回调方法，并移出。遍历，会导致延迟。若使用多县城呢
+    // 只要小于当前时间的timer都会回调出去
     while (timers_.size() && timers_.begin()->first < tid) {
         Task task = move(timers_.begin()->second);
         timers_.erase(timers_.begin());
         task();
     }
+    // 更新下一次的唤醒时间
     refreshNearest();
 }
 
@@ -210,9 +214,12 @@ void EventsImp::callIdles() {
         auto lst = l.second;
         while (lst.size()) {
             IdleNode &node = lst.front();
+            // 如果上次更新时间，加上 空闲时间，超过了当前时间，说明还没有 超过设置的空闲时间，不处理
+            // 所以关键是这个 updated 字段的更新时机
             if (node.updated_ + idle > now) {
                 break;
             }
+            // 已超过空闲时间则回调
             node.updated_ = now;
             lst.splice(lst.end(), lst, lst.begin());
             node.cb_(node.con_);
@@ -222,6 +229,7 @@ void EventsImp::callIdles() {
 
 IdleId EventsImp::registerIdle(int idle, const TcpConnPtr &con, const TcpCallBack &cb) {
     if (!idleEnabled) {
+        // 每一秒触发一次循环定时器
         base_->runAfter(1000, [this] { callIdles(); }, 1000);
         idleEnabled = true;
     }
@@ -247,7 +255,7 @@ void EventsImp::refreshNearest(const TimerId *tid) {
         nextTimeout_ = 1 << 30;
     } else {
         const TimerId &t = timers_.begin()->first;
-        nextTimeout_ = t.first - util::timeMilli(); // 计算得到下一次唤醒时间
+        nextTimeout_ = t.first - util::timeMilli(); // 更新下一次唤醒时间。这个是成员变量
         nextTimeout_ = nextTimeout_ < 0 ? 0 : nextTimeout_;
     }
 }
@@ -265,16 +273,18 @@ TimerId EventsImp::runAt(int64_t milli, Task &&task, int64_t interval) {
         return TimerId();
     }
     if (interval) {
-        TimerId tid{-milli, ++timerSeq_};
-        TimerRepeatable &rtr = timerReps_[tid];
+        TimerId tid{-milli, ++timerSeq_};//原子递增timerSeq_
+        TimerRepeatable &rtr = timerReps_[tid];// tid肯定是唯一的
         rtr = {milli, interval, {milli, ++timerSeq_}, move(task)};
         TimerRepeatable *tr = &rtr;
         timers_[tr->timerid] = [this, tr] { repeatableTimeout(tr); };
+        // 每插入一个timer就更新下一次唤醒时间
         refreshNearest(&tr->timerid);
         return tid;
     } else {
         TimerId tid{milli, ++timerSeq_};
         timers_.insert({tid, move(task)});
+        // 每插入一个timer就更新下一次唤醒时间
         refreshNearest(&tid);
         return tid;
     }

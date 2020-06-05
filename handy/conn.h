@@ -86,6 +86,7 @@ struct TcpConn : public std::enable_shared_from_this<TcpConn>, private noncopyab
     std::string str() { return peer_.toString(); }
 
    public:
+   // 这么多变量都是public的，有一点坏味道了
     EventBase *base_;
     Channel *channel_;
     Buffer input_, output_;
@@ -95,6 +96,7 @@ struct TcpConn : public std::enable_shared_from_this<TcpConn>, private noncopyab
     TcpCallBack readcb_, writablecb_, statecb_;
     std::list<IdleId> idleIds_;
     TimerId timeoutId_;
+    // 给其设置一个通用的context，供外部自己用。似乎不放这里是不是更好？
     AutoContext ctx_, internalCtx_;
     std::string destHost_, localIp_;
     int destPort_, connectTimeout_, reconnectInterval_;

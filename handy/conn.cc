@@ -174,6 +174,7 @@ void TcpConn::handleRead(const TcpConnPtr &con) {
         if (rd == -1 && errno == EINTR) {
             continue;
         } else if (rd == -1 && (errno == EAGAIN || errno == EWOULDBLOCK)) {
+            // 当读到数据，就更新idel的时间。也就是，只要有数据交互，则更新时机
             for (auto &idle : idleIds_) {
                 handyUpdateIdle(getBase(), idle);
             }

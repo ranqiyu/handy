@@ -9,6 +9,7 @@ int main(int argc, const char *argv[]) {
     exitif(svr == NULL, "start tcp server failed");
     svr->onConnState([](const TcpConnPtr &con) {
         if (con->getState() == TcpConn::Connected) {
+            // 针对这个一个 连接。一个连接可以设置多个 idle 回调？感觉没有多大意义
             con->addIdleCB(2, [](const TcpConnPtr &con) {
                 info("idle for 2 seconds, close connection");
                 con->close();
